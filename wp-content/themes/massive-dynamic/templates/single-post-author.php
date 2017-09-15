@@ -20,7 +20,7 @@ if(get_post_meta( get_the_ID(), 'author-section', true)== 'show'){
         <hr class="line">
 
         <div class="clearfix"></div>
-        <div class="image"><a href="<?php echo get_author_posts_url($author->ID); ?>"><?php  echo($filter_img);?></a></div>
+        <div class="image"><a href="<?php echo get_author_posts_url($author->ID); ?>"><?php echo($filter_img);?></a></div>
         <div class="info">
             <p class="name"><a href="<?php echo get_author_posts_url($author->ID); ?>"><?php echo esc_attr($firstName).' '.esc_attr($lastName); ?></a></p>
             <p class="description"><?php echo esc_attr($description);?></p>

@@ -14,16 +14,16 @@ class PixflowPortfolio extends PixflowPostType
     {
         
         $labels = array(
-            'name' => __( 'Portfolio', 'px-portfolio'),
-            'singular_name' => __( 'Portfolio', 'px-portfolio' ),
-            'add_new' => __('Add New', 'px-portfolio'),
-            'add_new_item' => __('Add New Portfolio', 'px-portfolio'),
-            'edit_item' => __('Edit Portfolio', 'px-portfolio'),
-            'new_item' => __('New Portfolio', 'px-portfolio'),
-            'view_item' => __('View Portfolio', 'px-portfolio'),
-            'search_items' => __('Search Portfolio', 'px-portfolio'),
-            'not_found' =>  __('No portfolios found', 'px-portfolio'),
-            'not_found_in_trash' => __('No portfolios found in Trash', 'px-portfolio'),
+            'name' => __( 'Portfolio', 'massive-dynamic'),
+            'singular_name' => __( 'Portfolio', 'massive-dynamic' ),
+            'add_new' => __('Add New', 'massive-dynamic'),
+            'add_new_item' => __('Add New Portfolio', 'massive-dynamic'),
+            'edit_item' => __('Edit Portfolio', 'massive-dynamic'),
+            'new_item' => __('New Portfolio', 'massive-dynamic'),
+            'view_item' => __('View Portfolio', 'massive-dynamic'),
+            'search_items' => __('Search Portfolio', 'massive-dynamic'),
+            'not_found' =>  __('No portfolios found', 'massive-dynamic'),
+            'not_found_in_trash' => __('No portfolios found in Trash', 'massive-dynamic'),
             'parent_item_colon' => ''
         );
         $args = array(
@@ -33,7 +33,7 @@ class PixflowPortfolio extends PixflowPostType
             'has_archive' => true,
             'hierarchical' => false,
             'menu_icon' => PIXFLOW_THEME_LIB_URI . '/assets/img/portfolio-icon.png',
-            'rewrite' => array('slug' => __( 'portfolios', 'px-portfolio' ), 'with_front' => true),
+            'rewrite' => array('slug' => __( 'portfolios', 'massive-dynamic' ), 'with_front' => true),
             'supports' => array('title',
                 'editor',
                 'thumbnail',
@@ -56,7 +56,7 @@ class PixflowPortfolio extends PixflowPostType
 
     function Pixflow_RegisterScripts()
     {
-        wp_register_script('portfolio', PIXFLOW_THEME_LIB_URI . '/post-types/js/portfolio.js', array('jquery'), PIXFLOW_THEME_VERSION);
+        wp_register_script('portfolio', PIXFLOW_THEME_LIB_URI . '/post-types/js/portfolio.min.js', array('jquery'), PIXFLOW_THEME_VERSION);
 
         parent::Pixflow_RegisterScripts();
     }
@@ -64,7 +64,7 @@ class PixflowPortfolio extends PixflowPostType
     function Pixflow_EnqueueScripts()
     {
         if (! wp_script_is( 'niceScroll', 'enqueued' )) {
-            wp_enqueue_script( 'niceScroll',pixflow_path_combine(PIXFLOW_THEME_LIB_URI, 'assets/script/jquery.nicescroll.min.js'),false,PIXFLOW_THEME_VERSION,true);
+            wp_enqueue_script( 'niceScroll',pixflow_path_combine(PIXFLOW_THEME_LIB_URI, 'assets/script/jquery.nicescroll.min.js'),false,null,true);
         }
         wp_enqueue_script('portfolio');
     }

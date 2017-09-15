@@ -1,10 +1,10 @@
 <div class="wrap">
-	<h2><?php echo $set->get_title(); ?></h2>
+	<h2><?php echo esc_attr($set->get_title()); ?></h2>
 	<div id="vp-wrap" class="vp-wrap">
 		<div id="vp-option-panel"class="vp-option-panel <?php echo ($set->get_layout() === 'fixed') ? 'fixed-layout' : 'fluid-layout' ; ?>">
 			<div class="vp-left-panel">
 				<div id="vp-logo" class="vp-logo">
-					<img src="<?php echo VP_Util_Res::img($set->get_logo()); ?>" alt="<?php echo $set->get_title(); ?>" />
+					<img src="<?php echo VP_Util_Res::img($set->get_logo()); ?>" alt="<?php echo esc_attr($set->get_title()); ?>" />
 				</div>
 				<div id="vp-menus" class="vp-menus">
 					<ul class="vp-menu-level-1">
@@ -17,9 +17,9 @@
 						<li>
 						<?php endif; ?>
 							<?php if ($menu->get_menus()): ?>
-							<a href="#<?php echo $menu->get_name(); ?>" class="vp-js-menu-dropdown vp-menu-dropdown">
+							<a href="#<?php echo esc_attr($menu->get_name()); ?>" class="vp-js-menu-dropdown vp-menu-dropdown">
 							<?php else: ?>
-							<a href="#<?php echo $menu->get_name(); ?>" class="vp-js-menu-goto vp-menu-goto">
+							<a href="#<?php echo esc_attr($menu->get_name()); ?>" class="vp-js-menu-goto vp-menu-goto">
 							<?php endif; ?>
 								<?php
 								$icon = $menu->get_icon();
@@ -30,7 +30,7 @@
 									VP_Util_Text::print_if_exists(VP_Util_Res::img($icon), '<i class="custom-menu-icon" style="background-image: url(\'%s\');"></i>');
 								endif;
 								?>
-								<span><?php echo $menu->get_title(); ?></span>
+								<span><?php echo esc_attr($menu->get_title()); ?></span>
 							</a>
 							<?php if ($menu->get_menus()): ?>
 							<ul class="vp-menu-level-2">
@@ -41,7 +41,7 @@
 								<?php else: ?>
 								<li>
 								<?php endif; ?>
-									<a href="#<?php echo $submenu->get_name(); ?>" class="vp-js-menu-goto vp-menu-goto">
+									<a href="#<?php echo esc_attr($submenu->get_name()); ?>" class="vp-js-menu-goto vp-menu-goto">
 										<?php
 										$sub_icon = $submenu->get_icon();
 										$font_awesome = VP_Util_Res::is_font_awesome($sub_icon);
@@ -51,7 +51,7 @@
 											VP_Util_Text::print_if_exists(VP_Util_Res::img($sub_icon), '<i class="custom-menu-icon" style="background-image: url(\'%s\');"></i>');
 										endif;
 										?>
-										<span><?php echo $submenu->get_title(); ?></span>
+										<span><?php echo esc_attr($submenu->get_title()); ?></span>
 									</a>
 								</li>
 								<?php endforeach; ?>
@@ -67,23 +67,23 @@
 					<div id="vp-submit-top" class="vp-submit top">
 						<div class="inner">
 							<input class="vp-save vp-button button button-primary" type="submit" value="<?php esc_attr_e('Save Changes', 'massive-dynamic'); ?>" />
-							<p class="vp-js-save-loader save-loader" style="display: none;"><img src="<?php VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" /><?php esc_attr_e('Saving Now', 'massive-dynamic'); ?></p>
-							<p class="vp-js-save-status save-status" style="display: none;"></p>
+							<p class="vp-js-save-loader save-loader px-display-none"><img src="<?php VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" /><?php esc_attr_e('Saving Now', 'massive-dynamic'); ?></p>
+							<p class="vp-js-save-status save-status px-display-none"></p>
 						</div>
 					</div>
 					<?php foreach ($set->get_menus() as $menu): ?>
 					<?php $menus = $set->get_menus(); ?>
 					<?php if ($menu === reset($menus)): ?>
-						<?php echo $menu->render(array('current' => 1)); ?>
+						<?php print($menu->render(array('current' => 1))); ?>
 					<?php else: ?>
-						<?php echo $menu->render(array('current' => 0)); ?>
+						<?php print($menu->render(array('current' => 0))); ?>
 					<?php endif; ?>
 					<?php endforeach; ?>
 					<div id="vp-submit-bottom" class="vp-submit bottom">
 						<div class="inner">
 							<input class="vp-save vp-button button button-primary" type="submit" value="<?php esc_attr_e('Import', 'massive-dynamic'); ?>" />
-							<p class="vp-js-save-loader save-loader" style="display: none;"><img src="<?php VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" /><?php esc_attr_e('Saving Now', 'massive-dynamic'); ?></p>
-							<p class="vp-js-save-status save-status" style="display: none;"></p>
+							<p class="vp-js-save-loader save-loader px-display-none" ><img src="<?php VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" /><?php esc_attr_e('Saving Now', 'massive-dynamic'); ?></p>
+							<p class="vp-js-save-status save-status px-display-none"></p>
 						</div>
 					</div>
 				</form>

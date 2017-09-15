@@ -74,7 +74,7 @@
     else
     {
         $content = apply_filters('the_content',strip_shortcodes(get_the_content(esc_attr__('keep reading', 'massive-dynamic').'<i class="px-icon icon-arrow-right7"></i>')));
-        echo $content;
+        print($content);
     }
 
     ?>

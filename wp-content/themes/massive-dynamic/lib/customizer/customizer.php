@@ -20,7 +20,7 @@ class pixflow_customizer
         add_action('customize_controls_print_styles', array($this, 'styles'));
         add_action('customize_controls_print_scripts', array($this, 'custom_js'), 999);
         remove_action( 'admin_init', 'vc_page_welcome_redirect' );
-        set_transient( '_vc_page_welcome_redirect', 0, 30 );
+//        set_transient( '_vc_page_welcome_redirect', 0, 30 );
     }
 
     /**
@@ -52,20 +52,17 @@ class pixflow_customizer
         $options = apply_filters('customizer/config', array());
 
         $customizer_url = isset($options['url_path']) ? $options['url_path'] : plugin_dir_url(__FILE__);
-
-        wp_register_style('customizer-css', $customizer_url . 'assets/css/customizer.css', NULL, NULL, 'all');
+        wp_register_style('customizer-css', $customizer_url . 'assets/css/customizer.min.css', NULL, NULL, 'all');
         wp_register_style('customizer-ui', $customizer_url . 'assets/css/jquery-ui-1.10.0.custom.css', NULL, NULL, 'all');
-        wp_register_style('pixflow-icon-font-library-css', pixflow_path_combine(PIXFLOW_THEME_CSS_URI,'iconfonts.css'), NULL, NULL, 'all');
+        wp_register_style('pixflow-icon-font-library-css', pixflow_path_combine(PIXFLOW_THEME_CSS_URI,'iconfonts.min.css'), NULL, NULL, 'all');
         wp_enqueue_style('pixflow-icon-font-library-css');
+        wp_enqueue_style('massivebuilderfonts', PIXFLOW_THEME_LIB_URI . '/customizer/assets/css/massivebuilderfonts.min.css',array(),PIXFLOW_THEME_VERSION);
         wp_enqueue_style('customizer-css');
         wp_enqueue_style('customizer-ui');
-        wp_enqueue_script('plugins-js', pixflow_path_combine(PIXFLOW_THEME_JS_URI, 'plugins.js'), array(), PIXFLOW_THEME_VERSION,true);
-        wp_enqueue_script('customizer_js', $customizer_url . 'assets/js/customizer.js', array(),PIXFLOW_THEME_VERSION,true);
-
-
-        wp_enqueue_style('intro', pixflow_path_combine($customizer_url . '/assets/css', 'introjs.css'), array(), PIXFLOW_THEME_VERSION, false);
-        wp_enqueue_style('intro', pixflow_path_combine($customizer_url . '/assets/css', 'introjs-rtl.css'), array(), PIXFLOW_THEME_VERSION, false);
-        wp_enqueue_script('intro', pixflow_path_combine($customizer_url . '/assets/js', 'intro.js'), array(), PIXFLOW_THEME_VERSION, false);
+        wp_enqueue_script('plugins-js', pixflow_path_combine(PIXFLOW_THEME_JS_URI, 'plugins.min.js'), array(), null,true);
+        wp_enqueue_script('isotope', pixflow_path_combine(PIXFLOW_THEME_JS_URI, 'isotope.min.js'), array(), null,true);
+        wp_enqueue_script('carofredsel', pixflow_path_combine(PIXFLOW_THEME_JS_URI, 'jquerycaroufredsel.min.js'), array(), null,true);
+        wp_enqueue_script('customizer_js', $customizer_url . 'assets/js/customizer.min.js', array(),PIXFLOW_THEME_VERSION,true);
 
         if ( defined( 'MD_Shortcodes_VER' ) ) {
             $noShortcodesMsg1 = esc_attr__('You Don\'t Need Shortcodes','massive-dynamic');
@@ -104,13 +101,13 @@ class pixflow_customizer
             'demoImporter2' => esc_attr__('This package will import the content you choose using bottoms below. Please note that choosing media, will increase the import time dramatically. Also you need to install required plugins like contact form 7 before importing the demos.','massive-dynamic'),
             'demoImporter3' => esc_attr__('New builder settings will overwrite your current settings, are you sure about this?','massive-dynamic'),
             'importConfirm' => esc_attr__('Yes, Im sure about this','massive-dynamic'),
-            'importDemo' => esc_attr__('import demo','massive-dynamic'),
             'importing' => esc_attr__('importing','massive-dynamic'),
             'faildImport' => esc_attr__('Network error, try again!','massive-dynamic'),
             'faildImportServer' => esc_attr__('Your Server Prevent Remote File Get','massive-dynamic'),
             'faildImportPermission' => esc_attr__('Folder Permission is not correct ','massive-dynamic'),
             'imported' => esc_attr__('IMPORTED!','massive-dynamic'),
-            'mastersettingMsg1' => wp_kses( __('You are about to change <span class="message-text-color">master template settings,</span> current unique settings of this page will be lost! Are you sure?','massive-dynamic'),array('span' => array('class' => array()))),
+            'importDemo' => esc_attr__('import demo','massive-dynamic'),
+            'mastersettingMsg1' => wp_kses( __('You are about to change <a class="mastersettingMsg1">master template settings,</a> current unique settings of this page will be lost! Are you sure?','massive-dynamic'),array('a' => array('class' => array()))),
             'mastersettingMsgTitle' => esc_attr__('CAUTION!','massive-dynamic'),
             'mastersettingMsgYes' => esc_attr__('Yes, Do it','massive-dynamic'),
             'mastersettingMsgNo' => esc_attr__('No, Don\'t','massive-dynamic'),
@@ -158,11 +155,20 @@ class pixflow_customizer
             'content' => esc_attr__('CONTENT','massive-dynamic'),
             'media' => esc_attr__('MEDIA','massive-dynamic'),
             'purchase_code_status'=>pixflow_get_theme_mod('purchase_code_status',PIXFLOW_PURCHASE_CODE_STATUS),
+            'md_theme_version' => wp_get_theme()->get( 'Version' ) ,
+            'google_font_url' => PIXFLOW_THEME_LIB_URI . '/googlefonts.txt' ,
+            'google_font_small_url' => PIXFLOW_THEME_LIB_URI . '/googlefonts-small.txt',
+            'md_version_customizer_content' =>esc_attr__('Ver','massive-dynamic'),
+            'md_version_customizer_content_2' =>esc_attr__('Update','massive-dynamic'),
+            'md_shortcodes_button_customizer' =>esc_attr__('add element', 'massive-dynamic') ,
+            'customizer_url' =>  admin_url( 'customize.php' )
+
+
         );
 
         wp_localize_script( 'customizer_js', 'customizerValues', $customizerLocalizedOptions );
-        wp_enqueue_script( 'niceScroll',pixflow_path_combine(PIXFLOW_THEME_LIB_URI, 'assets/script/jquery.nicescroll.min.js'),false,PIXFLOW_THEME_VERSION,true);
-        wp_register_script('customizer-required', $customizer_url . 'assets/js/required.js',array(),PIXFLOW_THEME_VERSION,true);
+        wp_enqueue_script( 'niceScroll',pixflow_path_combine(PIXFLOW_THEME_LIB_URI, 'assets/script/jquery.nicescroll.min.js'),false,null,true);
+        wp_register_script('customizer-required', $customizer_url . '/assets/js/required.min.js',array(),PIXFLOW_THEME_VERSION,true);
         $required = $_SESSION['required'];
         wp_localize_script('customizer-required', 'required', $required);
         wp_enqueue_script('customizer-required');
@@ -174,13 +180,14 @@ class pixflow_customizer
      */
     function custom_js()
     {
-        global $img,$current_user,$firstName,$lastName,$return,$url;
+        global $img,$current_user,$firstName,$lastName,$return,$url,$edit_profile;
         $current_user = wp_get_current_user();
 
         $firstName= $current_user->user_firstname!=''?$current_user->user_firstname:"Your ";
         $lastName=$current_user->user_lastname!=''?$current_user->user_lastname:"Name";
+        $edit_profile = get_edit_user_link($current_user->ID);
 
-        $img=get_avatar( $current_user->user_email, 56 , '','Avatar' );
+        $img = get_avatar( $current_user->user_email, 56 , PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/images/avatar.jpg','Avatar' );
 
         if ( $return ) {
             $return = wp_unslash( $return );
@@ -202,75 +209,26 @@ class pixflow_customizer
             $analyticUrl= admin_url();
             $analyticTarget='_blank';
         }
-
         $customizerLocalizedSentences = array(
-            //'responsive' => esc_attr__('RESPONSIVE','massive-dynamic'),
-            'desktop' => esc_attr__('Desktop','massive-dynamic'),
-            'tabletLandscape' => esc_attr__('Tablet Landscape','massive-dynamic'),
-            'tabletPortrait' => esc_attr__('Tablet Portrait','massive-dynamic'),
-            'mobileLandscape' => esc_attr__('Mobile Landscape','massive-dynamic'),
-            'mobilePortrait' => esc_attr__('Mobile Portrait','massive-dynamic'),
             'publishPanel' => esc_attr__('PUBLISH PANEL','massive-dynamic'),
             'save' => esc_attr__('Save','massive-dynamic'),
-            'information' => esc_attr__('INFORMATION','massive-dynamic'),
-            'helpAndSupportCenter' => esc_attr__('Help & support center','massive-dynamic'),
-            'documentation' => esc_attr__('Documentation','massive-dynamic'),
-            'pageOption' => esc_attr__('Page Option','massive-dynamic'),
-            'generalPageSetting' => esc_attr__('General page setting','massive-dynamic'),
-            'uniquePageSetting' => esc_attr__('Unique page setting','massive-dynamic'),
-            'pageSettingDescription' => esc_attr__('General settings is used for creating a main layout which is used for several pages. If you want to create a page with different layout and settings, then you should switch to unique settings.','massive-dynamic'),
-            'needHelp' => esc_attr__('Need Help?','massive-dynamic'),
-            'noWorries' => esc_attr__('No worries, you can watch this','massive-dynamic'),
-            'video' => esc_attr__('video','massive-dynamic'),
-            'takeATourDescription' => esc_attr__('or use Take a Tour feature and get familiar with Massive Builder.','massive-dynamic'),
-            'takeATour' => esc_attr__('TAKE A TOUR','massive-dynamic'),
-            'showHints' => esc_attr__('Show Hints','massive-dynamic'),
-            'hideHints' => esc_attr__('Hide Hints','massive-dynamic'),
-            'newsletter' => esc_attr__('Newsletter','massive-dynamic'),
-            'takeTour' => esc_attr__('Take a Tour','massive-dynamic'),
+            'generalPageSetting' => esc_attr__('General setting','massive-dynamic'),
+            'uniquePageSetting' => esc_attr__('Unique setting','massive-dynamic'),
             'avatarImage' => $img,
+            'edit_profile_customizer' => $edit_profile,
             'fullname' => $firstName.' '.$lastName,
-            'gizmoController' => esc_attr__('Gizmo Controller','massive-dynamic'),
-            'showHideControllers' => esc_attr__('Click to show or hide controllers','massive-dynamic'),
-            'informationController' => esc_attr__('Information Controller','massive-dynamic'),
-            'needInformation' => esc_attr__('Do you need some information?','massive-dynamic'),
-            'responsiveView' => esc_attr__('Responsive View','massive-dynamic'),
-            'differentDevices' => esc_attr__('Check your website in different devices','massive-dynamic'),
+            'logo_path' => PIXFLOW_THEME_LIB_URI.'/assets/img/builder-logo.png',
+            'edit_profile'=> esc_attr__('Edit Profile','massive-dynamic'),
             'importDemo' => esc_attr__('import demo','massive-dynamic'),
-            'usePremadeWebsites' => esc_attr__('Use premade websites to create your website quickly','massive-dynamic'),
-            'newEntries' => esc_attr__('New Entries','massive-dynamic'),
-            'addNewPosts' => esc_attr__('To add new post, page, portfolio or product','massive-dynamic'),
-            'newPages' => esc_attr__('NEW PAGES','massive-dynamic'),
-            'addNewPost' => esc_attr__('Add New Post','massive-dynamic'),
-            'addNewPage' => esc_attr__('Add New Page','massive-dynamic'),
-            'addNewPortfolio' => esc_attr__('Add New Portfolio','massive-dynamic'),
             'adminURL' => esc_url(admin_url()),
-            'addNewProduct' => esc_attr__('Add New Product','massive-dynamic'),
             'dashboard' => esc_attr__('  Dashboard','massive-dynamic'),
-            'dashboardController' => esc_attr__('Dashboard Controller','massive-dynamic'),
-            'goToDashboard' => esc_attr__('Lets go to Dashboard','massive-dynamic'),
-            'generalUniqueSetting' => esc_attr__('General/Unique setting','massive-dynamic'),
-            'switchGeneralUnique' => esc_attr__('Switch between General or Unique settings.','massive-dynamic'),
             'saveAndView' => esc_attr__('Publish','massive-dynamic'),
-            'addNew' => esc_attr__('Add New','massive-dynamic'),
-            'enterName' => esc_attr__('Please enter a name for Add new','massive-dynamic'),
-            'create' => esc_attr__('CREATE','massive-dynamic'),
-            'ajaxURL' => admin_url( 'admin-ajax.php' ),
-            'ajaxNonce' => wp_create_nonce('ajax-nonce'),
-            'customizerURI' => PIXFLOW_THEME_CUSTOMIZER_URI,
-            'yourWebsite' => esc_attr__('Your Website','massive-dynamic'),
-            'helloMassiveDynamic' => esc_attr__('Loading website settings','massive-dynamic'),
-            'weReLoading' => esc_attr__('Loading page content . It won\'t take long','massive-dynamic'),
-            'loading' => esc_attr__('Loading','massive-dynamic'),
+            'edit_content' => esc_attr__('Edit Content','massive-dynamic'),
+            'demos' => esc_attr__('Import Demo','massive-dynamic') ,
         );
-        $customizerLocalizedSentences['pixflow_v3'] = 'false';
-        if(!get_option('pixflow_v3')){
-            $customizerLocalizedSentences['pixflow_v3'] = 'true';
-            update_option('pixflow_v3','checked');
-        }
         $options = apply_filters('customizer/config', array());
         $customizer_url = isset($options['url_path']) ? $options['url_path'] : plugin_dir_url(__FILE__);
-        wp_register_script('customizer-scripts', $customizer_url . 'assets/js/customizer-scripts.js',array(),PIXFLOW_THEME_VERSION,true);
+        wp_register_script('customizer-scripts', $customizer_url . 'assets/js/customizer-scripts.min.js',array(),PIXFLOW_THEME_VERSION,true);
         wp_localize_script( 'customizer-scripts', 'customizerSentences', $customizerLocalizedSentences );
         wp_enqueue_script('customizer-scripts');
     }
@@ -300,3 +258,14 @@ function pixflow_frontPageDisplay(){
     }
 }
 add_action ( 'customize_save_after', 'pixflow_frontPageDisplay',100 );
+
+// Temporary solution to solve Theme conflict issue with changesset feature
+function pixflow_fix_changeset_issue(){
+    $changeset_posts = get_posts( array( 'post_type' => 'customize_changeset'));
+    foreach( $changeset_posts as $post ) {
+        // Delete's each post.
+        wp_delete_post( $post->ID, true);
+        // Set to False if you want to send them to Trash.
+    }
+}
+add_action ( 'customize_save_after', 'pixflow_fix_changeset_issue',100 );

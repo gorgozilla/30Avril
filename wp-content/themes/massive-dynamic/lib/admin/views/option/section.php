@@ -5,7 +5,7 @@
 	<?php VP_Util_Text::print_if_exists($section->get_description(), '<span class="description vp-js-tipsy" original-title="%s"></span>'); ?>
 	<div class="vp-controls">
 		<?php foreach ($section->get_fields() as $field): ?>
-		<?php echo $field->render(); ?>
+		<?php print($field->render()); ?>
 		<?php endforeach; ?>
 	</div>
 </div>

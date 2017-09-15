@@ -8,16 +8,27 @@
  * @author  PixFlow
  *
  */
-
-$fonts_list = '[{"font_family":"Roboto","font_styles":"regular,100,100italic,300,300italic,italic,500,500italic,700,700italic,900,900italic","font_types":"400 regular:400:normal,100 light regular:100:normal,100 light italic:100:italic,300 light regular:300:normal,300 light italic:300:italic,400 italic:400:italic,500 bold regular:500:normal,500 bold italic:500:italic,700 bold regular:700:normal,700 bold italic:700:italic,900 bold regular:900:normal,900 bold italic:900:italic"},{"font_family":"Open Sans",	"font_styles":"300,300italic,regular,italic,600,600italic,700,700italic,800,800italic",	"font_types":"300 light regular:300:normal,300 light italic:300:italic,400 regular:400:normal,400 italic:400:italic,600 bold regular:600:normal,600 bold italic:600:italic,700 bold regular:700:normal,700 bold italic:700:italic,800 bold regular:800:normal,800 bold italic:800:italic"}	,{"font_family":"Open Sans Condensed","font_styles":"300,300italic,700","font_types":"300 light regular:300:normal,300 light italic:300:italic,700 bold regular:700:normal"},{"font_family":"Orbitron","font_styles":"regular,500,700,900","font_types":"400 regular:400:normal,500 bold regular:500:normal,700 bold regular:700:normal,900 bold regular:900:normal"},{"font_family":"Oswald","font_styles":"300,regular,700","font_types":"300 light regular:300:normal,400 regular:400:normal,700 bold regular:700:normal"},{"font_family":"Oxygen","font_styles":"300,regular,700","font_types":"300 light regular:300:normal,400 regular:400:normal,700 bold regular:700:normal"},{"font_family":"PT Sans","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"PT Serif","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Pacifico","font_styles":"regular","font_types":"400 regular:400:normal"},{"font_family":"Permanent Marker","font_styles":"regular","font_types":"400 regular:400:normal"},{"font_family":"Philosopher","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Playfair Display","font_styles":"regular,italic,700,700italic,900,900italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic,900 bold regular:900:normal,900 bold italic:900:italic"},{"font_family":"Poppins","font_styles":"300,regular,500,600,700","font_types":"300 light regular:300:normal,400 regular:400:normal,500 bold regular:500:normal,600 bold regular:600:normal,700 bold regular:700:normal"},{"font_family":"Radley","font_styles":"regular,italic","font_types":"400 regular:400:normal,400 italic:400:italic"},{"font_family":"Raleway","font_styles":"100,200,300,regular,500,600,700,800,900","font_types":"100 light regular:100:normal,200 light regular:200:normal,300 light regular:300:normal,400 regular:400:normal,500 bold regular:500:normal,600 bold regular:600:normal,700 bold regular:700:normal,800 bold regular:800:normal,900 bold regular:900:normal"},{"font_family":"Roboto Condensed","font_styles":"300,300italic,regular,italic,700,700italic","font_types":"300 light regular:300:normal,300 light italic:300:italic,400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Roboto Slab","font_styles":"100,300,regular,700","font_types":"100 light regular:100:normal,300 light regular:300:normal,400 regular:400:normal,700 bold regular:700:normal"},{"font_family":"Satisfy","font_styles":"regular","font_types":"400 regular:400:normal"},{"font_family":"Signika","font_styles":"300,regular,600,700","font_types":"300 light regular:300:normal,400 regular:400:normal,600 bold regular:600:normal,700 bold regular:700:normal"},{"font_family":"Source Code Pro","font_styles":"200,300,regular,500,600,700,900","font_types":"200 light regular:200:normal,300 light regular:300:normal,400 regular:400:normal,500 bold regular:500:normal,600 bold regular:600:normal,700 bold regular:700:normal,900 bold regular:900:normal"},{"font_family":"Ubuntu","font_styles":"300,300italic,regular,italic,500,500italic,700,700italic","font_types":"300 light regular:300:normal,300 light italic:300:italic,400 regular:400:normal,400 italic:400:italic,500 bold regular:500:normal,500 bold italic:500:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Ubuntu Mono","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Vollkorn","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Montserrat","font_styles":"regular,700","font_types":"400 regular:400:normal,700 bold regular:700:normal"},{"font_family":"Ubuntu",	"font_styles":"300,300italic,regular,italic,500,500italic,700,700italic", "font_types":"300 light regular:300:normal,300 light italic:300:italic,400 regular:400:normal,400 italic:400:italic,500 bold regular:500:normal,500 bold italic:500:italic,700 bold regular:700:normal,700 bold italic:700:italic"}]';
-$fonts = json_decode( $fonts_list );
+$fonts_list = PIXFLOW_THEME_LIB_URI . '/googlefonts-small.txt';
+$fonts_list_dir = PIXFLOW_THEME_LIB . '/googlefonts-small.txt';
+$file_content = wp_remote_get(
+    $fonts_list,
+    array(
+        "timeout" => 90,
+        "sslverify" => false
+    )
+);
+if(is_wp_error($file_content)){
+    $fonts = json_decode( @file_get_contents( $fonts_list_dir ) );
+}else{
+    $fonts = json_decode(  $file_content['body'] );
+}
 
 $mBuilderShortcodes = array();
-$mBuilderInCustomizer = false;
+$in_mbuilder = false;
 $mBuilderExternalTypes = array();
 
 /**
- * @version 1.0.0
+ * @version 1.1.0
  */
 class MBuilder{
 
@@ -30,6 +41,11 @@ class MBuilder{
      * @var array - models of each shortcode
      */
     public $models;
+
+    /**
+     * @var array - used shortcodes in content
+     */
+    public $used_shortcodes;
 
     /**
      * @var string - content of shortcodes
@@ -71,37 +87,47 @@ class MBuilder{
      * MBuilder constructor.
      */
     protected function __construct(){
-        global $mBuilderShortcodes;
-        if(is_customize_preview()) {
+        global $mBuilderShortcodes,$in_mbuilder;
+        $loadBuilder = true;
+        // Skip load Builder if its not in customizer
+        if(is_customize_preview() || (defined('DOING_AJAX') && DOING_AJAX)) {
+            $loadBuilder = false;
+        }
+        // Skip load Builder if its blog or single portfolio template page
+        if ( true == is_home() || (true == is_singular( 'portfolio' ) && 'standard' == pixflow_metabox('portfolio_options.template_type','standard')) ) {
+            $loadBuilder = false;
+        }
+        // Skip load Builder if its shop page
+        if(function_exists('is_shop')){
+            if(is_woocommerce() || is_shop() || is_product_category() || is_product_tag() || is_product() || is_cart() || is_checkout() || is_account_page() || is_wc_endpoint_url()){
+                $loadBuilder = false;
+            }
+        }
+        // Skip load Builder if its Password protect page
+        if ( post_password_required() ) {
+            $loadBuilder = false;
+        }
+
+        if($loadBuilder && $in_mbuilder) {
+            $this->load_shortcode_maps();
+
             do_action('mBuilder_before_init');
 
             // Enqueue required assets
-            wp_enqueue_script('tinyMce', PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/js/tinymce.min.js',array(),PIXFLOW_THEME_VERSION);
-            wp_enqueue_script('mBuilder', PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/js/mbuilder.js',array(),PIXFLOW_THEME_VERSION,true);
-            wp_enqueue_style('gizmo', pixflow_path_combine(PIXFLOW_THEME_LIB_URI . '/assets/css/', 'vc-gizmo.css'), array(), PIXFLOW_THEME_VERSION);
-            wp_enqueue_style('mBuilder-gizmo', pixflow_path_combine(PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/css/', 'mbuilder.css'), array(), PIXFLOW_THEME_VERSION);
+            wp_enqueue_style('massivebuilderfonts', PIXFLOW_THEME_LIB_URI . '/customizer/assets/css/massivebuilderfonts.min.css',array(),PIXFLOW_THEME_VERSION);
+            wp_enqueue_style('tinymce_css', includes_url( 'css/' ) . 'editor.min.css',array(),PIXFLOW_THEME_VERSION);
+            wp_enqueue_script('webfont', PIXFLOW_THEME_LIB_URI . '/customizer/assets/js/webfont.min.js', array(),PIXFLOW_THEME_VERSION,true);
+            wp_enqueue_script('tinymce_js', includes_url( 'js/tinymce/' ) . 'wp-tinymce.php', array( 'jquery' ), false, true );
+            wp_enqueue_script('mBuilder', PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/js/mbuilder.min.js',array(),PIXFLOW_THEME_VERSION,true);
+            wp_enqueue_script('color-picker-js', PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/js/color-picker.min.js',array(),PIXFLOW_THEME_VERSION,true);
+            wp_enqueue_script('meditor-js', PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/js/meditor.min.js',array('mBuilder' , 'backbone'),PIXFLOW_THEME_VERSION,true);
+            wp_enqueue_style('meditor-css', pixflow_path_combine(PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/css/', 'meditor.min.css'), array(), PIXFLOW_THEME_VERSION);
+            wp_enqueue_style('color-picker-css', pixflow_path_combine(PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/css/', 'color-picker.min.css'), array(), PIXFLOW_THEME_VERSION);
+            wp_enqueue_media();
+            wp_enqueue_style('mBuilder-gizmo', pixflow_path_combine(PIXFLOW_THEME_LIB_URI . '/mbuilder/assets/css/', 'mbuilder.min.css'), array(), PIXFLOW_THEME_VERSION);
 
-
-            $mBuilderValues = array(
-                'ajax_url'    => admin_url('admin-ajax.php'),
-                'ajax_nonce'  => wp_create_nonce('ajax-nonce'),
-                'deleteText'  => __('Delete','massive-dynamic'),
-                'duplicateText'  => __('Duplicate','massive-dynamic'),
-                'columnText'  => __('Column Setting','massive-dynamic'),
-                'rowText'     => __('Row','massive-dynamic'),
-                'layoutText'  => __('Layout','massive-dynamic'),
-                'customColText'  => __('Custom Column','massive-dynamic'),
-                'deleteDescText' => __('Are you sure ?','massive-dynamic'),
-                'settingText'    => __('Setting','massive-dynamic'),
-                'leaveMsg' => esc_attr__('You are about to leave this page and you haven\'t saved changes yet, would you like to save changes before leaving?','massive-dynamic'),
-                'unsaved' => esc_attr__('Unsaved Changes!','massive-dynamic'),
-                'save_leave' => esc_attr__('Save & Leave','massive-dynamic'),
-            );
-            wp_localize_script('mBuilder', 'mBuilderValues', $mBuilderValues);
-            wp_enqueue_style('admin',pixflow_path_combine(PIXFLOW_THEME_LIB_URI,'/assets/css/admin.css'),false,PIXFLOW_THEME_VERSION);
-
-
-
+            wp_localize_script('mBuilder', 'mBuilderValues', $this->localize_values() );
+            wp_enqueue_style('admin',pixflow_path_combine(PIXFLOW_THEME_LIB_URI,'/assets/css/admin.min.css'),false,PIXFLOW_THEME_VERSION);
 
 
             do_action('mBuilder_shortcodes_init');
@@ -116,6 +142,71 @@ class MBuilder{
 
     }
 
+    public static function load_shortcode_maps(){
+        $shortcodes = PixflowFramework::Pixflow_Shortcodes(false);
+        MBuilder::load_shortcode_map($shortcodes);
+    }
+
+    /*
+     * Create a list of wordpress urls that we need in our js files
+     * @return void
+    */
+    private function localize_values() {
+        $mBuilderValues = array(
+            'ajax_url'    => admin_url('admin-ajax.php'),
+            'ajax_nonce'  => wp_create_nonce('ajax-nonce'),
+            'deleteText'  => __('Delete','massive-dynamic'),
+            'duplicateText'  => __('Duplicate','massive-dynamic'),
+            'animationText'  => __('Animation','massive-dynamic'),
+            'rowText'     => __('Row','massive-dynamic'),
+            'layoutText'  => __('Layout','massive-dynamic'),
+            'customColText'  => __('Custom Column','massive-dynamic'),
+            'deleteDescText' => __('Are you sure ?','massive-dynamic'),
+            'settingText'    => __('Setting','massive-dynamic'),
+            'leaveMsg' => esc_attr__('You are about to leave this page and you haven\'t saved changes yet, would you like to save changes before leaving?','massive-dynamic'),
+            'unsaved' => esc_attr__('Unsaved Changes!','massive-dynamic'),
+            'saved' => esc_attr__('Publish','massive-dynamic'),
+            'saving' => esc_attr__('Saving...','massive-dynamic'),
+            'save' => esc_attr__('Publish','massive-dynamic'),
+            'google_font' => PIXFLOW_THEME_LIB_URI . '/googlefonts.txt' ,
+            'designText' => esc_attr__('Design','massive-dynamic'),
+            'responsiveText' => esc_attr__('Responsive','massive-dynamic'),
+            'spacingText' => esc_attr__('Spacing','massive-dynamic') ,
+
+        );
+        return  $mBuilderValues;
+    }
+    /*
+     * load shortcode map
+     * @return void
+    */
+    public static function load_shortcode_map( $shortcode ) {
+        $filedClass = 'vc_col-sm-12 vc_column ';
+        static $separatorCounter = 0;
+        if( is_string( $shortcode ) ) {
+
+            if( file_exists( PIXFLOW_THEME_SHORTCODES . '/' . $shortcode . '/map.php' ) ) {
+                require_once( PIXFLOW_THEME_SHORTCODES . '/' . $shortcode . '/map.php' );
+            }
+
+        } elseif( is_array( $shortcode ) ) {
+
+            foreach( $shortcode as $name ) {
+
+                if( file_exists( PIXFLOW_THEME_SHORTCODES . '/' . $name . '/map.php' ) ) {
+                    require_once( PIXFLOW_THEME_SHORTCODES . '/' . $name . '/map.php' );
+                }
+
+            }
+
+        } else {
+
+            //Throw error
+            throw new Exception( 'Unknown shortcode type' );
+
+        }
+    }
+
     /**
      * Build setting panel form and inputs to edit shortcodes visually
      *
@@ -123,6 +214,7 @@ class MBuilder{
      * @since 1.0.0
      */
     public static function buildForm($params,$atts = array(),$content=null){
+        $groupJs = array();
         if(isset($atts['md_text_use_title_slider']) || in_array('md_text_use_title_slider',$atts)){
             if((isset($atts['md_text_number']) && $atts['md_text_number']<2) || !isset($atts['md_text_number'])){
                 $atts['md_text_use_title_slider'] = '';
@@ -131,7 +223,7 @@ class MBuilder{
         $innerContent = $content;
         global $mBuilderExternalTypes;
         foreach($params as $param){
-            if($param['group'] == '') $param['group'] = esc_attr__( "General",  'mBuilder');
+            if($param['group'] == '') $param['group'] = esc_attr__( "General",  'massive-dynamic');
             $form[$param['group']][] = $param;
             extract( shortcode_atts( array(
                 $param['param_name']  => $param['value']
@@ -139,7 +231,7 @@ class MBuilder{
         }
         if(isset($atts['css']) && $atts['css'] != ''){
             $css = $atts['css'];
-            $r = preg_match ('/.*?{(.*?)}.*?/is', $css,$matches);
+            preg_match ('/.*?{(.*?)}.*?/is', $css,$matches);
             if(is_array($matches) && isset($matches[1])){
                 $css = $matches[1];
             }else{
@@ -160,17 +252,17 @@ class MBuilder{
                 $final_css[str_replace('-','_',trim($property[0]))]=trim($property[1]);
             }
         }
-        if(count($form[esc_attr__( "General",  'mBuilder')])) {
-            $generalTab = $form[esc_attr__("General", 'mBuilder')];
-            unset($form[esc_attr__("General", 'mBuilder')]);
-            $form = array(esc_attr__("General", 'mBuilder') => $generalTab) + $form;
+        if(count($form[esc_attr__( "General",  'massive-dynamic')])) {
+            $generalTab = $form[esc_attr__("General", 'massive-dynamic')];
+            unset($form[esc_attr__("General", 'massive-dynamic')]);
+            $form = array(esc_attr__("General", 'massive-dynamic') => $generalTab) + $form;
             $content = $innerContent;
         }
         $groupHtml = array();
         echo '<div id="mBuilderTabs">';
         echo "<ul>";
         foreach($form as $key=>$group){
-            echo '<li><a href="#mBuilder'.str_replace(' ','',$key).'">'.$key.'</a></li>';
+            echo '<li><a href="#mBuilder'.str_replace(' ','',esc_attr($key)).'">'.esc_attr($key).'</a></li>';
             foreach($group as $k=>$param){
                 $dependency = '';
                 if(isset($param['dependency'])){
@@ -204,12 +296,19 @@ class MBuilder{
                             break;
                         case 'textarea_html':
                             $groupHtml[$key] .=
-                                '<div class="edit_form_line"><textarea name="' . $param['param_name'] . '">' . stripslashes($content) . '</textarea></div>';
+                                '<div class="edit_form_line"><textarea id="' . $param['param_name'] . '" name="' . $param['param_name'] . '">' . stripslashes($content) . '</textarea></div>';
                             break;
                         case 'textarea':
                             $groupHtml[$key] .=
                                 '<div class="mBuilder_element_label">' . $param['heading'] . '</div>' .
-                                '<div class="edit_form_line"><textarea name="' . $param['param_name'] . '">' . ${$param['param_name']} . '</textarea></div>';
+                                '<div class="edit_form_line"><textarea id="' . $param['param_name'] . '" name="' . $param['param_name'] . '">' . ${$param['param_name']} . '</textarea></div>';
+                            break;
+                        case 'textarea_raw_html':
+                            $raw_content =(bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', ${$param['param_name']}) ;
+                            $raw_content = ($raw_content)?htmlentities( rawurldecode( base64_decode( strip_tags( $raw_content ) ) ), ENT_COMPAT, 'UTF-8' ):$raw_content;
+                            $groupHtml[$key] .=
+                                '<div class="mBuilder_element_label">' . $param['heading'] . '</div>' .
+                                '<div class="edit_form_line"><textarea class="textarea_raw_html" name="' . $param['param_name'] . '">' . $raw_content . '</textarea></div>';
                             break;
                         case 'separator':
                             $groupHtml[$key] .=
@@ -310,20 +409,20 @@ class MBuilder{
         echo "</ul>";
         $groupJs = array_unique($groupJs);
         foreach ($groupHtml as $key=>$html){
-            echo '<div id="mBuilder'.str_replace(' ','',$key).'" class="mBuilder-edit-el">'.$html."</div>";
+            print('<div id="mBuilder'.str_replace(' ','',esc_attr($key)).'" class="mBuilder-edit-el">'.$html."</div>");
         }
-        $spectrum = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/spectrum.js';
-        echo '<script src="'.$spectrum.'"></script>';
-        $spectrumCSS = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/spectrum.css';
-        echo '<link rel="stylesheet" href="'.$spectrumCSS.'">';
+        $spectrum = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/spectrum.min.js';
+        echo '<script src="'.esc_url($spectrum).'"></script>';
+        $spectrumCSS = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/spectrum.min.css';
+        echo '<link rel="stylesheet" href="'.esc_url($spectrumCSS).'">';
 
-        $nouislider = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/jquery.nouislider.js';
-        echo '<script src="'.$nouislider.'"></script>';
-        $nouisliderCSS = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/jquery.nouislider.css';
-        echo '<link rel="stylesheet" href="'.$nouisliderCSS.'">';
+        $nouislider = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/jquery.nouislider.min.js';
+        echo '<script src="'.esc_url($nouislider).'"></script>';
+        $nouisliderCSS = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/jquery.nouislider.min.css';
+        echo '<link rel="stylesheet" href="'.esc_url($nouisliderCSS).'">';
 
         foreach($groupJs as $value){
-            echo '<script src="'.$value.'"></script>';
+            echo '<script src="'.esc_url($value).'"></script>';
         }
         echo "</div>";
 
@@ -344,7 +443,12 @@ class MBuilder{
                 }
                 $attr = preg_replace('/^\[[^\]]*? /s','' ,$attr );
             }
+            $i=0;
+
             while($attr) {
+                if(++$i>200){
+                    break;
+                }
                 $attr = trim($attr);
                 if(preg_match('/^\].*/s',$attr )){
                     $attr = null;
@@ -354,7 +458,7 @@ class MBuilder{
 
                 if(isset($separator[0])){
                     if($separator[0] == '') {
-                        echo $attr;
+                        echo esc_attr($attr);
                         break;
                     }
                     $attrs = explode($separator[0], $attr, 2);
@@ -368,6 +472,12 @@ class MBuilder{
                         $value = preg_split("/([^\\\])$separator[0]/s", $attrs[1], 2, PREG_SPLIT_DELIM_CAPTURE);
                     }
                     $key = str_replace('=', '', $key);
+                    if( ! (isset($value[0]) && isset($value[1]) && isset($value[2])) ){
+                        $value = array();
+                        $value[0] = '';
+                        $value[1] = '';
+                        $value[2] = substr($attrs[1],1);
+                    }
                     $attr = $value[2];
                     $value = $value[0].$value[1];
                     $value = str_replace('\"','"',$value);
@@ -473,7 +583,7 @@ class MBuilder{
         if (is_wp_error($post_id)) {
             $errors = $post_id->get_error_messages();
             foreach ($errors as $error) {
-                echo $error;
+                echo esc_attr($error);
             }
         }else{
             echo 'updated';
@@ -498,6 +608,11 @@ class MBuilder{
         $childes = $this->models[$id]['childes'];
         $content = $this->models[$id]['content'];
         $attr = ($attr != '')?' '.$attr:$attr;
+        // to prevent put double qoutation on VC Column
+        if($type == 'vc_column'){
+            $attr = str_replace('url("','url(``',$attr);
+            $attr = str_replace('");','``)',$attr);
+        }
         $this->content .= '['.$type.$attr.']';
         if(count($childes)){
             foreach ($childes as $child) {
@@ -515,21 +630,118 @@ class MBuilder{
         $this->content .='[/'.$type.']';
     }
 
+    public function generate_pages_models($page_id=null){
+        if(null == $page_id){
+            $page_id = get_the_ID();
+        }
+    	global $mBuilderModelIdArray,$in_mbuilder;
+        $last_in_mbuilder = $in_mbuilder;
+        $in_mbuilder =true;
+		$page_content = get_post($page_id);
+
+        if(!function_exists('pixflow_js_remove_wpautop')){
+            require_once ('includes/visualcomposer-functions.php');
+        }
+        if($page_content) {
+            pixflow_js_remove_wpautop($page_content->post_content);
+        }
+	    $this->models = $mBuilderModelIdArray;
+        $in_mbuilder = $last_in_mbuilder;
+	    return $this->models;
+    }
+
+    public function list_used_shortcodes($page_id=null){
+        if(null == $page_id){
+            $page_id = get_the_ID();
+        }
+        $used_shortcodes = array();
+        $content = get_post($page_id);
+        if (! $content){
+            return $used_shortcodes;
+        }
+        $content = $content->post_content;
+        $pat = "~\[[^\/][^=]*?( .*?)*?\]~s";
+
+        if(preg_match_all($pat, $content, $mats)){
+            $els = $mats[0];
+            $dels = array_count_values($els);
+            foreach($dels as $el=>$n){
+                $el = substr($el,1);
+                $el = str_replace(']','',$el);
+                $el = explode(' ',trim($el));
+                $used_shortcodes[] = $el[0];
+            }
+            $used_shortcodes = array_unique($used_shortcodes);
+        }
+
+        $this->used_shortcodes = $used_shortcodes ;
+        return $this->used_shortcodes;
+    }
+
+    /**
+     * Generate static JS and CSS for each page based on their shortcodes after publish
+     *
+     * @param $id - Page ID
+     * @param $models - Shortcode models
+     *
+     * @return boolean
+     * @since 1.0.0
+     */
+    public function generate_static_js_css($id){
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+	    $page_js_path = PIXFLOW_THEME_CACHE . '/' . $id . '.js';
+	    $page_css_path = PIXFLOW_THEME_CACHE . '/' . $id . '.css';
+        WP_Filesystem(false,false,true);
+        global $wp_filesystem;
+        $models = array();
+        $js_content = $css_content ='';
+        if(empty($this->models) && (!file_exists($page_js_path) || !file_exists($page_css_path)) ) {
+            $this->generate_pages_models($id);
+        }
+        if(empty($this->models)) {
+            $this->models = array();
+        }
+        $used_do_shortcodes = array();
+        $do_shortcodes = pixflow_load_do_shortcodes();
+        foreach ($do_shortcodes as $shortcode){
+            $used_do_shortcodes[] = array('attr'=>'','content'=>'','type'=>$shortcode);
+        }
+        if(count($used_do_shortcodes)){
+            $this->models = $used_do_shortcodes + $this->models;
+        }
+        foreach($this->models as $model){
+            if(!in_array($model['type'],$models)){
+                $models[] = $model['type'];
+                $dependencies = pixflow_load_dependency($model['type']);
+                $js_content .= $dependencies['js'];
+                $js_content .= @file_get_contents(PIXFLOW_THEME_LIB.'/shortcodes/'. $model['type'] . '/script.min.js');
+                $css_content .= $dependencies['css'];
+                $css_content .= @file_get_contents(PIXFLOW_THEME_LIB.'/shortcodes/'. $model['type'] . '/style.min.css');
+            }
+        }
+
+        if ( ! $wp_filesystem->put_contents(  PIXFLOW_THEME_CACHE .'/'.$id.'.js', $js_content) )
+        {
+            echo esc_attr__("error saving file!",'massive-dynamic');
+        }
+        if ( ! $wp_filesystem->put_contents(  PIXFLOW_THEME_CACHE . '/'.$id.'.css', $css_content) )
+        {
+            echo esc_attr__("error saving file!",'massive-dynamic');
+        }
+    }
+
     /**
      * A filter on the_content if mBuilder is loaded to change normal texts to the Text Shortcode
      *
      * @since 1.0.0
      */
     public function textToShortcode($content){
-        $content = shortcode_unautop( trim( $content ) );
-        $not_shortcodes = preg_split( '/' . get_shortcode_regex(). '/', $content );
-        foreach ( $not_shortcodes as $string ) {
-            $temp = str_replace( array('<p>','</p>'), '', $string );
+        if(strpos($content,"[vc_row")===false){
+            $temp = str_replace( array('<p>','</p>'), '', $content );
             if ( strlen( trim( $temp ) ) > 0 ) {
-                $content = preg_replace( '/(' . preg_quote( $string, '/' ) . '(?!\[\/))/', '[vc_row][vc_column][md_text]$1[/md_text][/vc_column][/vc_row]', $content );
+                $content = '[vc_row][vc_column][md_text md_text_title1="" md_text_title_separator="no"]'.$content.'[/md_text][/vc_column][/vc_row]';
             }
         }
-
         return $content;
     }
 
@@ -544,14 +756,21 @@ class MBuilder{
  * @since 1.0.0
  */
 function addBodyClasses($classes){
-    if (is_customize_preview()) {
+    global $in_mbuilder;
+    if ($in_mbuilder) {
         $classes[] = 'compose-mode';
         $classes[] = 'vc_editor';
+        $classes[] = 'pixflow-builder';
     }
     return $classes;
 }
 add_filter('body_class', 'addBodyClasses');
 
+function mbuilder_set_assets(){
+    $shortcodes_list = PixflowFramework::Pixflow_Shortcodes() ;
+    $shortcodes_list = array_map('pixflow_rename_shortcode' , $shortcodes_list);
+    return pixflow_get_assets_for_customizer($shortcodes_list) ;
+}
 /**
  * Massive Dynamic Starts using mBuilder as its default builder
  *
@@ -560,25 +779,19 @@ add_filter('body_class', 'addBodyClasses');
  */
 function pixflow_mBuilder($content){
     $mBuilder = MBuilder::getInstance();
-
     // Skip load Builder if its not in customizer
-    if(!is_customize_preview()) {
-        return $content;
-    }
-    // Skip load Builder if its blog or single portfolio template page
-    if ( true == is_home() || (true == is_singular( 'portfolio' ) && 'standard' == pixflow_metabox('portfolio_options.template_type','standard')) ) {
-        return $content;
-    }
-    // Skip load Builder if its shop page
-    if(function_exists('is_shop')){
-        if(is_product() && !(is_shop() || is_product_category())){
-            return $content;
-        }
-    }
+	global $in_mbuilder;
 
+    if(pixflow_is_builder_editable(get_the_ID()) == false && isset($_GET['mbuilder'] )) {
+    	$url = get_permalink();
+    	?>
+		<script> window.location.href = ' <?php echo esc_url($url); ?> ' </script>
+		<?php
+        return false ;
+    }
 
     if(!strpos($content,'[md_blog')){
-        $content = $mBuilder->textToShortcode($content);
+        $content = $in_mbuilder ? $mBuilder->textToShortcode($content) : $content ;
     }
 
 
@@ -587,24 +800,31 @@ function pixflow_mBuilder($content){
     return $content;
 }
 add_filter('the_content','pixflow_mBuilder');
+
+$current_user = wp_get_current_user();
+if(isset($_GET['mbuilder']) && user_can( $current_user, 'administrator' )){
+    global $in_mbuilder;
+    $in_mbuilder = true;
+    add_action('wp_enqueue_scripts','mbuilder_set_assets');
+}
+
 /**
- * Add visual basic shortcodes to mBuilder
+ * Add visual composer basic shortcodes to mBuilder
  *
  *
  * @return void
  * @since 1.0.0
  */
 function mBuilderPrerequisits(){
-    add_shortcode("vc_row",'mBuilder_vcRow');
-    add_shortcode("vc_row_inner",'mBuilder_vcInnerRow');
-    add_shortcode("vc_column",'mBuilder_vcColumn');
-    add_shortcode("vc_column_inner",'mBuilder_vcColumn');
+    add_shortcode("vc_row",'pixflow_get_style_script');
+    add_shortcode("vc_row_inner",'pixflow_get_style_script');
+    add_shortcode("vc_column",'pixflow_get_style_script');
+    add_shortcode("vc_column_inner",'pixflow_get_style_script');
     require_once(PIXFLOW_THEME_LIB.'/mbuilder/includes/visualcomposer-functions.php');
 }
 require_once(PIXFLOW_THEME_LIB.'/mbuilder/includes/visualcomposer-compatibilities.php');
 require_once(PIXFLOW_THEME_LIB.'/mbuilder/includes/ajax-actions.php');
 
-//////////////////////
 add_action('init', 'mBuilderPrerequisits', 998);
 
 function pixflow_tinymce_config( $init ) {
@@ -625,6 +845,41 @@ add_filter('tiny_mce_before_init', 'pixflow_tinymce_config');
  * @since 1.0.0
  */
 function mbuilderLateLoadStyles(){
-    wp_enqueue_style('bootstrap-style',pixflow_path_combine(PIXFLOW_THEME_CSS_URI,'bootstrap.css'),array(),PIXFLOW_THEME_VERSION);
+    wp_enqueue_style('bootstrap-style',pixflow_path_combine(PIXFLOW_THEME_CSS_URI,'bootstrap.min.css'),array(),null);
 }
 add_action('get_footer','mbuilderLateLoadStyles',999);
+
+/**
+ * Delete cache files from cache directory after each save post
+ *
+ * @since 1.1.0
+ */
+function mbuilder_generate_cache_files($post_id){
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
+    WP_Filesystem(false,false,true);
+    global $wp_filesystem;
+
+    $wp_filesystem->delete(PIXFLOW_THEME_CACHE.'/'.$post_id.'.css');
+    $wp_filesystem->delete(PIXFLOW_THEME_CACHE.'/'.$post_id.'.js');
+}
+add_action( 'save_post', 'mbuilder_generate_cache_files' );
+
+function pixflow_load_builder_layout() {
+    get_template_part('lib/mbuilder/templates/toolbar');
+    get_template_part('lib/mbuilder/templates/shortcode-sidebar');
+}
+if($in_mbuilder){
+    add_action('pixflow_body_start', 'pixflow_load_builder_layout');
+}
+
+/*
+ * Add custom styles when load pixflow builder toolbar
+ * */
+function pixflow_builder_toolbar_style(){
+    $inline_css = 'html { margin-top: 50px !important; }'.'* html body { margin-top: 50px !important; }';
+    wp_add_inline_style("responsive-style" , wp_strip_all_tags( $inline_css ) );
+}
+if($in_mbuilder){
+    add_action('wp_enqueue_scripts', 'pixflow_builder_toolbar_style');
+}
+

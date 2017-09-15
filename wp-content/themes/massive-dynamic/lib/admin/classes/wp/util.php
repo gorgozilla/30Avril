@@ -32,7 +32,7 @@ class VP_WP_Util
 		else
 			echo '<div class="updated">';
 
-		echo "<p><strong>$message</strong></p></div>";
+		echo "<p><strong>".esc_attr($message)."</strong></p></div>";
 	}
 
 }

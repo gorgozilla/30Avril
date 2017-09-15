@@ -8,7 +8,7 @@ global $md_uniqueSettings;
  */
 function pixflow_unique_setting_scripts() {
 	global $md_uniqueSettings;
-	wp_enqueue_script( 'unique_setting', pixflow_path_combine(PIXFLOW_THEME_LIB_URI,'/assets/script/unique-setting.js'), array('jquery'), '1.0', 1 );
+	wp_enqueue_script( 'unique_setting', pixflow_path_combine(PIXFLOW_THEME_LIB_URI,'/assets/script/unique-setting.min.js'), array('jquery'), '1.0', 1 );
 	wp_localize_script( 'unique_setting', 'ajax_var', array(
 		'url' => admin_url( 'admin-ajax.php' ),
 		'nonce' => wp_create_nonce( 'ajax-nonce' ),
@@ -37,16 +37,20 @@ function pixflow_save_unique_setting() {
 		$customized = $_POST['dirtyCustomized']; // customized values
 		$headerItemOrder = $_POST['headerItemOrder'];
 		$headerItemOrder = stripslashes(htmlspecialchars_decode($headerItemOrder));
-		$customized = (json_decode(stripslashes($customized),true));
+		$customized = stripslashes($customized);
+        $customized = str_replace("\t", "    ", $customized);
+        $customized = str_replace("\r", "\\n", $customized);
+        $customized = str_replace("\n", "\\n", $customized);
+		$customized = json_decode($customized,true);
 		if ( function_exists ( 'wp_cache_post_change' ) ) { // invalidate WP Super Cache if exists
 			$GLOBALS["super_cache_enabled"]=1;
 			wp_cache_post_change( $post_id );
 		}
 		if ( current_user_can( 'edit_theme_options' ) ) { // user is logged in
 			foreach($customized as $key=>$value){
-				if(in_array($key,$settings)){
+			    if(in_array($key,$settings)){
 					//unique setting
-					$value = (!boolval($value))?'false':$value;
+					$value = (is_bool($value) && !boolval($value))?'false':$value;
 					if($post_detail == 'post' || $post_detail == 'portfolio' || $post_detail == 'product'){
 						update_option( $post_detail.'_'.$key, $value );
 					}else{
@@ -159,7 +163,6 @@ function pixflow_get_setting() {
 	if ( isset( $_POST['status'] ) ) {
 
 		$post_id = $_POST['id']; // post id
-		$vc = $_POST['vc']; // VC Status
 		$status = $_POST['status']; //  Setting status
 		$settings = $_POST['settings']; // settings data
 		if ( function_exists ( 'wp_cache_post_change' ) ) { // invalidate WP Super Cache if exists
@@ -171,7 +174,7 @@ function pixflow_get_setting() {
 			pixflow_removeTemp();
 			foreach($settings as $id=>$setting){
 				$default = (defined('PIXFLOW_'.strtoupper(str_replace('-','_',$id))))?constant('PIXFLOW_'.strtoupper(str_replace('-','_',$id))):'';
-				$settings[$id]['value'] = pixflow_get_theme_mod($id,$default,$post_id,$vc);
+				$settings[$id]['value'] = pixflow_get_theme_mod($id,$default,$post_id);
 			}
             echo json_encode($settings);
 		}

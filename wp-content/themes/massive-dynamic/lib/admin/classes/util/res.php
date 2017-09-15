@@ -83,9 +83,9 @@ class VP_Util_Res
 	public static function img_out($img, $default)
 	{
 		if (empty($img))
-			echo self::img($default);
+			echo esc_url(self::img($default));
 		else
-			echo self::img($img);
+			echo esc_url(self::img($img));
 	}
 
 }

@@ -30,9 +30,9 @@ function pixflow_customizer_sections($wp_customize)
     $wp_customize->remove_control( 'active_theme' );
 
     $panels = array(
-        'layout' => array('title' => esc_attr__('General Options', 'massive-dynamic'), 'description' => esc_attr__('Set theme layout', 'massive-dynamic'), 'priority' => 20),
+        'layout' => array('title' => esc_attr__('General', 'massive-dynamic'), 'description' => esc_attr__('Set theme layout', 'massive-dynamic'), 'priority' => 20),
         'header' => array('title' => esc_attr__('Header', 'massive-dynamic'), 'description' => esc_attr__('Make your own header here', 'massive-dynamic'), 'priority' => 30),
-        'site_content' => array('title' => esc_attr__('Site Content', 'massive-dynamic'), 'description' => esc_attr__('Make your own header here', 'massive-dynamic'), 'priority' => 40),
+        'site_content' => array('title' => esc_attr__('Content', 'massive-dynamic'), 'description' => esc_attr__('Make your own header here', 'massive-dynamic'), 'priority' => 40),
         'footer' => array('title' => esc_attr__('Footer', 'massive-dynamic'), 'description' => esc_attr__('Set theme footer settings', 'massive-dynamic'), 'priority' => 50),
         'sidebar' => array('title' => esc_attr__('Sidebar', 'massive-dynamic'), 'description' => esc_attr__('Make your own sidebar here', 'massive-dynamic'), 'priority' => 60),
         'typography' => array('title' => esc_attr__('Typography', 'massive-dynamic'), 'description' => esc_attr__('Set theme font styles', 'massive-dynamic'), 'priority' => 80),
@@ -47,9 +47,10 @@ function pixflow_customizer_sections($wp_customize)
         'portfolio_sec' => array('title' => esc_attr__('Portfolio Detail', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'layout'),
         'custom_css' => array('title' => esc_attr__('Custom CSS', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'layout'),
         'custom_js' => array('title' => esc_attr__('Custom JS', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'layout'),
-        'purchase_code' => array('title' => esc_attr__('Purchase Code', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'layout'),
+        /*'purchase_code' => array('title' => esc_attr__('Purchase Code', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'layout'),*/
         'header_layout' => array('title' => esc_attr__('Header Layout', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'header'),
         'header_style' => array('title' => esc_attr__('Appearance', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'header'),
+        'menu_button' => array('title' => esc_attr__('Menu Button', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'header'),
         'header_dropdown' => array('title' => esc_attr__('Drop Down & Mega Menu', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'header'),
         'header_business_bar' => array('title' => esc_attr__('Business Bar', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'header'),
         'nav_sec' => array('title' => esc_attr__('Typography', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'header'),
@@ -75,7 +76,7 @@ function pixflow_customizer_sections($wp_customize)
         'link_sec' => array('title' => esc_attr__('Links', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'typography'),
         'charset_sec' => array('title' => esc_attr__('Charset', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'typography'),
         'social_item' => array('title' => esc_attr__('Social Links', 'massive-dynamic'), 'priority' => 90, 'panel' => ''),
-        'notification_main' => array('title' => esc_attr__('Notification Center', 'massive-dynamic'), 'priority' => 100,'panel'=>''),
+        'notification_main' => array('title' => esc_attr__('Notification', 'massive-dynamic'), 'priority' => 100,'panel'=>''),
     );
     if(in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || class_exists( 'WooCommerce' )){
         $sections['sidebar_shop'] = array('title' => esc_attr__('Shop Sidebar', 'massive-dynamic'), 'priority' => ++$sectionPriority, 'panel' => 'sidebar');
@@ -642,7 +643,7 @@ function pixflow_customizer_settings($controls)
     );
 
     /******* purchase code Sec *******/
-    $controls[] = array(
+    /*$controls[] = array(
         'type' => 'textarea',
         'default' => PIXFLOW_PURCHASE_CODE,
         'setting' => 'purchase_code',
@@ -669,7 +670,7 @@ function pixflow_customizer_settings($controls)
 
     $controls[] = array(
         'type' => 'description',
-        'default' => esc_attr__(''),
+        'default' => '',
         'setting' => 'purchase_validation',
         'section' => 'purchase_code',
         'priority' => ++$priority
@@ -677,7 +678,7 @@ function pixflow_customizer_settings($controls)
 
     $controls[] = array(
         'type' => 'description',
-        'default' => __('After entering your purchase code, you should save it using "Publish" button (that is placed on top of your work space), and then you can import demo websites.<br /><br /><a href="http://support.pixflow.net/knowledge-base/how-to-find-your-purchase-code/" target="_blank">Learn more</a>','massive-dynamic'),
+        'default' => __('After entering your purchase code, you should save it using "Publish" button (that is placed on top of your work space), and then you can import demo websites.<br /><br /><a href="https://help.massivedynamic.co/hc/en-us/articles/226565347-Where-is-my-purchase-code-" target="_blank">Learn more</a>','massive-dynamic'),
         'setting' => 'purchase_description',
         'section' => 'purchase_code',
         'priority' => ++$priority
@@ -694,7 +695,7 @@ function pixflow_customizer_settings($controls)
         'transport' => 'postMessage',
         'priority' => ++$priority,
         'output' => false
-    );
+    );*/
 
     //-------------------------------------------------
     // Header Panel Options
@@ -1779,6 +1780,43 @@ function pixflow_customizer_settings($controls)
     );
 
     /******* Menu Typography *******/
+
+    //select custom font
+    $controls[] = array(
+        'type' => 'radio',
+        'mode' => 'buttonset',
+        'setting' => 'nav_fontfamily_mode',
+        'panel' => 'typo',
+        'label' => esc_attr__('Font Type', 'massive-dynamic'),
+        'section' => 'nav_sec',
+        'default' => PIXFLOW_NAV_FONTFAMILY_MODE,
+        'priority' => ++$priority,
+        'choices' => array(
+            'google' => esc_attr__('Google', 'massive-dynamic'),
+            'custom' => esc_attr__('Custom', 'massive-dynamic'),
+        ),
+        'class' => 'glue first font-picker',
+        'transport' => 'refresh',
+        'separator' => 'true',
+    );
+
+    // custom font url
+    $controls[] = array(
+        'type' => 'upload',
+        'placeholder' => esc_attr__('Upload Font','massive-dynamic'),
+        'default' => '',
+        'setting' => 'nav_custom_font_url',
+        'label' => 'Custom Font',
+        'section' => 'nav_sec',
+        'transport' => 'refresh',
+        'priority' => ++$priority,
+        'class' => 'glue ',
+        'separator' => true,
+        'required' => array(
+            array('type'=>'radio','setting'=>'nav_fontfamily_mode','value'=>'custom')
+        )
+    );
+
     $controls[] = array(
         'type' => 'select',
         'setting' => 'nav_name',
@@ -1791,6 +1829,9 @@ function pixflow_customizer_settings($controls)
         'class' => 'glue first font-picker',
         'transport' => 'refresh',
         'separator' => 'true',
+        'required' => array(
+            array('type'=>'radio','setting'=>'nav_fontfamily_mode','value'=>'google')
+        )
     );// Font Name
 
     $controls[] = array(
@@ -2075,6 +2116,150 @@ function pixflow_customizer_settings($controls)
         'priority' => ++$priority
     );
 
+
+    //Menu Button
+    $controls[] = array(
+        'type' => 'select',
+        'setting' => 'menu_button_style',
+        'label' => esc_attr__('Style', 'massive-dynamic'),
+        'section' => 'menu_button',
+        'default' => PIXFLOW_MENU_BUTTON_STYLE,
+        'class' => 'glue first',
+        'separator' => true,
+        'priority' => ++$priority,
+        'choices' => array(
+            'rectangle' => esc_attr__('Rectangle', 'massive-dynamic'),
+            'rectangle_outline' => esc_attr__('Rectangle Outline', 'massive-dynamic'),
+            'oval' => esc_attr__('Oval', 'massive-dynamic'),
+            'oval_outline' => esc_attr__('Oval Outline', 'massive-dynamic'),
+        ),
+        'transport' => 'postMessage',
+        'compare' => 'and',
+        'required' => array(
+            array('type' => 'radio', 'setting' => 'header_position', 'value' => 'top'),
+            array('type' => 'select', 'setting' => 'header_theme', 'value' => 'classic'),
+            array('type' => 'select', 'setting' => 'classic_style', 'value' => 'none')
+        )
+    );
+
+    $controls[] = array(
+        'type' => 'titletext',
+        'default' => esc_attr__('colors','massive-dynamic'),
+        'setting' => 'menu_button_color_option',
+        'section' => 'menu_button',
+        'priority' => ++$priority,
+        'class' => 'glue',
+        'separator' => true,
+        'compare' => 'and',
+        'required' => array(
+            array('type' => 'radio', 'setting' => 'header_position', 'value' => 'top'),
+            array('type' => 'select', 'setting' => 'header_theme', 'value' => 'classic'),
+            array('type' => 'select', 'setting' => 'classic_style', 'value' => 'none')
+        )
+    );
+
+    $controls[] = array(
+        'type' => 'rgba',
+        'setting' => 'button_bg_color',
+        'label' => esc_attr__('Fill Color', 'massive-dynamic'),
+        'section' => 'menu_button',
+        'priority' => ++$priority,
+        'class' => 'glue',
+        'transport' => 'postMessage',
+        'default' => PIXFLOW_BUTTON_BG_COLOR,
+        'opacity' => false,
+        'compare' => 'and',
+        'required' => array(
+            array('type' => 'radio', 'setting' => 'header_position', 'value' => 'top'),
+            array('type' => 'select', 'setting' => 'header_theme', 'value' => 'classic'),
+            array('type' => 'select', 'setting' => 'classic_style', 'value' => 'none')
+        )
+    ); // texture overlay solid color
+
+    $controls[] = array(
+        'type' => 'rgba',
+        'setting' => 'button_text_color',
+        'label' => esc_attr__('Text Color', 'massive-dynamic'),
+        'section' => 'menu_button',
+        'priority' => ++$priority,
+        'class' => 'glue ',
+        'transport' => 'postMessage',
+        'default' => PIXFLOW_BUTTON_TEXT_COLOR,
+        'opacity' => false,
+        'compare' => 'and',
+        'separator' => true,
+        'required' => array(
+            array('type' => 'radio', 'setting' => 'header_position', 'value' => 'top'),
+            array('type' => 'select', 'setting' => 'header_theme', 'value' => 'classic'),
+            array('type' => 'select', 'setting' => 'classic_style', 'value' => 'none')
+        )
+    ); // texture overlay solid color
+
+    $controls[] = array(
+        'type' => 'titletext',
+        'default' => esc_attr__('Hover colors','massive-dynamic'),
+        'setting' => 'menu_button_hover_option',
+        'section' => 'menu_button',
+        'priority' => ++$priority,
+        'class' => 'glue',
+        'separator' => true,
+        'compare' => 'and',
+        'required' => array(
+            array('type' => 'radio', 'setting' => 'header_position', 'value' => 'top'),
+            array('type' => 'select', 'setting' => 'header_theme', 'value' => 'classic'),
+            array('type' => 'select', 'setting' => 'classic_style', 'value' => 'none')
+        )
+    );
+
+    $controls[] = array(
+        'type' => 'rgba',
+        'setting' => 'button_hover_bg_color',
+        'label' => esc_attr__('Fill Color', 'massive-dynamic'),
+        'section' => 'menu_button',
+        'priority' => ++$priority,
+        'class' => 'glue',
+        'transport' => 'postMessage',
+        'default' => PIXFLOW_BUTTON_HOVER_BG_COLOR,
+        'opacity' => false,
+        'compare' => 'and',
+        'required' => array(
+            array('type' => 'radio', 'setting' => 'header_position', 'value' => 'top'),
+            array('type' => 'select', 'setting' => 'header_theme', 'value' => 'classic'),
+            array('type' => 'select', 'setting' => 'classic_style', 'value' => 'none')
+        )
+    ); // texture overlay solid color
+
+
+
+    $controls[] = array(
+        'type' => 'rgba',
+        'setting' => 'button_hover_text_color',
+        'label' => esc_attr__('Text Color', 'massive-dynamic'),
+        'section' => 'menu_button',
+        'priority' => ++$priority,
+        'class' => 'glue ',
+        'transport' => 'postMessage',
+        'default' => PIXFLOW_BUTTON_HOVER_TEXT_COLOR,
+        'opacity' => false,
+        'compare' => 'and',
+        'separator' => true,
+        'required' => array(
+            array('type' => 'radio', 'setting' => 'header_position', 'value' => 'top'),
+            array('type' => 'select', 'setting' => 'header_theme', 'value' => 'classic'),
+            array('type' => 'select', 'setting' => 'classic_style', 'value' => 'none')
+        )
+    ); // texture overlay solid color
+
+    $url = admin_url().'nav-menus.php';
+    $controls[] = array(
+        'type' => 'description',
+        'default' => '<a target="_blank" href="'.$url.'" class="menu-page">'.esc_attr__("Edit Menu","massive-dynamic").' </a> <h6>'.esc_attr__('HOW TO USE MENU ITEM AS BUTTON','massive-dynamic').'</h6><ol class="menu"><li>'. esc_attr('Button menu items are only available in top classic header with style set to none. ','massive-dynamic') .'</li><li>'.esc_attr__('These options only affect the menu items which are turned to button.','massive-dynamic').'</li><li> To have buttons in header, click on button above and go to menu panel. From there click on a first-level menu item and choose "turn to button" option and save.</li></ol>',
+        'setting' => 'header_button_description',
+        'section' => 'menu_button',
+        'priority' => ++$priority,
+        'class' => 'glue last',
+        );
+
     //-------------------------------------------------
     // Site Content Panel Options
     //-------------------------------------------------
@@ -2192,7 +2377,7 @@ function pixflow_customizer_settings($controls)
         'separator' => true,
         'compare' => 'and',
         'required' => array(
-            array('type' => 'checkbox', 'setting' => 'main_bg', 'value' => true),
+            array('type' => 'checkbox', 'setting' => 'main_bg', 'value' => 1),
         )
     ); // Overlay Color type
 
@@ -3504,28 +3689,6 @@ function pixflow_customizer_settings($controls)
         'priority' => ++$priority,
         'class' => 'last glue',
     );
-
-    /*$controls[] = array(
-        'type' => 'image',
-        'setting' => 'preloader_logo',
-        'label' => esc_attr__('Preloader Logo', 'massive-dynamic'),
-        'section' => 'branding',
-        'priority' => ++$priority,
-        'default' => PIXFLOW_PRELOADER_LOGO,
-        'separator' => true,
-        'class' => 'first glue',
-        'separator' => true,
-        'transport' => 'postMessage'
-    );
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => 'Upload a small variation of your logo here, this logo will be displayed before load your website.',
-        'setting' => 'preloader_logo_description',
-        'section' => 'branding',
-        'priority' => ++$priority,
-        'class' => 'last glue',
-    );*/
     $controls[] = array(
         'type' => 'upload',
         'setting' => 'favicon',
@@ -3552,939 +3715,191 @@ function pixflow_customizer_settings($controls)
 
     $priority = $priority + 10;
 
+    $typography = array('h1','h2','h3','h4','h5','h6','p','link');
+
+    foreach ($typography as $typo){
+
+        $pixflowFontFamily  = constant('PIXFLOW_' . strtoupper($typo) . '_FONTFAMILY_MODE');
+        $pixflowName        = constant('PIXFLOW_' . strtoupper($typo) . '_NAME');
+        $pixflowSize        = constant('PIXFLOW_' . strtoupper($typo) . '_SIZE');
+        $pixflowWeight      = constant('PIXFLOW_' . strtoupper($typo) . '_WEIGHT');
+        $pixflowLineHight   = constant('PIXFLOW_' . strtoupper($typo) . '_LINEHEIGHT');
+        $pixflowLetterSpace = constant('PIXFLOW_' . strtoupper($typo) . '_LETTERSPACE');
+        $pixflowColor       = constant('PIXFLOW_' . strtoupper($typo) . '_COLOR');
+        $pixflowStyle       = constant('PIXFLOW_' . strtoupper($typo) . '_STYLE');
+
+        //select custom font
+        $controls[] = array(
+            'type' => 'radio',
+            'mode' => 'buttonset',
+            'setting' => $typo.'_fontfamily_mode',
+            'label' => esc_attr__('Font Type', 'massive-dynamic'),
+            'section' => $typo.'_sec',
+            'default' => $pixflowFontFamily,
+            'priority' => ++$priority,
+            'class' => 'glue first',
+            'choices' => array(
+                'google' => esc_attr__('Google', 'massive-dynamic'),
+                'custom' => esc_attr__('Custom', 'massive-dynamic'),
+            ),
+            'transport' => 'refresh',
+            'separator' => true,
+        );
+
+        // custom font url
+        $controls[] = array(
+            'type' => 'upload',
+            'placeholder' => esc_attr__('Upload Font','massive-dynamic'),
+            'default' => '',
+            'setting' => $typo.'_custom_font_url',
+            'label' => 'Custom Font',
+            'section' => $typo.'_sec',
+            'transport' => 'refresh',
+            'priority' => ++$priority,
+            'class' => 'glue ',
+            'separator' => true,
+            'required' => array(
+                array('type'=>'radio','setting'=>$typo.'_fontfamily_mode','value'=>'custom')
+            )
+        );
+
+        $controls[] = array(
+            'type' => 'select',
+            'setting' => $typo.'_name',
+            'label' => esc_attr__('Font Family', 'massive-dynamic'),
+            'section' => $typo.'_sec',
+            'default' => $pixflowName,
+            'class' => 'glue first open font-picker',
+            'priority' => ++$priority,
+            'choices' => array(pixflow_get_theme_mod($typo.'_name', $pixflowName)),
+            'transport' => 'refresh',
+            'separator' => true,
+            'required' => array(
+                array('type'=>'radio','setting'=>$typo.'_fontfamily_mode','value'=>'google')
+            )
+        );// Font Name
+
+        $controls[] = array(
+            'type' => 'slider',
+            'setting' => $typo.'_size',
+            'label' => esc_attr__('Size', 'massive-dynamic'),
+            'section' => $typo.'_sec',
+            'default' => $pixflowSize,
+            'priority' => ++$priority,
+            'class' => 'glue ',
+            'choices' => array(
+                'min' => 15,
+                'max' => 70,
+                'step' => 1,
+                'unit' => 'px'
+            ),
+            'transport' => 'postMessage',
+            'separator' => true,
+        );// font size
+
+        $controls[] = array(
+            'type' => 'slider',
+            'setting' => $typo.'_weight',
+            'label' => esc_attr__('Weight', 'massive-dynamic'),
+            'section' => $typo.'_sec',
+            'default' => $pixflowWeight,
+            'priority' => ++$priority,
+            'class' => 'glue last',
+            'separator' => true,
+            'choices' => array(
+                'min' => 100,
+                'max' => 800,
+                'step' => 100,
+            ),
+            'transport' => 'refresh'
+        );// font weight
+
+        $controls[] = array(
+            'type' => 'slider',
+            'setting' => $typo.'_lineHeight',
+            'label' => esc_attr__('Line Height', 'massive-dynamic'),
+            'section' => $typo.'_sec',
+            'default' => $pixflowLineHight,
+            'priority' => ++$priority,
+            'choices' => array(
+                'min' => 15,
+                'max' => 90,
+                'step' => 1,
+                'unit' => 'px'
+            ),
+            'class' => 'glue first',
+            'transport' => 'postMessage',
+            'separator' => true,
+        );//Line Height
+
+        $controls[] = array(
+            'type' => 'slider',
+            'setting' => $typo.'_letterSpace',
+            'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
+            'section' => $typo.'_sec',
+            'default' => $pixflowLetterSpace,
+            'priority' => ++$priority,
+            'choices' => array(
+                'min' => 0,
+                'max' => 10,
+                'step' => 0.01,
+                'unit' => 'px'
+            ),
+            'transport' => 'postMessage',
+            'separator' => true,
+            'class' => 'glue',
+        );//Letter Spacing
+
+        $controls[] = array(
+            'type' => 'rgba',
+            'setting' => $typo.'_color',
+            'label' => esc_attr__('Color', 'massive-dynamic'),
+            'section' => $typo.'_sec',
+            'default' => $pixflowColor,
+            'priority' => ++$priority,
+            'transport' => 'postMessage',
+            'class' => 'glue',
+            'separator' => true,
+        );// Font Color
+
+        $controls[] = array(
+            'type' => 'checkbox',
+            'setting' => $typo.'_style',
+            'label' => esc_attr__('Italic', 'massive-dynamic'),
+            'section' => $typo.'_sec',
+            'default' => $pixflowStyle,
+            'class' => 'glue',
+            'priority' => ++$priority,
+            'separator' => true,
+            'transport' => 'postMessage',
+        );//Italic
+
+        $controls[] = array(
+            'type' => 'description',
+            'default' => esc_attr__('Choose desired options for ','massive-dynamic').strtoupper($typo).esc_attr__(' tag. Please note that this settings will affect most shortcodes(elements) that use ','massive-dynamic').strtoupper($typo).esc_attr__(' for title.','massive-dynamic'),
+            'setting' => $typo.'_description_custom',
+            'section' => $typo.'_sec',
+            'class' => 'glue',
+            'priority' => ++$priority,
+            'required' => array(
+                array('type'=>'radio','setting'=>$typo.'_fontfamily_mode','value'=>'google')
+            )
+        );
+
+        $controls[] = array(
+            'type' => 'description',
+            'default' => esc_attr__('You can upload and use your custom fonts here. This theme supports .eot , .svg, .ttf, .woff and .woff2 for custom fonts. We recommend using .woff for better browser support.','massive-dynamic'),
+            'setting' => $typo.'_description',
+            'section' => $typo.'_sec',
+            'class' => 'glue last',
+            'priority' => ++$priority,
+            'required' => array(
+                array('type'=>'radio','setting'=>$typo.'_fontfamily_mode','value'=>'custom')
+            )
+        );
+
+    }
 
-    /********* H1 Sec *********/
-    $controls[] = array(
-        'type' => 'select',
-        'setting' => 'h1_name',
-        'label' => esc_attr__('Font Family', 'massive-dynamic'),
-        'section' => 'h1_sec',
-        'default' => PIXFLOW_H1_NAME,
-        'class' => 'glue first open font-picker',
-        'priority' => ++$priority,
-        'choices' => array(pixflow_get_theme_mod('h1_name',PIXFLOW_H1_NAME)),
-        'transport' => 'refresh',
-        'separator' => true,
-    );// Font Name
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h1_size',
-        'label' => esc_attr__('Size', 'massive-dynamic'),
-        'section' => 'h1_sec',
-        'default' => PIXFLOW_H1_SIZE,
-        'priority' => ++$priority,
-        'class' => 'glue ',
-        'choices' => array(
-            'min' => 15,
-            'max' => 70,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-    );// font size
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h1_weight',
-        'label' => esc_attr__('Weight', 'massive-dynamic'),
-        'section' => 'h1_sec',
-        'default' => PIXFLOW_H1_WEIGHT,
-        'priority' => ++$priority,
-        'class' => 'glue last',
-        'separator' => true,
-        'choices' => array(
-            'min' => 100,
-            'max' => 800,
-            'step' => 100,
-        ),
-        'transport' => 'refresh'
-    );// font weight
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h1_lineHeight',
-        'label' => esc_attr__('Line Height', 'massive-dynamic'),
-        'section' => 'h1_sec',
-        'default' => PIXFLOW_H1_LINEHEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 15,
-            'max' => 90,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue first',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );//Line Height
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h1_letterSpace',
-        'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
-        'section' => 'h1_sec',
-        'default' => PIXFLOW_H1_LETTERSPACE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 0,
-            'max' => 10,
-            'step' => 0.01,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-        'class' => 'glue',
-    );//Letter Spacing
-
-    $controls[] = array(
-        'type' => 'rgba',
-        'setting' => 'h1_color',
-        'label' => esc_attr__('Color', 'massive-dynamic'),
-        'section' => 'h1_sec',
-        'default' => PIXFLOW_H1_COLOR,
-        'priority' => ++$priority,
-        'transport' => 'postMessage',
-        'class' => 'glue',
-        'separator' => true,
-    );// Font Color
-
-    $controls[] = array(
-        'type' => 'checkbox',
-        'setting' => 'h1_style',
-        'label' => esc_attr__('Italic', 'massive-dynamic'),
-        'section' => 'h1_sec',
-        'default' => PIXFLOW_H1_STYLE,
-        'class' => 'glue',
-        'priority' => ++$priority,
-        'separator' => true,
-        'transport' => 'postMessage',
-    );//Italic
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => esc_attr__('Choose desired options for H1 tag. Please note that this settings will affect most shortcodes(elements) that use H1 for title.','massive-dynamic'),
-        'setting' => 'h1_description',
-        'section' => 'h1_sec',
-        'class' => 'glue last',
-        'priority' => ++$priority
-    );
-
-    /******* H2 Sec *******/
-    $controls[] = array(
-        'type' => 'select',
-        'setting' => 'h2_name',
-        'label' => esc_attr__('Font Family', 'massive-dynamic'),
-        'section' => 'h2_sec',
-        'default' => PIXFLOW_H2_NAME,
-        'class' => 'glue first font-picker',
-        'priority' => ++$priority,
-        'choices' => array(pixflow_get_theme_mod('h2_name',PIXFLOW_H2_NAME)),
-        'separator' => true,
-    );// Font Name
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h2_size',
-        'label' => esc_attr__('Size', 'massive-dynamic'),
-        'section' => 'h2_sec',
-        'default' => PIXFLOW_H2_SIZE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 60,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue ',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );// font size
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h2_weight',
-        'label' => esc_attr__('Weight', 'massive-dynamic'),
-        'section' => 'h2_sec',
-        'default' => PIXFLOW_H2_WEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 100,
-            'max' => 800,
-            'step' => 100,
-        ),
-        'separator' => true,
-        'class' => 'glue last',
-    );// font weight
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h2_lineHeight',
-        'label' => esc_attr__('Line Height', 'massive-dynamic'),
-        'section' => 'h2_sec',
-        'default' => PIXFLOW_H2_LINEHEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 8,
-            'max' => 80,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue first',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );//Line Height
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h2_letterSpace',
-        'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
-        'section' => 'h2_sec',
-        'default' => PIXFLOW_H2_LETTERSPACE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 0,
-            'max' => 10,
-            'step' => 0.01,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-        'class' => 'glue',
-    );//Letter Spacing
-
-    $controls[] = array(
-        'type' => 'rgba',
-        'setting' => 'h2_color',
-        'label' => esc_attr__('Color', 'massive-dynamic'),
-        'section' => 'h2_sec',
-        'default' => PIXFLOW_H2_COLOR,
-        'priority' => ++$priority,
-        'separator' => true,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );// Font Color
-
-    $controls[] = array(
-        'type' => 'checkbox',
-        'setting' => 'h2_style',
-        'label' => esc_attr__('Italic', 'massive-dynamic'),
-        'section' => 'h2_sec',
-        'default' => PIXFLOW_H2_STYLE,
-        'priority' => ++$priority,
-        'separator' => true,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );//Italic
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => esc_attr__('Choose desired options for H2 tag. Please note that this settings will affect most shortcodes(elements) that use H2 for title.','massive-dynamic'),
-        'setting' => 'h2_description',
-        'section' => 'h2_sec',
-        'class' => 'glue last',
-        'priority' => ++$priority
-    );
-
-    /******* H3 Sec *******/
-    $controls[] = array(
-        'type' => 'select',
-        'setting' => 'h3_name',
-        'label' => esc_attr__('Font Family', 'massive-dynamic'),
-        'section' => 'h3_sec',
-        'default' => PIXFLOW_H3_NAME,
-        'class' => 'glue first font-picker',
-        'priority' => ++$priority,
-        'choices' => array(pixflow_get_theme_mod('h3_name',PIXFLOW_H3_NAME)),
-        'separator' => true,
-    );// Font Name
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h3_size',
-        'label' => esc_attr__('Size', 'massive-dynamic'),
-        'section' => 'h3_sec',
-        'default' => PIXFLOW_H3_SIZE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 50,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue ',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );// font size
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h3_weight',
-        'label' => esc_attr__('Weight', 'massive-dynamic'),
-        'section' => 'h3_sec',
-        'default' => PIXFLOW_H3_WEIGHT,
-        'priority' => ++$priority,
-        'class' => 'glue last',
-        'choices' => array(
-            'min' => 100,
-            'max' => 800,
-            'step' => 100,
-        ),
-        'separator' => true
-    );// font weight
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h3_lineHeight',
-        'label' => esc_attr__('Line Height', 'massive-dynamic'),
-        'section' => 'h3_sec',
-        'default' => PIXFLOW_H3_LINEHEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 70,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue first',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );//Line Height
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h3_letterSpace',
-        'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
-        'section' => 'h3_sec',
-        'default' => PIXFLOW_H3_LETTERSPACE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 0,
-            'max' => 10,
-            'step' => 0.01,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-        'class' => 'glue',
-    );//Letter Spacing
-
-    $controls[] = array(
-        'type' => 'rgba',
-        'setting' => 'h3_color',
-        'label' => esc_attr__('Color', 'massive-dynamic'),
-        'section' => 'h3_sec',
-        'default' => PIXFLOW_H3_COLOR,
-        'priority' => ++$priority,
-        'transport' => 'postMessage',
-        'separator' => true,
-        'class' => 'glue',
-    );// Font Color
-
-    $controls[] = array(
-        'type' => 'checkbox',
-        'setting' => 'h3_style',
-        'label' => esc_attr__('Italic', 'massive-dynamic'),
-        'section' => 'h3_sec',
-        'default' => PIXFLOW_H3_STYLE,
-        'priority' => ++$priority,
-        'separator' => true,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );//Italic
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => esc_attr__('Choose desired options for H3 tag. Please note that this settings will affect most shortcodes(elements) that use H3 for title.','massive-dynamic'),
-        'setting' => 'h3_description',
-        'section' => 'h3_sec',
-        'priority' => ++$priority,
-        'class' => 'glue last',
-    );
-
-    /******* H4 Sec *******/
-    $controls[] = array(
-        'type' => 'select',
-        'setting' => 'h4_name',
-        'label' => esc_attr__('Font Family', 'massive-dynamic'),
-        'section' => 'h4_sec',
-        'default' => PIXFLOW_H4_NAME,
-        'priority' => ++$priority,
-        'class' => 'glue first font-picker',
-        'choices' => array(pixflow_get_theme_mod('h4_name',PIXFLOW_H4_NAME)),
-        'separator' => true,
-    );// Font Name
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h4_size',
-        'label' => esc_attr__('Size', 'massive-dynamic'),
-        'section' => 'h4_sec',
-        'default' => PIXFLOW_H4_SIZE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 40,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue ',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );// font size
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h4_weight',
-        'label' => esc_attr__('Weight', 'massive-dynamic'),
-        'section' => 'h4_sec',
-        'default' => PIXFLOW_H4_WEIGHT,
-        'priority' => ++$priority,
-        'class' => 'glue ',
-        'choices' => array(
-            'min' => 100,
-            'max' => 800,
-            'step' => 100,
-        ),
-        'separator' => true,
-    );// font weight
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h4_lineHeight',
-        'label' => esc_attr__('Line Height', 'massive-dynamic'),
-        'section' => 'h4_sec',
-        'default' => PIXFLOW_H4_LINEHEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 60,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );//Line Height
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h4_letterSpace',
-        'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
-        'section' => 'h4_sec',
-        'default' => PIXFLOW_H4_LETTERSPACE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 0,
-            'max' => 10,
-            'step' => 0.01,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-        'class' => 'glue',
-    );//Letter Spacing
-
-    $controls[] = array(
-        'type' => 'rgba',
-        'setting' => 'h4_color',
-        'label' => esc_attr__('Color', 'massive-dynamic'),
-        'section' => 'h4_sec',
-        'default' => PIXFLOW_H4_COLOR,
-        'priority' => ++$priority,
-        'separator' => true,
-        'transport' => 'postMessage',
-        'class' => 'glue',
-    );// Font Color
-
-    $controls[] = array(
-        'type' => 'checkbox',
-        'setting' => 'h4_style',
-        'label' => esc_attr__('Italic', 'massive-dynamic'),
-        'section' => 'h4_sec',
-        'default' => PIXFLOW_H4_STYLE,
-        'priority' => ++$priority,
-        'separator' => true,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );//Italic
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => esc_attr__('Choose desired options for H4 tag. Please note that this settings will affect most shortcodes(elements) that use H4 for title.','massive-dynamic'),
-        'setting' => 'h4_description',
-        'section' => 'h4_sec',
-        'priority' => ++$priority,
-        'class' => 'glue last',
-    );
-
-    /******* H5 Sec *******/
-    $controls[] = array(
-        'type' => 'select',
-        'setting' => 'h5_name',
-        'label' => esc_attr__('Font Family', 'massive-dynamic'),
-        'section' => 'h5_sec',
-        'default' => PIXFLOW_H5_NAME,
-        'priority' => ++$priority,
-        'class' => 'glue first font-picker',
-        'choices' => array(pixflow_get_theme_mod('h5_name',PIXFLOW_H5_NAME)),
-        'separator' => true,
-    );// Font Name
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h5_size',
-        'label' => esc_attr__('Size', 'massive-dynamic'),
-        'section' => 'h5_sec',
-        'default' => PIXFLOW_H5_SIZE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 30,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue ',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );// font size
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h5_weight',
-        'label' => esc_attr__('Weight', 'massive-dynamic'),
-        'section' => 'h5_sec',
-        'default' => PIXFLOW_H5_WEIGHT,
-        'priority' => ++$priority,
-        'class' => 'glue',
-        'choices' => array(
-            'min' => 100,
-            'max' => 800,
-            'step' => 100,
-        ),
-        'separator' => true,
-    );// font weight
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h5_lineHeight',
-        'label' => esc_attr__('Line Height', 'massive-dynamic'),
-        'section' => 'h5_sec',
-        'default' => PIXFLOW_H5_LINEHEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 50,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue ',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );//Line Height
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h5_letterSpace',
-        'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
-        'section' => 'h5_sec',
-        'default' => PIXFLOW_H5_LETTERSPACE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 0,
-            'max' => 10,
-            'step' => 0.01,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-        'class' => 'glue',
-    );//Letter Spacing
-
-    $controls[] = array(
-        'type' => 'rgba',
-        'setting' => 'h5_color',
-        'label' => esc_attr__(' Color', 'massive-dynamic'),
-        'section' => 'h5_sec',
-        'default' => PIXFLOW_H5_COLOR,
-        'priority' => ++$priority,
-        'separator' => true,
-        'transport' => 'postMessage',
-        'class' => 'glue',
-    );// Font Color
-
-    $controls[] = array(
-        'type' => 'checkbox',
-        'setting' => 'h5_style',
-        'label' => esc_attr__('Italic', 'massive-dynamic'),
-        'section' => 'h5_sec',
-        'default' => PIXFLOW_H5_STYLE,
-        'separator' => true,
-        'priority' => ++$priority,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );//Italic
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => esc_attr__('Choose desired options for H5 tag. Please note that this settings will affect most shortcodes(elements) that use H5 for title.','massive-dynamic'),
-        'setting' => 'h5_description',
-        'section' => 'h5_sec',
-        'priority' => ++$priority,
-        'class' => 'glue last',
-    );
-
-    /******* H6 Sec *******/
-    $controls[] = array(
-        'type' => 'select',
-        'setting' => 'h6_name',
-        'label' => esc_attr__('Font Family', 'massive-dynamic'),
-        'section' => 'h6_sec',
-        'default' => PIXFLOW_H6_NAME,
-        'priority' => ++$priority,
-        'class' => 'glue first font-picker',
-        'choices' => array(pixflow_get_theme_mod('h6_name',PIXFLOW_H6_NAME)),
-        'separator' => true,
-    );// Font Name
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h6_size',
-        'label' => esc_attr__('Size', 'massive-dynamic'),
-        'section' => 'h6_sec',
-        'default' => PIXFLOW_H6_SIZE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 20,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue',
-        'separator' => true,
-        'transport' => 'postMessage'
-    );// font size
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h6_weight',
-        'label' => esc_attr__('Weight', 'massive-dynamic'),
-        'section' => 'h6_sec',
-        'default' => PIXFLOW_H6_WEIGHT,
-        'priority' => ++$priority,
-        'class' => 'glue',
-        'separator' => true,
-        'choices' => array(
-            'min' => 100,
-            'max' => 800,
-            'step' => 100,
-        )
-    );// font weight
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h6_lineHeight',
-        'label' => esc_attr__('Line Height', 'massive-dynamic'),
-        'section' => 'h6_sec',
-        'default' => PIXFLOW_H6_LINEHEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 40,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );//Line Height
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'h6_letterSpace',
-        'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
-        'section' => 'h6_sec',
-        'default' => PIXFLOW_H6_LETTERSPACE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 0,
-            'max' => 20,
-            'step' => 0.01,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-        'class' => 'glue',
-    );//Letter Spacing
-
-    $controls[] = array(
-        'type' => 'rgba',
-        'setting' => 'h6_color',
-        'label' => esc_attr__('Color', 'massive-dynamic'),
-        'section' => 'h6_sec',
-        'default' => PIXFLOW_H6_COLOR,
-        'priority' => ++$priority,
-        'separator' => true,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );// Font Color
-
-    $controls[] = array(
-        'type' => 'checkbox',
-        'setting' => 'h6_style',
-        'label' => esc_attr__('Italic', 'massive-dynamic'),
-        'section' => 'h6_sec',
-        'default' => PIXFLOW_H6_STYLE,
-        'separator' => true,
-        'priority' => ++$priority,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );//Italic
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => esc_attr__('Choose desired options for H6 tag. Please note that this settings will affect most shortcodes(elements) that use H6 for title.','massive-dynamic'),
-        'setting' => 'h6_description',
-        'section' => 'h6_sec',
-        'priority' => ++$priority,
-        'class' => 'glue last',
-    );
-
-    /******* Paragraph Sec *******/
-    $controls[] = array(
-        'type' => 'select',
-        'setting' => 'p_name',
-        'label' => esc_attr__('Font Family', 'massive-dynamic'),
-        'section' => 'p_sec',
-        'default' => PIXFLOW_P_NAME,
-        'class' => 'glue first font-picker',
-        'priority' => ++$priority,
-        'choices' => array(pixflow_get_theme_mod('p_name',PIXFLOW_P_NAME)),
-        'separator' => true,
-    );// Font Name
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'p_size',
-        'label' => esc_attr__('Size', 'massive-dynamic'),
-        'section' => 'p_sec',
-        'default' => PIXFLOW_P_SIZE,
-        'priority' => ++$priority,
-        'class' => 'glue ',
-        'choices' => array(
-            'min' => 7,
-            'max' => 70,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-    );// font size
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'p_weight',
-        'label' => esc_attr__('Weight', 'massive-dynamic'),
-        'section' => 'p_sec',
-        'default' => PIXFLOW_P_WEIGHT,
-        'priority' => ++$priority,
-        'class' => 'glue',
-        'separator' => true,
-        'choices' => array(
-            'min' => 100,
-            'max' => 800,
-            'step' => 100,
-        )
-    );// font weight
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'p_lineHeight',
-        'label' => esc_attr__('Line Height', 'massive-dynamic'),
-        'section' => 'p_sec',
-        'default' => PIXFLOW_P_LINEHEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 8,
-            'max' => 90,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'p_letterSpace',
-        'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
-        'section' => 'p_sec',
-        'default' => PIXFLOW_P_LETTERSPACE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 0,
-            'max' => 10,
-            'step' => 0.01,
-            'unit' => 'px'
-        ),
-        'separator' => true,
-        'transport' => 'postMessage',
-        'class' => 'glue',
-    );
-
-    $controls[] = array(
-        'type' => 'rgba',
-        'setting' => 'p_color',
-        'label' => esc_attr__('Color', 'massive-dynamic'),
-        'section' => 'p_sec',
-        'default' => PIXFLOW_P_COLOR,
-        'separator' => true,
-        'priority' => ++$priority,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );// Font Color
-
-    $controls[] = array(
-        'type' => 'checkbox',
-        'setting' => 'p_style',
-        'label' => esc_attr__('Italic', 'massive-dynamic'),
-        'section' => 'p_sec',
-        'default' => PIXFLOW_P_STYLE,
-        'separator' => true,
-        'priority' => ++$priority,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );//font Style
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => esc_attr__('Choose desired options for p tag. Please note that this settings will affect most shortcodes(elements) with description text.','massive-dynamic'),
-        'setting' => 'p_description',
-        'section' => 'p_sec',
-        'priority' => ++$priority,
-        'class' => 'glue last',
-    );
-
-    /******* Links Sec *******/
-    $controls[] = array(
-        'type' => 'select',
-        'setting' => 'link_name',
-        'panel' => 'typo',
-        'label' => esc_attr__('Font Family', 'massive-dynamic'),
-        'section' => 'link_sec',
-        'default' => PIXFLOW_LINK_NAME,
-        'priority' => ++$priority,
-        'choices' => array(pixflow_get_theme_mod('link_name',PIXFLOW_LINK_NAME)),
-        'class' => 'glue font-picker',
-        'transport' => 'refresh',
-        'separator' => true,
-    );// Font Name
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'link_size',
-        'label' => esc_attr__('Size', 'massive-dynamic'),
-        'section' => 'link_sec',
-        'default' => PIXFLOW_LINK_SIZE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 30,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );// font size
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'link_weight',
-        'label' => esc_attr__('Weight', 'massive-dynamic'),
-        'section' => 'link_sec',
-        'default' => PIXFLOW_LINK_WEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 100,
-            'max' => 800,
-            'step' => 100,
-        ),
-        'class' => 'glue ',
-        'separator' => true,
-        'transport' => 'refresh',
-    );// font weight
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'link_lineHeight',
-        'label' => esc_attr__('Line Height', 'massive-dynamic'),
-        'section' => 'link_sec',
-        'default' => PIXFLOW_LINK_LINEHEIGHT,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 10,
-            'max' => 30,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'class' => 'glue',
-        'transport' => 'postMessage',
-        'separator' => true,
-    );//Line Height
-
-    $controls[] = array(
-        'type' => 'slider',
-        'setting' => 'link_letterSpace',
-        'label' => esc_attr__('Letter Spacing', 'massive-dynamic'),
-        'section' => 'link_sec',
-        'default' => PIXFLOW_LINK_LETTERSPACE,
-        'priority' => ++$priority,
-        'choices' => array(
-            'min' => 0,
-            'max' => 10,
-            'step' => 1,
-            'unit' => 'px'
-        ),
-        'transport' => 'postMessage',
-        'separator' => true,
-        'class' => 'glue ',
-    );//Letter Spacing
-
-    $controls[] = array(
-        'type' => 'rgba',
-        'setting' => 'link_color',
-        'label' => esc_attr__('Color', 'massive-dynamic'),
-        'section' => 'link_sec',
-        'default' => PIXFLOW_LINK_COLOR,
-        'priority' => ++$priority,
-        'separator' => true,
-        'transport' => 'postMessage',
-        'class' => 'glue',
-    );// Font Color
-
-    $controls[] = array(
-        'type' => 'checkbox',
-        'setting' => 'link_style',
-        'label' => esc_attr__('Italic', 'massive-dynamic'),
-        'section' => 'link_sec',
-        'default' => PIXFLOW_LINK_STYLE,
-        'separator' => true,
-        'priority' => ++$priority,
-        'class' => 'glue',
-        'transport' => 'postMessage'
-    );//Italic
-
-    $controls[] = array(
-        'type' => 'description',
-        'default' => esc_attr__('Choose desired options for a tag.','massive-dynamic'),
-        'setting' => 'link_description',
-        'section' => 'link_sec',
-        'priority' => ++$priority,
-        'class' => 'glue last',
-    );
 
     /******* Charset Sec *******/
     $controls[] = array(

@@ -73,6 +73,14 @@ function pixflow_register_required_plugins() {
 			'required'			=> false, // If false, the plugin is only 'recommended' instead of required
 			'force_deactivation'=> false,
 		),
+        //Ninja Popups
+        array(
+            'name'			    => 'Ninja Popups', // The plugin name
+            'slug'			    => 'ninja-popups', // The plugin slug (typically the folder name)
+            'source'            => pixflow_path_combine(PIXFLOW_THEME_PLUGINS, 'ninja-popups.zip'), // The plugin source
+            'required'			=> false, // If false, the plugin is only 'recommended' instead of required
+            'force_deactivation'=> false,
+        ),
 		//Go Pricing
 		array(
 			'name'			    => 'Go Pricing', // The plugin name
@@ -192,7 +200,7 @@ add_action( 'vc_before_init', 'pixflow_vcSetAsTheme');
 
 // Initialising Massive Dynamic Shortcodes
 if (class_exists('WPBakeryVisualComposerAbstract')) {
-
+    vc_disable_frontend();
 	// Remove hints from frontend editor
 	add_action( 'vc_before_init', 'pixflow_vc_remove_fe_pointers');
 	function pixflow_vc_remove_fe_pointers() {
@@ -215,13 +223,25 @@ if (class_exists('WPBakeryVisualComposerAbstract')) {
 	add_filter('vc_google_fonts_get_fonts_filter', 'pixflow_changevcfont');
 	function pixflow_changevcfont()
 	{
-		$fonts_list = '[{"font_family":"Roboto","font_styles":"regular,100,100italic,300,300italic,italic,500,500italic,700,700italic,900,900italic","font_types":"400 regular:400:normal,100 light regular:100:normal,100 light italic:100:italic,300 light regular:300:normal,300 light italic:300:italic,400 italic:400:italic,500 bold regular:500:normal,500 bold italic:500:italic,700 bold regular:700:normal,700 bold italic:700:italic,900 bold regular:900:normal,900 bold italic:900:italic"},{"font_family":"Open Sans",	"font_styles":"300,300italic,regular,italic,600,600italic,700,700italic,800,800italic",	"font_types":"300 light regular:300:normal,300 light italic:300:italic,400 regular:400:normal,400 italic:400:italic,600 bold regular:600:normal,600 bold italic:600:italic,700 bold regular:700:normal,700 bold italic:700:italic,800 bold regular:800:normal,800 bold italic:800:italic"}	,{"font_family":"Open Sans Condensed","font_styles":"300,300italic,700","font_types":"300 light regular:300:normal,300 light italic:300:italic,700 bold regular:700:normal"},{"font_family":"Orbitron","font_styles":"regular,500,700,900","font_types":"400 regular:400:normal,500 bold regular:500:normal,700 bold regular:700:normal,900 bold regular:900:normal"},{"font_family":"Oswald","font_styles":"300,regular,700","font_types":"300 light regular:300:normal,400 regular:400:normal,700 bold regular:700:normal"},{"font_family":"Oxygen","font_styles":"300,regular,700","font_types":"300 light regular:300:normal,400 regular:400:normal,700 bold regular:700:normal"},{"font_family":"PT Sans","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"PT Serif","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Pacifico","font_styles":"regular","font_types":"400 regular:400:normal"},{"font_family":"Permanent Marker","font_styles":"regular","font_types":"400 regular:400:normal"},{"font_family":"Philosopher","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Playfair Display","font_styles":"regular,italic,700,700italic,900,900italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic,900 bold regular:900:normal,900 bold italic:900:italic"},{"font_family":"Poppins","font_styles":"300,regular,500,600,700","font_types":"300 light regular:300:normal,400 regular:400:normal,500 bold regular:500:normal,600 bold regular:600:normal,700 bold regular:700:normal"},{"font_family":"Radley","font_styles":"regular,italic","font_types":"400 regular:400:normal,400 italic:400:italic"},{"font_family":"Raleway","font_styles":"100,200,300,regular,500,600,700,800,900","font_types":"100 light regular:100:normal,200 light regular:200:normal,300 light regular:300:normal,400 regular:400:normal,500 bold regular:500:normal,600 bold regular:600:normal,700 bold regular:700:normal,800 bold regular:800:normal,900 bold regular:900:normal"},{"font_family":"Roboto Condensed","font_styles":"300,300italic,regular,italic,700,700italic","font_types":"300 light regular:300:normal,300 light italic:300:italic,400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Roboto Slab","font_styles":"100,300,regular,700","font_types":"100 light regular:100:normal,300 light regular:300:normal,400 regular:400:normal,700 bold regular:700:normal"},{"font_family":"Satisfy","font_styles":"regular","font_types":"400 regular:400:normal"},{"font_family":"Signika","font_styles":"300,regular,600,700","font_types":"300 light regular:300:normal,400 regular:400:normal,600 bold regular:600:normal,700 bold regular:700:normal"},{"font_family":"Source Code Pro","font_styles":"200,300,regular,500,600,700,900","font_types":"200 light regular:200:normal,300 light regular:300:normal,400 regular:400:normal,500 bold regular:500:normal,600 bold regular:600:normal,700 bold regular:700:normal,900 bold regular:900:normal"},{"font_family":"Ubuntu","font_styles":"300,300italic,regular,italic,500,500italic,700,700italic","font_types":"300 light regular:300:normal,300 light italic:300:italic,400 regular:400:normal,400 italic:400:italic,500 bold regular:500:normal,500 bold italic:500:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Ubuntu Mono","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Vollkorn","font_styles":"regular,italic,700,700italic","font_types":"400 regular:400:normal,400 italic:400:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Montserrat","font_styles":"regular,700","font_types":"400 regular:400:normal,700 bold regular:700:normal"},{"font_family":"Ubuntu",	"font_styles":"300,300italic,regular,italic,500,500italic,700,700italic", "font_types":"300 light regular:300:normal,300 light italic:300:italic,400 regular:400:normal,400 italic:400:italic,500 bold regular:500:normal,500 bold italic:500:italic,700 bold regular:700:normal,700 bold italic:700:italic"},{"font_family":"Dosis","font_styles":"200,300,regular,500,600,700,800","font_types":"200 light regular:200:normal,300 light regular:300:normal,400 regular:400:normal,500 bold regular:500:normal,600 bold regular:600:normal,700 bold regular:700:normal,800 bold regular:800:normal"},{"font_family":"Lato","font_styles":"100,300,regular,700,900","font_types":"100 light regular:100:normal,100 light italic:100:italic,300 light regular:300:normal,300 light italic:300:italic,400 light regular:400:normal,400 light italic:400:italic,700 light regular:700:normal,700 light italic:700:italic,900 light regular:900:normal,900 light italic:900:italic"},{"font_family":"Glegoo","font_styles":"regular,bold","font_types":"400 light regular:400:normal,700 bold regular:700:normal"}]';
-		return json_decode( $fonts_list );
+        $fonts_list = PIXFLOW_THEME_LIB_URI . '/googlefonts-small.txt';
+        $fonts_list_dir = PIXFLOW_THEME_LIB . '/googlefonts-small.txt';
+        $file_content = wp_remote_get(
+            $fonts_list,
+            array(
+                "timeout" => 90,
+                "sslverify" => false
+            )
+        );
+        if(is_wp_error($file_content)){
+            $fonts = json_decode( @file_get_contents( $fonts_list_dir ) );
+        }else{
+            $fonts = json_decode(  $file_content['body'] );
+        }
+		return $fonts;
 	}
 }
 function pixflow_requireMbExtend(){
 	require_once(PIXFLOW_THEME_LIB . '/extendvc/extend-mb.php');
-
 }
 
 add_action('init', 'pixflow_requireMbExtend', 999);

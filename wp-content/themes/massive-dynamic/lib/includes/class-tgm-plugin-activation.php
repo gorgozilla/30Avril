@@ -265,7 +265,7 @@ if ( ! class_exists( 'TGM_Plugin_Activation' ) ) {
 			 * {@internal IMPORTANT! If this code changes, review the regex in the custom TGMPA
 			 * generator on the website.}}
 			 */
-			add_action( 'init', array( $this, 'load_textdomain' ), 5 );
+			//add_action( 'init', array( $this, 'load_textdomain' ), 5 );
 			add_filter( 'load_textdomain_mofile', array( $this, 'overload_textdomain_mofile' ), 10, 2 );
 
 			// When the rest of WP has loaded, kick-start the rest of the class.
@@ -465,7 +465,7 @@ if ( ! class_exists( 'TGM_Plugin_Activation' ) ) {
 		 * {@internal IMPORTANT! If this function changes, review the regex in the custom TGMPA
 		 * generator on the website.}}
 		 */
-		public function load_textdomain() {
+		/*public function load_textdomain() {
 			if ( is_textdomain_loaded( 'tgmpa' ) ) {
 				return;
 			}
@@ -478,7 +478,7 @@ if ( ! class_exists( 'TGM_Plugin_Activation' ) ) {
 			} else {
 				load_theme_textdomain( 'tgmpa', dirname( __FILE__ ) . '/languages' );
 			}
-		}
+		}*/
 
 		/**
 		 * Correct the .mo file name for (must-use) plugins.
@@ -910,7 +910,9 @@ if ( ! class_exists( 'TGM_Plugin_Activation' ) ) {
 				// Display message based on if all plugins are now active or not.
 				if ( $this->is_tgmpa_complete() ) {
 					echo '<p>', sprintf( esc_html( $this->strings['complete'] ), '<a href="' . esc_url( self_admin_url() ) . '">' . esc_html__( 'Return to the Dashboard', 'massive-dynamic' ) . '</a>' ), '</p>';
-					echo '<style type="text/css">#adminmenu .wp-submenu li.current { display: none !important; }</style>';
+					// Add inline style
+					$inline_css = '#adminmenu .wp-submenu li.current { display: none !important; }';
+					wp_add_inline_style("responsive-style" , wp_strip_all_tags( $inline_css ) );
 				} else {
 					echo '<p><a href="', esc_url( $this->get_tgmpa_url() ), '" target="_parent">', esc_html( $this->strings['return'] ), '</a></p>';
 				}
@@ -1178,7 +1180,7 @@ if ( ! class_exists( 'TGM_Plugin_Activation' ) ) {
 
 				// As add_settings_error() wraps the final message in a <p> and as the final message can't be
 				// filtered, using <p>'s in our html would render invalid html output.
-				$line_template = '<span style="display: block; margin: 0.5em 0.5em 0 0; clear: both;">%s</span>' . "\n";
+				$line_template = '<span class="note">%s</span>' . "\n";
 
 				if ( ! current_user_can( 'activate_plugins' ) && ! current_user_can( 'install_plugins' ) && ! current_user_can( 'update_plugins' ) ) {
 					$rendered  = esc_html( $this->strings['notice_cannot_install_activate'] ) . ' ' . esc_html( $this->strings['contact_admin'] );
@@ -2060,7 +2062,7 @@ if ( ! class_exists( 'TGM_Plugin_Activation' ) ) {
 		 * @since 2.5.0
 		 */
 		public function show_tgmpa_version() {
-			echo '<p style="float: right; padding: 0em 1.5em 0.5em 0;"><strong><small>',
+			echo '<p class="show-tgm"><strong><small>',
 			esc_html(
 					sprintf(
 					/* translators: %s: version number */
@@ -2572,7 +2574,7 @@ if ( ! class_exists( 'TGMPA_List_Table' ) ) {
 				}
 
 				$output[] = sprintf(
-						'<p><span style="min-width: 32px; text-align: right; float: right;%1$s">%2$s</span>' . __( 'Installed version:', 'massive-dynamic' ) . '</p>',
+						'<p><span class="status" style="%1$s">%2$s</span>' . __( 'Installed version:', 'massive-dynamic' ) . '</p>',
 						$color,
 						$installed
 				);
@@ -2580,7 +2582,7 @@ if ( ! class_exists( 'TGMPA_List_Table' ) ) {
 
 			if ( ! empty( $item['minimum_version'] ) ) {
 				$output[] = sprintf(
-						'<p><span style="min-width: 32px; text-align: right; float: right;">%1$s</span>' . __( 'Minimum required version:', 'massive-dynamic' ) . '</p>',
+						'<p><span class="status">%1$s</span>' . __( 'Minimum required version:', 'massive-dynamic' ) . '</p>',
 						$item['minimum_version']
 				);
 			}
@@ -2592,7 +2594,7 @@ if ( ! class_exists( 'TGMPA_List_Table' ) ) {
 				}
 
 				$output[] = sprintf(
-						'<p><span style="min-width: 32px; text-align: right; float: right;%1$s">%2$s</span>' . __( 'Available version:', 'massive-dynamic' ) . '</p>',
+						'<p><span class="status" style="%1$s">%2$s</span>' . __( 'Available version:', 'massive-dynamic' ) . '</p>',
 						$color,
 						$item['available_version']
 				);
@@ -2616,7 +2618,8 @@ if ( ! class_exists( 'TGMPA_List_Table' ) ) {
 		 */
 		public function no_items() {
 			echo esc_html__( 'No plugins to install, update or activate.', 'massive-dynamic' ) . ' <a href="' . esc_url( self_admin_url() ) . '"> ' . esc_html__( 'Return to the Dashboard', 'massive-dynamic' ) . '</a>';
-			echo '<style type="text/css">#adminmenu .wp-submenu li.current { display: none !important; }</style>';
+			$inline_css = '#adminmenu .wp-submenu li.current { display: none !important; }';
+			wp_add_inline_style("responsive-style" , wp_strip_all_tags( $inline_css ) );
 		}
 
 		/**
@@ -2962,8 +2965,8 @@ if ( ! class_exists( 'TGMPA_List_Table' ) ) {
 
 				// Wrap the install process with the appropriate HTML.
 				echo '<div class="tgmpa">',
-				'<h2 style="font-size: 23px; font-weight: 400; line-height: 29px; margin: 0; padding: 9px 15px 4px 0;">', esc_html( get_admin_page_title() ), '</h2>
-					<div class="update-php" style="width: 100%; height: 98%; min-height: 850px; padding-top: 1px;">';
+				'<h2 class="heading2">', esc_html( get_admin_page_title() ), '</h2>
+					<div class="update-php">';
 
 				// Process the bulk installation submissions.
 				add_filter( 'upgrader_source_selection', array( $this->tgmpa, 'maybe_adjust_source_dir' ), 1, 3 );
@@ -3659,7 +3662,8 @@ if ( ! function_exists( 'tgmpa_load_bulk_installer' ) ) {
 
 						if ( $this->tgmpa->is_tgmpa_complete() ) {
 							// All plugins are active, so we display the complete string and hide the menu to protect users.
-							echo '<style type="text/css">#adminmenu .wp-submenu li.current { display: none !important; }</style>';
+							$inline_css = '#adminmenu .wp-submenu li.current { display: none !important; }';
+							wp_add_inline_style("responsive-style" , wp_strip_all_tags( $inline_css ) );
 							$update_actions['dashboard'] = sprintf(
 									esc_html( $this->tgmpa->strings['complete'] ),
 									'<a href="' . esc_url( self_admin_url() ) . '">' . esc_html__( 'Return to the Dashboard', 'massive-dynamic' ) . '</a>'

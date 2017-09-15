@@ -3,7 +3,7 @@ Thank you for choosing Massive Dynamic!
 
 For the latest information on the Massive Dynamic, make sure to register for access to our
 member area where we provide extensive documentation and all official support:
-http://support.pixflow.net
+https://help.massivedynamic.co/hc/en-us
 
 = Theme Name: Massive Dynamic
 
@@ -19,7 +19,7 @@ http://support.pixflow.net
 
 = License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-= Version: 1.0.1
+= Version: 4.1
 
 = Tags: white, left-sidebar, right-sidebar, fluid-layout, fixed-layout, custom-colors, flexible-header, full-width-template, post-formats, theme-options, threaded-comments, translation-ready
 

@@ -29,6 +29,7 @@ $relative_url   = str_replace($wp_content_dir, "", $dirname);
 
 // finally framework base url
 $vp_url         = content_url() . $relative_url;
+$vp_url         = str_replace("wp-content/wp-content", 'wp-content',$vp_url);
 
 defined('VP_URL')         or define('VP_URL'        , untrailingslashit($vp_url));
 defined('VP_PUBLIC_URL')  or define('VP_PUBLIC_URL' , VP_URL        . '/public');

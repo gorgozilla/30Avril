@@ -1,4 +1,9 @@
 <?php
+define('PIXFLOW_P_TAG','pixflow_tag_p');
+define('PIXFLOW_BR_TAG','pixflow_tag_br');
+define('PIXFLOW_NL_TAG','pixflow_tag_nl');
+define('PIXFLOW_DIV_TAG','pixflow_tag_div');
+
 //defining allowed HTML tags for wp_kses
 global $md_allowed_HTML_tags;
 $purchase_code=get_option("md_purchase_code") !=''?get_option("md_purchase_code"):get_theme_mod('purchase_code','');
@@ -13,6 +18,9 @@ $md_allowed_HTML_tags = array(
     'div' => array(
         'class' => array(),
         'style' => array(),
+        'id' => array(),
+        'data-name' => array()
+
     ),
     'span' => array(
         'class' => array(),
@@ -157,6 +165,12 @@ $md_uniqueSettings = array(
     'header_side_image_repeat',
     'header_side_image_position',
     'header_side_image_size',
+    /*Menu Button*/
+    'menu_button_style',
+    'button_bg_color',
+    'button_text_color',
+    'button_hover_text_color',
+    'button_hover_bg_color',
     /*DropDown*/
     'dropdown_bg_solid_color',
     'dropdown_heading_solid_color',
@@ -418,6 +432,12 @@ define('PIXFLOW_NAV_COLOR_SECOND','rgb(255,255,255)');
 define('PIXFLOW_NAV_HOVER_COLOR_SECOND','rgb(255, 196, 0)');
 define('PIXFLOW_POPUP_MENU_COLOR','rgb(255,255,255)');
 define('PIXFLOW_OVERLAY_BG','rgb(0,0,0)');
+//Menu Button
+define('PIXFLOW_MENU_BUTTON_STYLE','rectangle');
+define('PIXFLOW_BUTTON_BG_COLOR','rgb(255,255,255)');
+define('PIXFLOW_BUTTON_TEXT_COLOR','rgb(0,0,0)');
+define('PIXFLOW_BUTTON_HOVER_BG_COLOR','rgb(0,0,0)');
+define('PIXFLOW_BUTTON_HOVER_TEXT_COLOR','rgb(255,255,255)');
 //dropdown
 define('PIXFLOW_DROP_DOWN_STYLE','simple');
 define('PIXFLOW_DROPDOWN_BG_SOLID_COLOR','rgba(255,255,255,.8)');
@@ -438,6 +458,9 @@ define('PIXFLOW_BUSINESSBAR_ADDRESS','Your address will show here');
 define('PIXFLOW_BUSINESSBAR_TEL','+12 34 56 78');
 define('PIXFLOW_BUSINESSBAR_EMAIL','email@example.com');
 //Typography
+define('PIXFLOW_NAV_FONTFAMILY_MODE','google');
+define('PIXFLOW_NAV_CUSTOM_FONT_URL','');
+define('PIXFLOW_NAV_CUSTOM_FONT_FAMILY','');
 define('PIXFLOW_NAV_NAME','Roboto');
 define('PIXFLOW_NAV_SIZE',13);
 define('PIXFLOW_NAV_WEIGHT',400);
@@ -568,7 +591,6 @@ Branding Defaults
  **************************************************/
 define('PIXFLOW_DARK_LOGO',PIXFLOW_THEME_IMAGES_URI . '/logo-dark.png');
 define('PIXFLOW_LIGHT_LOGO',PIXFLOW_THEME_IMAGES_URI . '/logo-light.png');
-define('PIXFLOW_PRELOADER_LOGO',PIXFLOW_THEME_IMAGES_URI . '/logo-preloader.png');
 define('PIXFLOW_FAVICON',PIXFLOW_THEME_IMAGES_URI . '/favicon.ico');
 /**************************************************
 Typography Defaults
@@ -576,6 +598,9 @@ Typography Defaults
 //h1
 define('PIXFLOW_H1_NAME','Roboto');
 define('PIXFLOW_H1_SIZE',70);
+define('PIXFLOW_H1_FONTFAMILY_MODE','google');
+define('PIXFLOW_H1_CUSTOM_FONT_FAMILY','');
+define('PIXFLOW_H1_CUSTOM_FONT_URL','');
 define('PIXFLOW_H1_WEIGHT',400);
 define('PIXFLOW_H1_LINEHEIGHT',75);
 define('PIXFLOW_H1_LETTERSPACE',0);
@@ -584,6 +609,9 @@ define('PIXFLOW_H1_STYLE','normal');
 
 //h2
 define('PIXFLOW_H2_NAME','Roboto');
+define('PIXFLOW_H2_FONTFAMILY_MODE','google');
+define('PIXFLOW_H2_CUSTOM_FONT_FAMILY','');
+define('PIXFLOW_H2_CUSTOM_FONT_URL','');
 define('PIXFLOW_H2_SIZE',60);
 define('PIXFLOW_H2_WEIGHT',400);
 define('PIXFLOW_H2_LINEHEIGHT',65);
@@ -593,6 +621,9 @@ define('PIXFLOW_H2_STYLE','normal');
 
 //h3
 define('PIXFLOW_H3_NAME','Roboto');
+define('PIXFLOW_H3_FONTFAMILY_MODE','google');
+define('PIXFLOW_H3_CUSTOM_FONT_FAMILY','');
+define('PIXFLOW_H3_CUSTOM_FONT_URL','');
 define('PIXFLOW_H3_SIZE',50);
 define('PIXFLOW_H3_WEIGHT',400);
 define('PIXFLOW_H3_LINEHEIGHT',55);
@@ -602,6 +633,9 @@ define('PIXFLOW_H3_STYLE','normal');
 
 //h4
 define('PIXFLOW_H4_NAME','Roboto');
+define('PIXFLOW_H4_FONTFAMILY_MODE','google');
+define('PIXFLOW_H4_CUSTOM_FONT_FAMILY','');
+define('PIXFLOW_H4_CUSTOM_FONT_URL','');
 define('PIXFLOW_H4_SIZE',40);
 define('PIXFLOW_H4_WEIGHT',400);
 define('PIXFLOW_H4_LINEHEIGHT',45);
@@ -611,6 +645,9 @@ define('PIXFLOW_H4_STYLE','normal');
 
 //h5
 define('PIXFLOW_H5_NAME','Roboto');
+define('PIXFLOW_H5_FONTFAMILY_MODE','google');
+define('PIXFLOW_H5_CUSTOM_FONT_FAMILY','');
+define('PIXFLOW_H5_CUSTOM_FONT_URL','');
 define('PIXFLOW_H5_SIZE',30);
 define('PIXFLOW_H5_WEIGHT',400);
 define('PIXFLOW_H5_LINEHEIGHT',35);
@@ -620,6 +657,9 @@ define('PIXFLOW_H5_STYLE','normal');
 
 //h6
 define('PIXFLOW_H6_NAME','Roboto');
+define('PIXFLOW_H6_FONTFAMILY_MODE','google');
+define('PIXFLOW_H6_CUSTOM_FONT_FAMILY','');
+define('PIXFLOW_H6_CUSTOM_FONT_URL','');
 define('PIXFLOW_H6_SIZE',20);
 define('PIXFLOW_H6_WEIGHT',400);
 define('PIXFLOW_H6_LINEHEIGHT',25);
@@ -629,6 +669,9 @@ define('PIXFLOW_H6_STYLE','normal');
 
 //Paragraph
 define('PIXFLOW_P_NAME','Roboto');
+define('PIXFLOW_P_FONTFAMILY_MODE','google');
+define('PIXFLOW_P_CUSTOM_FONT_FAMILY','');
+define('PIXFLOW_P_CUSTOM_FONT_URL','');
 define('PIXFLOW_P_SIZE',14);
 define('PIXFLOW_P_WEIGHT',400);
 define('PIXFLOW_P_LINEHEIGHT',14);
@@ -638,6 +681,9 @@ define('PIXFLOW_P_STYLE','normal');
 
 //Link
 define('PIXFLOW_LINK_NAME','Roboto');
+define('PIXFLOW_LINK_FONTFAMILY_MODE','google');
+define('PIXFLOW_LINK_CUSTOM_FONT_FAMILY','');
+define('PIXFLOW_LINK_CUSTOM_FONT_URL','');
 define('PIXFLOW_LINK_SIZE',14);
 define('PIXFLOW_LINK_WEIGHT',400);
 define('PIXFLOW_LINK_LINEHEIGHT',14);

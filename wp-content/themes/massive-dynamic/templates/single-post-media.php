@@ -39,9 +39,9 @@ if($format==false){
         <div class="single-post-media" <?php if ($height != '') echo 'style="height:' . esc_attr($height) . 'px"'; ?>>
             <?php
             if ($video['type'] == 'youtube')
-                $src = "http://www.youtube.com/embed/" . esc_attr($video['id']);
+                $src = "https://www.youtube.com/embed/" . esc_attr($video['id']);
             else
-                $src = "http://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
+                $src = "https://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
             ?>
             <iframe src="<?php echo esc_url($src); ?>" width="100%" height="<?php echo esc_attr($height); ?>" frameborder="0"
                     webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>

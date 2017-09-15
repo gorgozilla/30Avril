@@ -1,7 +1,6 @@
 <?php
 /**
  * Lost password form
- 
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/myaccount/form-lost-password.php.
  *
@@ -11,14 +10,10 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     http://docs.woothemes.com/document/template-structure/
- 
+ * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
- 
  * @package WooCommerce/Templates
- 
- * @version 2.6.0
- 
+ * @version 3.0.0
  */
  
 
@@ -30,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php wc_print_notices(); ?>
 
-<form method="post" class="lost_reset_password">
+<form method="post" class="woocommerce-ResetPassword lost_reset_password">
 
 	<article class="account-title">
 		<h1><?php esc_attr_e('Lost Password','massive-dynamic'); ?></h1>
@@ -68,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php do_action( 'woocommerce_lostpassword_form' ); ?>
 
-		<p class="form-row">
+		<p class="form-row woocommerce-form-row">
 			<input type="hidden" name="wc_reset_password" value="true" />
 			<input type="submit" class="button" value="<?php echo 'lost_password' == $args['form'] ? esc_attr__( 'Reset Password', 'massive-dynamic' ) : esc_attr__( 'Save', 'massive-dynamic' ); ?>" />
 		</p>

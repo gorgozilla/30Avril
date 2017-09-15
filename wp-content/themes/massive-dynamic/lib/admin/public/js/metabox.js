@@ -1,3 +1,174 @@
+jQuery( function($) {
+	$(document).click(function(e)
+	{
+		var elem = $(e.target);
+
+		if (elem.attr('class') && elem.filter('[class*=dodelete]').length)
+		{
+			e.preventDefault();
+
+			var p = elem.parents('.wpa_group:first');
+
+			if(p.length <= 0)
+				p = elem.parents('.postbox'); /*wp*/
+
+			var the_name = elem.attr('class').match(/dodelete-([a-zA-Z0-9_-]*)/i);
+
+			the_name = (the_name && the_name[1]) ? the_name[1] : null ;
+
+			/* todo: expose and allow editing of this message */
+			if (confirm('This action can not be undone, are you sure?'))
+			{
+				if (the_name)
+				{
+					$('.wpa_group-'+ the_name, p).not('.tocopy').remove();
+				}
+				else
+				{
+					elem.parents('.wpa_group:first').remove();
+				}
+
+				if(!the_name)
+				{
+					var the_group = elem.parents('.wpa_group');
+					if(the_group && the_group.attr('class'))
+					{
+						the_name = the_group.attr('class').match(/wpa_group-([a-zA-Z0-9_-]*)/i);
+						the_name = (the_name && the_name[1]) ? the_name[1] : null ;
+					}
+				}
+				checkLoopLimit(the_name);
+
+				$.wpalchemy.trigger('wpa_delete');
+			}
+		}
+	});
+
+	$(document).on('click', '[class*=docopy-]', function(e)
+	{
+		e.preventDefault();
+
+		var p = $(this).parents('.wpa_group:first');
+
+		if(p.length <= 0)
+			p = $(this).parents('.postbox'); /*wp*/
+
+		var the_name = $(this).attr('class').match(/docopy-([a-zA-Z0-9_-]*)/i)[1];
+
+		var the_group = $('.wpa_group-'+ the_name +'.tocopy', p).first();
+
+		var the_clone = the_group.clone().removeClass('tocopy last');
+
+		var the_props = ['name', 'id', 'for', 'class'];
+
+		the_group.find('*').each(function(i, elem)
+		{
+			for (var j = 0; j < the_props.length; j++)
+			{
+				var the_prop = $(elem).attr(the_props[j]);
+
+				if (the_prop)
+				{
+					var reg = new RegExp('\\['+the_name+'\\]\\[(\\d+)\\]', 'i');
+					var the_match = the_prop.match(reg);
+
+					if (the_match)
+					{
+						the_prop = the_prop.replace(the_match[0], '['+ the_name + ']' + '['+ (+the_match[1]+1) +']');
+
+						$(elem).attr(the_props[j], the_prop);
+					}
+
+					the_match = null;
+
+					// todo: this may prove to be too broad of a search
+					the_match = the_prop.match(/n(\d+)/i);
+
+					if (the_match)
+					{
+						the_prop = the_prop.replace(the_match[0], 'n' + (+the_match[1]+1));
+
+						$(elem).attr(the_props[j], the_prop);
+					}
+				}
+			}
+		});
+
+		// increment the group id
+		var reg       = new RegExp('\\[(\\d+)\\]$', 'i');
+		var the_id    = the_group.attr('id');
+		var the_match = the_id.match(reg);
+		if (the_match)
+		{
+			the_group.attr('id', the_id.replace(the_match[0], '['+ (+the_match[1]+1) +']'));
+		}
+
+		if ($(this).hasClass('ontop'))
+		{
+			$('.wpa_group-'+ the_name, p).first().before(the_clone);
+		}
+		else
+		{
+			the_group.before(the_clone);
+		}
+
+		checkLoopLimit(the_name);
+
+		$.wpalchemy.trigger('wpa_copy', [the_clone]);
+	});
+
+	function checkLoopLimit(name)
+	{
+		var elems = $('.docopy-' + name);
+
+		$.each(elems, function(idx, elem){
+
+			var p = $(this).parents('.wpa_group:first');
+
+			if(p.length <= 0)
+				p = $(this).parents('.postbox'); /*wp*/
+
+			var the_class = $('.wpa_loop-' + name, p).attr('class');
+
+			if (the_class)
+			{
+				var the_match = the_class.match(/wpa_loop_limit-([0-9]*)/i);
+
+				if (the_match)
+				{
+					var the_limit = the_match[1];
+
+					if ($('.wpa_group-' + name, p).not('.wpa_group.tocopy').length >= the_limit)
+					{
+						$(this).hide();
+					}
+					else
+					{
+						$(this).show();
+					}
+				}
+			}
+
+		});
+
+	}
+
+	/* do an initial limit check, show or hide buttons */
+	$('[class*=docopy-]').each(function()
+	{
+		var the_name = $(this).attr('class').match(/docopy-([a-zA-Z0-9_-]*)/i)[1];
+
+		checkLoopLimit(the_name);
+	});
+});
+
+(function($){ /* not using jQuery ondomready, code runs right away in footer */
+
+	/* use a global dom element to attach events to */
+	$.wpalchemy = $('<div></div>').attr('id','wpalchemy').appendTo('body');
+
+})(jQuery);
+
 ;(function($) {
 
 	"use strict";
@@ -194,7 +365,7 @@
 
 		if(errors > 0)
 		{
-			$notif = $('<span class="vp-metabox-error vp-js-tipsy" original-title="' + errors + ' error(s) found in metabox"></span>');
+			var $notif = $('<span class="vp-metabox-error vp-js-tipsy" original-title="' + errors + ' error(s) found in metabox"></span>');
 
 			if(action === 'Save Draft')
 			{

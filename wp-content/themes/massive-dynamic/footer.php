@@ -20,18 +20,15 @@
 <!-- Go to top button -->
 <?php
 $goToTopButton = pixflow_get_theme_mod('go_to_top_status',PIXFLOW_GO_TO_TOP_STATUS);
-$goToTopButtonClass = ( $goToTopButton == false || $goToTopButton == 'false')?' md-hidden':'';
-?>
-	<div class="go-to-top <?php echo esc_attr(pixflow_get_theme_mod('footer_section_gototop_skin',PIXFLOW_FOOTER_SECTION_GOTOTOP_SKIN).$goToTopButtonClass) ?>"></div>
-	<!-- Theme Hook -->
-	<?php
-	wp_footer();
+$goToTopButtonClass = ( $goToTopButton == false || $goToTopButton === 'false')?' md-hidden':''; ?>
+
+    <div class="go-to-top <?php echo esc_attr(pixflow_get_theme_mod('footer_section_gototop_skin', PIXFLOW_FOOTER_SECTION_GOTOTOP_SKIN) . $goToTopButtonClass) ?>"></div>
+    <!-- Theme Hook -->
+
+
+<?php
+wp_footer();
 	?>
 
 </body>
 </html>
-<?php
-if(is_customize_preview() == true){
-	unset($_SESSION['vc_temp_content']);
-}
-?>

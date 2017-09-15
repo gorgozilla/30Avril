@@ -17,8 +17,8 @@ class Pixflow_Customize_RGBA_Control extends WP_Customize_Control {
 	public function enqueue() {
 
 
-        wp_enqueue_style('customizer-controller-rgba',PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/spectrum.css',array(),PIXFLOW_THEME_VERSION);
-        wp_enqueue_script('customizer-controller-rgba',PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/spectrum.js',array(),PIXFLOW_THEME_VERSION,true);
+        wp_enqueue_style('customizer-controller-rgba',PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/spectrum.min.css',array(),PIXFLOW_THEME_VERSION);
+        wp_enqueue_script('customizer-controller-rgba',PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/spectrum.min.js',array(),PIXFLOW_THEME_VERSION,true);
 
 	}
 

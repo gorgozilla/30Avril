@@ -40,9 +40,9 @@ if(count($images)>0){
             ?>
             <?php
             if ($video['type'] == 'youtube')
-                $src = "http://www.youtube.com/embed/" . esc_attr($video['id']);
+                $src = "https://www.youtube.com/embed/" . esc_attr($video['id']);
             else
-                $src = "http://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
+                $src = "https://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
             ?>
             <div class="item video" data-merge="<?php echo esc_attr($count) ?>">
                 <a class="owl-video" href="<?php echo esc_url($src); ?>"></a>
@@ -53,7 +53,7 @@ if(count($images)>0){
 
     for($imageIndex = 0;$imageIndex<count($images);$imageIndex++ ) {
         $count++;
-        echo '<div class="item image" data-merge="'. $count.'"><img src="' . esc_url($images[$imageIndex]) . '"><div class="image-holder" style=background-image:url("' . esc_url($images[$imageIndex]) . '");></div></div>';
+        echo '<div class="item image" data-merge="'. esc_attr($count).'"><img src="' . esc_url($images[$imageIndex]) . '"><div class="image-holder" style=background-image:url("' . esc_url($images[$imageIndex]) . '");></div></div>';
     }
 
     if( $portfolioFormat == 'video' && $videoPosition != 'at_start') {
@@ -65,9 +65,9 @@ if(count($images)>0){
             ?>
             <?php
             if ($video['type'] == 'youtube')
-                $src = "http://www.youtube.com/embed/" . esc_attr($video['id']);
+                $src = "https://www.youtube.com/embed/" . esc_attr($video['id']);
             else
-                $src = "http://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
+                $src = "https://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
 
             $count++;
             ?>
@@ -88,7 +88,7 @@ if(count($images)>0){
                 <?php if ($terms != false) { ?>
                     <div class="category">
                         <?php for($i = 0; $i < count($terms);$i++ ){
-                            echo '<span>'.$terms[$i]->name.'</span>';
+                            echo '<span>'.esc_attr($terms[$i]->name).'</span>';
                         }  ?>
 
                     </div>

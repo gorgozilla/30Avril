@@ -14,8 +14,8 @@ class Pixflow_Customize_Sliderui_Control extends WP_Customize_Control {
 
     public function enqueue() {
 
-        wp_enqueue_style('nouislider-style',PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/jquery.nouislider.css',array(),PIXFLOW_THEME_VERSION);
-        wp_enqueue_script('nouislider-script',PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/jquery.nouislider.js',array(),PIXFLOW_THEME_VERSION);
+        wp_enqueue_style('nouislider-style',PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/jquery.nouislider.min.css',array(),PIXFLOW_THEME_VERSION);
+        wp_enqueue_script('nouislider-script',PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/jquery.nouislider.min.js',array(),PIXFLOW_THEME_VERSION);
 
     }
 

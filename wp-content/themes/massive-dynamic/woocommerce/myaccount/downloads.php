@@ -12,10 +12,10 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	http://docs.woothemes.com/document/template-structure/
+ * @see 	https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.6.0
+ * @version 3.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,9 +31,7 @@ wc_print_notices(); ?>
 	<h1><?php esc_attr_e('Downloads','massive-dynamic'); ?></h1>
 </article>
 
-<?php wc_get_template( 'myaccount/navigation.php' ); ?>
-
-<div class="woocommerce-MyAccount-content">
+<div class="woocommerce-MyAccount-content woocommerce-MyAccount-downloads shop_table shop_table_responsive">
 
 	<?php do_action( 'woocommerce_before_account_downloads', $has_downloads ); ?>
 
@@ -57,8 +55,8 @@ wc_print_notices(); ?>
 								<?php do_action( 'woocommerce_account_downloads_column_' . $column_id, $download ); ?>
 
 							<?php elseif ( 'download-file' === $column_id ) : ?>
-								<a href="<?php echo esc_url( get_permalink( $download['product_id'] ) ); ?>">
-									<?php echo esc_html( $download['download_name'] ); ?>
+								<a href="<?php echo esc_url( $download['download_url'] ); ?>" class="woocommerce-MyAccount-downloads-file>
+									<?php echo esc_html( $download['file']['name'] ); ?>
 								</a>
 
 							<?php elseif ( 'download-remaining' === $column_id ) : ?>
@@ -66,7 +64,7 @@ wc_print_notices(); ?>
 									if ( is_numeric( $download['downloads_remaining'] ) ) {
 										echo esc_html( $download['downloads_remaining'] );
 									} else {
-										_e( '&infin;', 'woocommerce' );
+										_e( '&infin;', 'massive-dynamic' );
 									}
 								?>
 
@@ -74,7 +72,7 @@ wc_print_notices(); ?>
 								<?php if ( ! empty( $download['access_expires'] ) ) : ?>
 									<time datetime="<?php echo date( 'Y-m-d', strtotime( $download['access_expires'] ) ); ?>" title="<?php echo esc_attr( strtotime( $download['access_expires'] ) ); ?>"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $download['access_expires'] ) ); ?></time>
 								<?php else : ?>
-									<?php _e( 'Never', 'woocommerce' ); ?>
+									<?php _e( 'Never', 'massive-dynamic' ); ?>
 								<?php endif; ?>
 
 							<?php elseif ( 'download-actions' === $column_id ) : ?>
@@ -82,7 +80,7 @@ wc_print_notices(); ?>
 									$actions = array(
 										'download'  => array(
 											'url'  => $download['download_url'],
-											'name' => __( 'Download', 'woocommerce' )
+											'name' => __( 'Download', 'massive-dynamic' )
 										)
 									);
 
@@ -98,11 +96,15 @@ wc_print_notices(); ?>
 					<?php endforeach; ?>
 				</tr>
 			<?php endforeach; ?>
-		</table>
-
-		<?php do_action( 'woocommerce_after_available_downloads' ); ?>
-
-	<?php endif; ?>
+            <?php do_action( 'woocommerce_after_available_downloads' ); ?>
+            <?php else : ?>
+                <div class="woocommerce-Message woocommerce-Message--info woocommerce-info">
+                    <a class="woocommerce-Button button" href="<?php echo esc_url( apply_filters( 'woocommerce_return_to_shop_redirect', wc_get_page_permalink( 'shop' ) ) ); ?>">
+                        <?php esc_html_e( 'Go shop', 'woocommerce' ) ?>
+                    </a>
+                    <?php esc_html_e( 'No downloads available yet.', 'woocommerce' ); ?>
+                </div>
+            <?php endif; ?>
 
 	<?php do_action( 'woocommerce_after_account_downloads', $has_downloads ); ?>
 </div>

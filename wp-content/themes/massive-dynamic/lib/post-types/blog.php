@@ -6,7 +6,6 @@ function pixflow_general_blog_add_meta_box() {
 
     foreach ( $screens as $screen ) {
 
-        add_meta_box('customizer',esc_attr__('customizer Options','massive-dynamic'),'pixflow_blog_in_customizer_callback',$screen);
         add_meta_box('pixflow-general-blog-setting',esc_attr__( 'Post Setting Section', 'massive-dynamic' ),'pixflow_general_blog_meta_box_callback',$screen);
 
 
@@ -257,20 +256,3 @@ function pixflow_audio_blog_save_meta_box_data( $post_id ) {
 
 }
 add_action( 'save_post', 'pixflow_audio_blog_save_meta_box_data' );
-
-
-function pixflow_blog_in_customizer_callback() {
-    $url = admin_url().'customize.php?url='.urlencode(get_permalink(get_the_ID()));
-    ?>
-    <div class="back-to-customizer">
-        <div class="left-side">
-            <h1 class="title">Continue building your website in<span>MASSIVE BUILDER</span></h1>
-            <p class="description">If you change website settings, it will affect other pages too.<br> To have a custom layout for all blog posts, choose unique settings.</p>
-        </div>
-        <div class="right-side">
-            <a class="button" href="<?php echo esc_url($url); ?>">Live Edit This Page</a>
-            <a target="_blank" href="http://support.pixflow.net" class="help"></a>
-        </div>
-    </div>
-<?php
-}

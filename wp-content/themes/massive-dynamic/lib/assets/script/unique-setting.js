@@ -55,7 +55,9 @@ function pixflow_save_unique_setting(id, detail){
     var md_dirtyCustomized = {};
     md_api.each( function ( value, key ) {
         if ( value._dirty ) {
-            md_dirtyCustomized[ key ] = value();
+            if(key != 'header_items_order'){
+                md_dirtyCustomized[ key ] = encodeURIComponent(value());
+            }
         }
     } );
     jQuery.ajax({

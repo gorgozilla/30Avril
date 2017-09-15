@@ -20,7 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<a class="public-logout" href="<?php echo esc_url($aa = wc_get_endpoint_url( 'customer-logout', '', wc_get_page_permalink( 'myaccount' ) )); ?>" ><?php esc_attr_e('LOGOUT','massive-dynamic'); ?></a>
 </article>
 
-<?php wc_get_template( 'myaccount/navigation.php' ); ?>
 
 <div class="woocommerce-MyAccount-content">
 	<form action="" method="post">

@@ -1,13 +1,11 @@
 <?php
 $headerPosition = pixflow_get_theme_mod('header_position',PIXFLOW_HEADER_POSITION);
-$footerStyle = 'width: ' . pixflow_get_theme_mod('footer-width',PIXFLOW_FOOTER_WIDTH) . '% ; margin-top:' . pixflow_get_theme_mod('footer-marginT',PIXFLOW_FOOTER_MARGINT) . 'px; ';
-$footerContentStyle = 'width:' . pixflow_get_theme_mod('footerC-width',PIXFLOW_FOOTERC_WIDTH) .'%; ';
 $footerWidgetStatus = pixflow_get_theme_mod('footer_widget_area_columns_status', PIXFLOW_FOOTER_WIDGET_AREA_COLUMNS_STATUS);
 $footerWidgets = pixflow_get_theme_mod('footer_widget_area_columns',PIXFLOW_FOOTER_WIDGET_AREA_COLUMNS) ;
-$widgets_separator_color = (pixflow_get_theme_mod('footer_widget_area_skin',PIXFLOW_FOOTER_WIDGET_AREA_SKIN) != "light"? "white":"black");
+$widgets_separator_color = (pixflow_get_theme_mod('footer_widget_area_skin',PIXFLOW_FOOTER_WIDGET_AREA_SKIN) != "light"? "#ffffff":"#000000");
 $footer_widget_area_skin = pixflow_get_theme_mod('footer_widget_area_skin',PIXFLOW_FOOTER_WIDGET_AREA_SKIN);
 $footer_parallax = pixflow_get_theme_mod('footer_parallax',PIXFLOW_FOOTER_PARALLAX);
-if($footer_parallax == 'on' || $footer_parallax == '1'){
+if($footer_parallax == 'on' || $footer_parallax == '1' || $footer_parallax == 'true'){
     $footer_parallax = 'footer-parallax';
 } else{
     $footer_parallax = '';
@@ -31,7 +29,7 @@ function pixflow_genFooterLogo(){
     $retString = '<div class="logo">';
     $retString .= '<img src="'.esc_url($logo).'" />';
     $retString .= '</div>';
-    echo($retString);
+    print($retString);
 }
 
 function pixflow_genFooterCopyrightText(){
@@ -40,7 +38,7 @@ function pixflow_genFooterCopyrightText(){
     $retString = '<div class="copyright '.esc_attr($logo_status).'"><p>';
     $retString .= wp_kses($copyright,array("a"=>array("href"=>array())));
     $retString .= '</p></div>';
-    echo($retString);
+    print($retString);
 }
 
 function pixflow_genFooterSocialIcons(){
@@ -57,7 +55,7 @@ function pixflow_genFooterSocialIcons(){
         }
     }
     $retString.='</div>';
-    echo($retString);
+    print($retString);
 
 }
 
@@ -74,11 +72,14 @@ function pixflow_genFooterBottom(){
     }
 }
 ?>
-<footer id="footer-default-id" class="footer-default <?php echo esc_attr($footer_parallax); ?>" style="<?php echo esc_attr($footerStyle);
-if($footer_parallax == 'footer-parallax'):
-    echo ' display:none; ';
-endif;
-?>" data-width="<?php echo pixflow_get_theme_mod('footer-width',PIXFLOW_FOOTER_WIDTH); ?>">
+<?php
+$footer_status = 'off' ;
+if(pixflow_get_theme_mod('footer_switcher' , PIXFLOW_FOOTER_SWITCHER) == true || pixflow_get_theme_mod('footer_widget_area_columns_status' , PIXFLOW_FOOTER_WIDGET_AREA_COLUMNS_STATUS) == true){
+    $footer_status = 'on' ;
+}
+?>
+
+<footer id="footer-default-id" class="footer-default <?php echo esc_attr($footer_parallax); ?>" data-footer-status="<?php echo esc_attr($footer_status); ?>" data-width="<?php echo esc_attr(pixflow_get_theme_mod('footer-width',PIXFLOW_FOOTER_WIDTH)); ?>">
     <div class="color-overlay texture-type"></div>
     <div class="color-overlay image-type"></div>
     <div class="texture-overlay"></div>
@@ -98,7 +99,7 @@ endif;
                        $widgetStyle = 'modernStyle';
                    }
                 ?>
-                <div class="row widget-area <?php echo esc_attr($widgetStyle) ?> content" style="<?php echo esc_attr($footerContentStyle); ?>">
+                <div class="row widget-area <?php echo esc_attr($widgetStyle) ?> content">
                     <?php
                     $widgetSize = 12 / $footerWidgets;
 
@@ -145,7 +146,7 @@ endif;
     ?>
     <hr class="footer-separator">
     <div id="footer-bottom">
-        <div class="<?php echo esc_attr(pixflow_get_theme_mod('footer_bottom_items_layout',PIXFLOW_FOOTER_BOTTOM_ITEMS_LAYOUT)); ?> content" style="<?php echo esc_attr($footerContentStyle); ?>">
+        <div class="<?php echo esc_attr(pixflow_get_theme_mod('footer_bottom_items_layout',PIXFLOW_FOOTER_BOTTOM_ITEMS_LAYOUT)); ?> content">
             <?php
             pixflow_genFooterBottom();
             ?>

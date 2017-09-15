@@ -228,7 +228,7 @@ function vp_get_fontawesome_icons()
 	{
 		$pattern = '/\.(icon-(?:\w+(?:-)?)+):before\s*{\s*content/';
 		$subject = wp_remote_get(
-				pixflow_path_combine(PIXFLOW_THEME_CSS_URI,'iconfonts.css'),
+				pixflow_path_combine(PIXFLOW_THEME_CSS_URI,'iconfonts.min.css'),
 				array(
 						"timeout" => 90,
 						"sslverify" => false

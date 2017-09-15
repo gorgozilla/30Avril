@@ -140,7 +140,7 @@ final class Pixflow_CEI_Core {
 		WP_Filesystem();
 		global $wp_filesystem;
 		$customizer_file = $file;//content_url().'/uploads/demo/demo'.$_SESSION['importDemo'].'/customizer.dat';
-		$customizerResponse = ( $wp_filesystem->exists( $customizer_file ) ) ? $wp_filesystem->get_contents( $customizer_file ) : '';
+		$customizerResponse = ( $wp_filesystem->exists( $customizer_file ) ) ? @file_get_contents( $customizer_file ) : '';
 		if($customizerResponse == ''){
 			$cei_error = esc_attr__( 'customizer.dat does not exist!', 'massive-dynamic' );
 			return;
@@ -247,10 +247,9 @@ final class Pixflow_CEI_Core {
 	static private function _sideload_image( $file ) 
 	{
 		$data = new stdClass();
-		
+		require_once(ABSPATH . 'wp-admin/includes/file.php');
 		if ( ! function_exists( 'media_handle_sideload' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/media.php' );
-			require_once( ABSPATH . 'wp-admin/includes/file.php' );
 			require_once( ABSPATH . 'wp-admin/includes/image.php' );
 		}
 		if ( ! empty( $file ) ) {
@@ -271,9 +270,11 @@ final class Pixflow_CEI_Core {
 			// Do the validation and storage stuff.
 			$id = media_handle_sideload( $file_array, 0 );
 	
-			// If error storing permanently, unlink.
+			// If error storing permanently, delete.
 			if ( is_wp_error( $id ) ) {
-				@unlink( $file_array['tmp_name'] );
+				WP_Filesystem(false , false , true);
+				global $wp_filesystem;
+				$wp_filesystem->delete( $file_array['tmp_name'] );
 				return $id;
 			}
 			

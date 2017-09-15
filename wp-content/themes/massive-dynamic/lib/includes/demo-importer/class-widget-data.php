@@ -73,9 +73,10 @@ class Pixflow_Widget_Data {
 
 			update_option( 'sidebars_widgets', $current_sidebars );
 
-			foreach ( $new_widgets as $title => $content )
-				update_option( 'widget_' . $title, $content );
+			foreach ( $new_widgets as $title => $content ) {
 
+				update_option('widget_' . $title, $content);
+			}
 			return true;
 		}
 
@@ -95,11 +96,15 @@ class Pixflow_Widget_Data {
 			'action' => 'import_submit'
 		);
 
-
-		$json = self::get_widget_settings_json($widget_file);
-
+        if(json_decode($widget_file)){
+            $json[0] = $widget_file;
+            $json[1] = 'internal';
+        }else {
+            $json = self::get_widget_settings_json($widget_file);
+        }
 		if( is_wp_error($json) )
 			wp_die( $json->get_error_message() );
+
 
 		if( !$json || !( $json_data = json_decode( $json[0], true ) ) )
 			return;
@@ -115,6 +120,7 @@ class Pixflow_Widget_Data {
 					continue;
 				}
 				$sidebar_info = self::get_sidebar_info( $sidebar_name );
+
 				if ( $sidebar_info ) :
 					foreach ( $widget_list as $widget ) :
 						$widget_options = false;
@@ -122,7 +128,9 @@ class Pixflow_Widget_Data {
 						$widget_type = trim( substr( $widget, 0, strrpos( $widget, '-' ) ) );
 						$widget_type_index = trim( substr( $widget, strrpos( $widget, '-' ) + 1 ) );
 						foreach ( $json_data[1] as $name => $option ) {
+
 							if ( $name == $widget_type ) {
+
 								$widget_type_options = $option;
 								break;
 							}
@@ -152,25 +160,29 @@ class Pixflow_Widget_Data {
 			$response->send();
 		}
 
-		$widget_file = content_url().'/uploads/demo/widget.json';
-		$file_content = wp_remote_get(
-				$widget_file,
-				array(
-						"timeout" => 90,
-						"sslverify" => false
-				)
-		);
-		$file_content = $file_content['body'];
+		//$widget_file = content_url().'/uploads/demo/widget.json';
+        if( $import_file!='internal'){
+            $file_content = wp_remote_get(
+                $widget_file,
+                array(
+                    "timeout" => 90,
+                    "sslverify" => false
+                )
+            );
+            $file_content = $file_content['body'];
+        }else{
+            $file_content = $widget_file;
+        }
 		$json_data = $file_content;
-		$pos 		 = strpos($json_data, '[{');
-		$json_data 		 = substr($json_data, $pos);
+		$pos  = strpos($json_data, '[{');
+		$json_data  = substr($json_data, $pos);
 		$json_data = json_decode( $json_data, true );
 		$sidebar_data = $json_data[0];
 		$widget_data = $json_data[1];
 		foreach ( $sidebar_data as $title => $sidebar ) {
 			$count = count( $sidebar );
 			for ( $i = 0; $i < $count; $i++ ) {
-				$widget = array( );
+				$widget = array();
 				$widget['type'] = trim( substr( $sidebar[$i], 0, strrpos( $sidebar[$i], '-' ) ) );
 				$widget['type-index'] = trim( substr( $sidebar[$i], strrpos( $sidebar[$i], '-' ) + 1 ) );
 				if ( !isset( $widgets[$widget['type']][$widget['type-index']] ) ) {
@@ -179,23 +191,22 @@ class Pixflow_Widget_Data {
 			}
 			$sidebar_data[$title] = array_values( $sidebar_data[$title] );
 		}
-
 		foreach ( $widgets as $widget_title => $widget_value ) {
 			foreach ( $widget_value as $widget_key => $widget_value ) {
-
 				$widgets[$widget_title][$widget_key] = $widget_data[$widget_title][$widget_key];
-
 			}
 		}
+       foreach ($widgets["nav_menu"] as &$nav_menu){
+           $nav_menu["nav_menu"] = $_SESSION['importProcessedTerms'][$nav_menu["nav_menu"]];
+       }
 
 		$sidebar_data = array( array_filter( $sidebar_data ), $widgets );
 
-
 		$response['id'] = ( self::parse_import_data( $sidebar_data ) ) ? true : new WP_Error( 'widget_import_submit', 'Unknown Error' );
-
-		//$response = new WP_Ajax_Response( $response );
-		//$response->send();
+//		$response = new WP_Ajax_Response( $response );
+//		$response->send();
 	}
+
 
 	/**
 	 * Read uploaded JSON file
@@ -203,7 +214,7 @@ class Pixflow_Widget_Data {
 	 */
 	public static function get_widget_settings_json($widget_file) {
 
-		$widget_file = content_url().'/uploads/demo/widget.json';
+
 		$file_contents = wp_remote_get(
 				$widget_file,
 				array(
@@ -211,9 +222,11 @@ class Pixflow_Widget_Data {
 						"sslverify" => false
 				)
 		);
+
 		$file_contents = $file_contents['body'];
 		$pos 		 = strpos($file_contents, '[{');
 		$file_contents 		 = substr($file_contents, $pos);
+
 		return array( $file_contents, $widget_file);
 
 	}

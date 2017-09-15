@@ -106,7 +106,7 @@
                         <span class="tab-title"><?php esc_attr_e('SEARCH','massive-dynamic'); ?></span>
                         <div class="search-container">
                             <div class="input-holder">
-                                <input id="search-input" placeholder="Search something">
+                                <input id="search-input" placeholder="<?php _e('Search something','massive-dynamic'); ?>">
                                 <div class="clear-button"></div>
                             </div>
                             <div id="result-container"></div>

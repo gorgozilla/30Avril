@@ -125,7 +125,7 @@ class VP_Metabox extends WPAlchemy_MetaBox
 		}
 	 
 		// create a nonce for verification
-		echo '<input type="hidden" name="'. $this->id .'_nonce" value="' . wp_create_nonce($this->id) . '" />';
+		echo '<input type="hidden" name="'. esc_attr($this->id) .'_nonce" value="' . esc_attr(wp_create_nonce($this->id)) . '" />';
 
 		$this->in_template = FALSE;
 	}
@@ -469,15 +469,15 @@ class VP_Metabox extends WPAlchemy_MetaBox
 		{
 			if( is_array($field) and $field['repeating'] )
 			{
-				echo $this->_render_repeating_group($field);
+				print($this->_render_repeating_group($field));
 			}
 			else if( is_array($field) and !$field['repeating'] )
 			{
-				echo $this->_render_group($field);
+				print($this->_render_group($field));
 			}
 			else
 			{
-				echo $this->_render_field($field);
+				print($this->_render_field($field));
 			}
 		}
 	}

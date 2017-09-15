@@ -38,9 +38,9 @@ if(count($images)>0){
             ?>
             <?php
             if ($video['type'] == 'youtube')
-                $src = "http://www.youtube.com/embed/" . esc_attr($video['id']);
+                $src = "https://www.youtube.com/embed/" . esc_attr($video['id']);
             else
-                $src = "http://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
+                $src = "https://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
             ?>
             <div class="item video">
                 <a class="owl-video" href="<?php echo esc_url($src); ?>"></a>
@@ -62,9 +62,9 @@ if(count($images)>0){
             ?>
             <?php
             if ($video['type'] == 'youtube')
-                $src = "http://www.youtube.com/embed/" . esc_attr($video['id']);
+                $src = "https://www.youtube.com/embed/" . esc_attr($video['id']);
             else
-                $src = "http://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
+                $src = "https://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
             ?>
             <div class="item video">
                 <a class="owl-video" href="<?php echo esc_url($src); ?>"></a>

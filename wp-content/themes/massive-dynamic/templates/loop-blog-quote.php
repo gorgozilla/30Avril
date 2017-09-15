@@ -2,7 +2,7 @@
     <blockquote>
         <?php
         $content = apply_filters('the_content',strip_shortcodes(get_the_content(esc_attr__('keep reading', 'massive-dynamic'))));
-        echo $content;
+        print($content);
         ?>
         <div class="name"><?php the_title(); ?></div>
     </blockquote>

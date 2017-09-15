@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * La configuration de base de votre installation WordPress.
  *
@@ -19,16 +19,16 @@
 
 // ** Réglages MySQL - Votre hébergeur doit vous fournir ces informations. ** //
 /** Nom de la base de données de WordPress. */
-define('DB_NAME', 'wp_30avril');
+define('DB_NAME', 'nnjy_30avril');
 
 /** Utilisateur de la base de données MySQL. */
-define('DB_USER', 'root');
+define('DB_USER', 'nnjy_db_30avril');
 
 /** Mot de passe de la base de données MySQL. */
-define('DB_PASSWORD', '');
+define('DB_PASSWORD', 'azrael00');
 
 /** Adresse de l’hébergement MySQL. */
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'nnjy.myd.infomaniak.com');
 
 /** Jeu de caractères à utiliser par la base de données lors de la création des tables. */
 define('DB_CHARSET', 'utf8mb4');
@@ -83,6 +83,9 @@ $table_prefix  = 'wp_';
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
 define('WP_DEBUG', false);
+
+define('WPLANG', fr-FR);
+
 
 /* C’est tout, ne touchez pas à ce qui suit ! */
 

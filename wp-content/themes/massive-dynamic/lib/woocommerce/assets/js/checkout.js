@@ -11,5 +11,5 @@ $(document).ready(function(){
             setTimeout(function(){$this.find('#select2-chosen-2').html(placeholder.replace(/(<([^>]+)>)/ig,""));},1);
         }
     });
-    $('<div class="payment-method"><h3>PAYMENT METHOD</h3></div>').insertBefore('.woocommerce-checkout-payment');
+    $('<div class="payment-method"><h3>'+themeOptionValues.payment_methods+'</h3></div>').insertBefore('.woocommerce-checkout-payment');
 });

@@ -152,8 +152,8 @@ abstract class PixflowPostType
     protected function Pixflow_RegisterScripts()
     {
 
-        wp_register_script('niceScroll',pixflow_path_combine(PIXFLOW_THEME_LIB_URI, 'assets/script/jquery.nicescroll.min.js'),false,PIXFLOW_THEME_VERSION,true);
-        wp_register_script('adminJs',pixflow_path_combine(PIXFLOW_THEME_LIB_URI,'/assets/script/admin.js'),false,PIXFLOW_THEME_VERSION,true);
+        wp_register_script('niceScroll',pixflow_path_combine(PIXFLOW_THEME_LIB_URI, 'assets/script/jquery.nicescroll.min.js'),false,null,true);
+        wp_register_script('adminJs',pixflow_path_combine(PIXFLOW_THEME_LIB_URI,'/assets/script/admin.min.js'),false,PIXFLOW_THEME_VERSION,true);
 
     }
 

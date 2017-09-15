@@ -1,85 +1,7 @@
 #vc_preloader{
     display: none;
 }
-.wpb-layout-element-button .icon-wpb-counterbox , .vc_element-icon.icon-wpb-counterbox {
-    background-image: url('../img/vcicons/counterbox.png');
-}
 
-.wpb-layout-element-button .icon-wpb-iconbox-noborder  , .vc_element-icon.icon-wpb-iconbox-noborder {
-    background-image: url('../img/vcicons/iconbox_noborder.png');
-}
-
-.wpb-layout-element-button .icon-wpb-iconbox-circle  , .vc_element-icon.icon-wpb-iconbox-circle {
-    background-image: url('../img/vcicons/iconbox_circle.png');
-}
-
-.wpb-layout-element-button .icon-wpb-iconbox-rectangle  , .vc_element-icon.icon-wpb-iconbox-rectangle {
-    background-image: url('../img/vcicons/iconbox_rectangle.png');
-}
-
-.wpb-layout-element-button .icon-wpb-iconbox-left  , .vc_element-icon.icon-wpb-iconbox-left {
-    background-image: url('../img/vcicons/iconbox_left.png');
-}
-
-.wpb-layout-element-button .icon-wpb-pixflowheader , .vc_element-icon.icon-wpb-pixflowheader {
-    background-image: url('../img/vcicons/pixflowheader.png');
-}
-
-.wpb-layout-element-button .icon-wpb-imagebox , .vc_element-icon.icon-wpb-imagebox {
-    background-image: url('../img/vcicons/imagebox.png');
-}
-
-.wpb-layout-element-button .icon-wpb-textbox , .vc_element-icon.icon-wpb-textbox {
-    background-image: url('../img/vcicons/textbox.png');
-}
-
-.wpb-layout-element-button .icon-wpb-textbox-icon , .vc_element-icon.icon-wpb-textbox-icon {
-    background-image: url('../img/vcicons/textboxicon.png');
-}
-
-.wpb-layout-element-button .icon-wpb-piechart , .vc_element-icon.icon-wpb-piechart  {
-    background-image: url('../img/vcicons/piechart.png');
-}
-
-.wpb-layout-element-button .icon-wpb-progressbar, .vc_element-icon.icon-wpb-progressbar {
-    background-image: url('../img/vcicons/progressbar.png');
-}
-
-.wpb-layout-element-button .icon-wpb-testimonial , .vc_element-icon.icon-wpb-testimonial {
-    background-image: url('../img/vcicons/testimonial.png');
-}
-
-.wpb-layout-element-button .icon-wpb-youtube , .vc_element-icon.icon-wpb-youtube {
-    background-image: url('../img/vcicons/youtube.png');
-}
-
-.wpb-layout-element-button .icon-wpb-vimeo , .vc_element-icon.icon-wpb-vimeo {
-    background-image: url('../img/vcicons/vimeo.png');
-}
-
-.wpb-layout-element-button .icon-wpb-soundcloud , .vc_element-icon.icon-wpb-soundcloud {
-    background-image: url('../img/vcicons/soundcloud.png');
-}
-
-.wpb-layout-element-button .icon-wpb-social , .vc_element-icon.icon-wpb-social {
-    background-image: url('../img/vcicons/social.png');
-}
-
-.wpb-layout-element-button .icon-wpb-teammemmber , .vc_element-icon.icon-wpb-teammemmber{
-    background-image: url('../img/vcicons/teammemmber.png');
-}
-
-.wpb-layout-element-button .icon-wpb-button , .vc_element-icon.icon-wpb-button {
-    background-image: url('../img/vcicons/button.png');
-}
-
-.wpb-layout-element-button .icon-wpb-imagesliderwithtext , .vc_element-icon.icon-wpb-imagesliderwithtext {
-    background-image: url('../img/vcicons/imagesliderwithtext.png');
-}
-
-.wpb-layout-element-button .icon-wpb-imagecarousel , .vc_element-icon.icon-wpb-imagecarousel {
-    background-image: url('../img/vcicons/imagecarousel.png');
-}
 
 /* Icon list */
 .px-input-icon{
@@ -94,30 +16,6 @@
 #headerstyle .px-input-icon{
     height: 57px;
 }
-
-/*.px-icon {
-    float:left;
-    display: block;
-    font-size: 30px;
-    width:1.5em;
-    line-height: 1.5em;
-    text-align:center;
-    cursor: pointer;
-    border: 1px solid #e1e1e1;
-    margin-top:-1px;
-    margin-left:-1px;
-    padding:5px;
-}
-
-.px-icon:hover{
-    color: #a8a8a8;
-}
-
-.px-icon.selected{
-    color:#ff4c2f;
-}*/
-
-
 
 
 /*!
@@ -267,43 +165,6 @@ li[data-element="vc_column_text"]{
 
 #wpwrap #wpbody #vc_inline-frame-wrapper iframe{
     height: 100% !important;
-}
-
-/************************* Responsive views  *************************/
-#wpwrap #wpbody #vc_inline-frame-wrapper.tablet-portrait{
-    background-image:  url("../img/vc-ui-icons/tablet-portrait.png");
-    background-color: transparent;
-    background-position: center 0px;
-    background-repeat:  no-repeat;
-
-}
-
-#wpwrap #wpbody #vc_inline-frame-wrapper.tablet-portrait #vc_inline-frame{
-    height: 814px !important;
-    position: absolute!important;
-    left: 50%;
-    margin-left: -384px;
-    bottom: 50%;
-    margin-bottom: -499px;
-    top: 115px;
-    border:2px solid rgba(0,0,0,.1);
-}
-
-#wpwrap #wpbody #vc_inline-frame-wrapper.smartphone-portrait{
-    background-image:  url("../img/vc-ui-icons/phone-portrait.png");
-    background-color: transparent;
-    background-position: center;
-    background-repeat:  no-repeat;
-}
-
-#wpwrap #wpbody #vc_inline-frame-wrapper.smartphone-portrait #vc_inline-frame{
-    height: 481px !important;
-    position: absolute!important;
-    left: 50%;
-    margin-left: -159px;
-    top: 50%;
-    margin-top: -240px;
-    border:2px solid rgba(0,0,0,.1);
 }
 
 /* change range slider position number and slider, slider being bigger */

@@ -19,7 +19,7 @@ class VP_WP_User
 		}
 		else
 		{
-			$wp_user_search = $wpdb->get_results("SELECT ID, display_name FROM $wpdb->users ORDER BY ID");
+		    $wp_user_search = $wpdb->get_results($wpdb->prepare("SELECT ID, display_name FROM $wpdb->users ORDER BY ID"));
 			foreach ( $wp_user_search as $userid )
 			{
 				$user_id       = (int) $userid->ID;

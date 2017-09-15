@@ -86,7 +86,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-arrow {
-  border: 5px solid white;
+  border: 5px solid #ffffff;
   content:'';
   position: absolute;
 }
@@ -94,7 +94,7 @@ tr.introjs-showElement > th {
   top: -10px;
   border-top-color:transparent;
   border-right-color:transparent;
-  border-bottom-color:white;
+  border-bottom-color:#ffffff;
   border-left-color:transparent;
 }
 .introjs-arrow.top-right {
@@ -102,7 +102,7 @@ tr.introjs-showElement > th {
   right: 10px;
   border-top-color:transparent;
   border-right-color:transparent;
-  border-bottom-color:white;
+  border-bottom-color:#ffffff;
   border-left-color:transparent;
 }
 .introjs-arrow.top-middle {
@@ -111,7 +111,7 @@ tr.introjs-showElement > th {
   margin-left: -5px;
   border-top-color:transparent;
   border-right-color:transparent;
-  border-bottom-color:white;
+  border-bottom-color:#ffffff;
   border-left-color:transparent;
 }
 .introjs-arrow.right {
@@ -120,7 +120,7 @@ tr.introjs-showElement > th {
   border-top-color:transparent;
   border-right-color:transparent;
   border-bottom-color:transparent;
-  border-left-color:white;
+  border-left-color:#ffffff;
 }
 .introjs-arrow.right-bottom {
   bottom:10px;
@@ -128,11 +128,11 @@ tr.introjs-showElement > th {
   border-top-color:transparent;
   border-right-color:transparent;
   border-bottom-color:transparent;
-  border-left-color:white;
+  border-left-color:#ffffff;
 }
 .introjs-arrow.bottom {
   bottom: -10px;
-  border-top-color:white;
+  border-top-color:#ffffff;
   border-right-color:transparent;
   border-bottom-color:transparent;
   border-left-color:transparent;
@@ -141,7 +141,7 @@ tr.introjs-showElement > th {
   left: -10px;
   top: 10px;
   border-top-color:transparent;
-  border-right-color:white;
+  border-right-color:#ffffff;
   border-bottom-color:transparent;
   border-left-color:transparent;
 }
@@ -149,7 +149,7 @@ tr.introjs-showElement > th {
   left: -10px;
   bottom:10px;
   border-top-color:transparent;
-  border-right-color:white;
+  border-right-color:#ffffff;
   border-bottom-color:transparent;
   border-left-color:transparent;
 }
@@ -158,7 +158,7 @@ tr.introjs-showElement > th {
   position: absolute;
   visibility: visible;
   padding: 43px;
-  background-color: white;
+  background-color: #ffffff;
   min-width: 255px;
   max-width: 300px;
   border-radius: 3px;
@@ -1364,9 +1364,6 @@ body.vjs-full-window {
   opacity: 0;
 }
 
-.shortcode-button-holder.active {
-  pointer-events: none;
-}
 
 /* Text added to intro hints */
 

@@ -92,7 +92,7 @@ class Pixflow_Customize_Image_Control extends WP_Customize_Upload_Control {
 				<div class="dropdown preview-thumbnail" tabindex="0">
 					<div class="dropdown-content">
 						<?php if ( empty( $src ) ): ?>
-							<img style="display:none;" />
+							<img class="px-display-none" />
 						<?php else: ?>
 							<img src="<?php echo esc_url( set_url_scheme( $src ) ); ?>" />
 						<?php endif; ?>

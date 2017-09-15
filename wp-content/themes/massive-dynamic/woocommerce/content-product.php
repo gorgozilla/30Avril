@@ -10,10 +10,10 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woothemes.com/document/template-structure/
+ * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.6.1
+ * @version 3.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,17 +23,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product;
 
 // Ensure visibility
-if ( ! $product || ! $product->is_visible() ) {
+if ( empty( $product ) || ! $product->is_visible() ) {
 	return;
 }
 
-global $product;
-$attachment_ids = $product->get_gallery_attachment_ids();
+$attachment_ids = $product->get_gallery_image_ids();
 $first_image = '';
 foreach( $attachment_ids as $attachment_id )
 {
     $image = wp_get_attachment_url( $attachment_id );
-    $image = (false == $image)?PIXFLOW_PLACEHOLDER_LARGE:$image;
+    $image = (false == $image)?PIXFLOW_PLACEHOLDER1:$image;
     $first_image =  $image_link = $image;
 	break;
 }

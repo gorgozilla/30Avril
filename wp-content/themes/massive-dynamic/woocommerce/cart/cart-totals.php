@@ -42,8 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td><?php wc_cart_totals_fee_html( $fee ); ?></td>
 				</tr>
 			<?php endforeach; ?>
-
-			<?php if ( wc_tax_enabled() && WC()->cart->tax_display_cart == 'excl' ) : ?>
+			<?php if ( wc_tax_enabled() && 'excl' === WC()->cart->tax_display_cart ) : ?>
 				<?php if ( get_option( 'woocommerce_tax_total_display' ) == 'itemized' ) : ?>
 					<?php foreach ( WC()->cart->get_tax_totals() as $code => $tax ) : ?>
 						<tr class="tax-rate tax-rate-<?php echo sanitize_title( $code ); ?>">
@@ -98,7 +97,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				printf( esc_attr__( 'Note: Shipping and taxes are estimated%s and will be updated during checkout based on your billing and shipping information.', 'massive-dynamic' ), $estimated_text );
 
-			?>onsmall></p>
+			?></small></p>
 		<?php endif; ?>
 
 		<div class="calculate-shipping">

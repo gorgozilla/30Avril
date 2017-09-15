@@ -6,19 +6,9 @@ class PixflowGoogleFonts {
 
     public function __construct($jsonFile)
     {
-        $jsonFile = PIXFLOW_THEME_LIB_URI.'/googlefonts.txt';
-        $file_content = wp_remote_get(
-            $jsonFile,
-            array(
-                "timeout" => 90,
-                "sslverify" => false
-            )
-        );
-        if(!is_array($file_content)){
-            return false;
-        }
-        $file_contents = $file_content['body'];
-        $content = $file_contents;
+        $json_file_dir = PIXFLOW_THEME_LIB .'/googlefonts.txt';
+
+        $content = @file_get_contents( $json_file_dir );
 
         if(FALSE === $content)
         {

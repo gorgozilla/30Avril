@@ -246,12 +246,21 @@ if(window.top != window.self) {
             pixflow_customizerObj().$('#customize-control-'+style+'_logo .upload-button').click();
         });
 
-        $('nav .edit-setting').click(function(){
+        $('nav .edit-setting,.gather-btn .edit-setting').click(function(){
             if($('.shortcodes-panel', window.top.document).css('display')=='block'){
                 $('.shortcodes-panel-button', window.top.document).click();
             }
-            var element_id = $(this).closest('nav').find('> ul > li').first().attr('id');
-            pixflow_customizerObj().$('li[id*="'+element_id+'"]').closest('li.control-subsection').find('> h3').click()
+            var parent = $(this).closest('nav');
+            if(!parent.length){
+                parent = $('.gather-overlay nav');
+            }
+            var element_id = parent.find('> ul > li').first().attr('id');
+            if(pixflow_customizerObj().$('li#unique-setting-switch').hasClass('close')) {
+                pixflow_customizerObj().$('li#unique-setting-switch > h3').click();
+            }
+
+            pixflow_customizerObj().$('li[id*="'+element_id+'"]').closest('li.control-subsection').find('> h3').click();
+
         })
 
         $('a.logo.header-item').click(function(e){
@@ -291,7 +300,7 @@ if(window.top != window.self) {
         $('.header-item').append('<div class="ui-move-handle"></div>');
 
         //Footer setting
-        var footerSetting = '<div class="footer-setting">' +
+        var footerSetting = '<div class="footer-setting">' + '<span class="setting-svg">'+settingSvg+'</span>' +
             '<div class="setting-holder">'+livepreview_var.footerSetting+'</div>' +
             '</div>';
         $('footer').append(footerSetting);
@@ -411,23 +420,23 @@ if(window.top != window.self) {
                     currentItem = items[i];
                 if (currentItem == leftItem) {
                     if (leftItem.logo == 'menu') {
-                        headerItems.eq(i - 1).find('.icon-gathermenu').removeClass('border-left');
-                        headerItems.eq(i - 1).find('.icon-gathermenu').addClass('border-right');
+                        headerItems.eq(i - 1).find('.gather-menu-icon').removeClass('border-left');
+                        headerItems.eq(i - 1).find('.gather-menu-icon').addClass('border-right');
                     } else {
                         headerItems.eq(i - 1).removeClass('border-left');
                         headerItems.eq(i - 1).addClass('border-right');
                     }
                 } else {
                     if (leftItem.logo == 'menu') {
-                        headerItems.eq(i - 1).find('.icon-gathermenu').removeClass('border-left');
-                        headerItems.eq(i - 1).find('.icon-gathermenu').addClass('border-right');
+                        headerItems.eq(i - 1).find('.gather-menu-icon').removeClass('border-left');
+                        headerItems.eq(i - 1).find('.gather-menu-icon').addClass('border-right');
                     } else {
                         headerItems.eq(i - 1).removeClass('border-left');
                         headerItems.eq(i - 1).addClass('border-right');
                     }
                     if (currentItem.logo == 'menu') {
-                        headerItems.eq(i).find('.icon-gathermenu').removeClass('border-right');
-                        headerItems.eq(i).find('.icon-gathermenu').addClass('border-left');
+                        headerItems.eq(i).find('.gather-menu-icon').removeClass('border-right');
+                        headerItems.eq(i).find('.gather-menu-icon').addClass('border-left');
                     } else {
                         headerItems.eq(i).removeClass('border-right');
                         headerItems.eq(i).addClass('border-left');
@@ -436,26 +445,26 @@ if(window.top != window.self) {
             }
             if (headerItems.eq(0).attr('data-md-align') == 'left') {
                 if (headerItems.eq(0).attr('data-custom-id') == 'menu') {
-                    headerItems.eq(0).find('.icon-gathermenu').removeClass('border-left');
+                    headerItems.eq(0).find('.gather-menu-icon').removeClass('border-left');
                 } else {
                     headerItems.eq(0).removeClass('border-left');
                 }
             } else {
                 if (headerItems.eq(0).attr('data-custom-id') == 'menu') {
-                    headerItems.eq(0).find('.icon-gathermenu').addClass('border-left');
+                    headerItems.eq(0).find('.gather-menu-icon').addClass('border-left');
                 } else {
                     headerItems.eq(0).addClass('border-left');
                 }
             }
             if ($('.header-item:last-child').attr('data-md-align') == 'right') {
                 if ($('.header-item:last-child').attr('data-custom-id') == 'menu') {
-                    $('.header-item:last-child').find('.icon-gathermenu').removeClass('border-right');
+                    $('.header-item:last-child').find('.gather-menu-icon').removeClass('border-right');
                 } else {
                     $('.header-item:last-child').removeClass('border-right');
                 }
             } else {
                 if ($('.header-item:last-child').attr('data-custom-id') == 'menu') {
-                    $('.header-item:last-child').find('.icon-gathermenu').addClass('border-right');
+                    $('.header-item:last-child').find('.gather-menu-icon').addClass('border-right');
                 } else {
                     $('.header-item:last-child').addClass('border-right');
                 }
@@ -513,14 +522,7 @@ if(window.top != window.self) {
     function pixflow_loadVC(){
 
         'use strict';
-
         $(window).load(function () {
-            pixflow_customizerObj().$('input#save').click(function () {
-                try {
-                    builder.saveContent();
-                } catch (e) {
-                }
-            });
             pixflow_customizerObj().uniqueLoaded++;
             if($('meta[name="post-id"]').attr('setting-status') == 'unique') {
                 if(pixflow_customizerObj().uniqueLoaded >= 1){
@@ -539,7 +541,10 @@ if(window.top != window.self) {
             },1000);
         });
         var s;
-        pixflow_customizerObj().$('#save-btn ').click(function () {
+
+        pixflow_customizerObj().$('#save-btn ').off('click.publish');
+        pixflow_customizerObj().$('#save-btn ').on('click.publish',function(){
+            try {
                 var customizerSaved = 0,
                     checkedCustomizer = false,
                     shouldCheck = false,
@@ -553,55 +558,75 @@ if(window.top != window.self) {
                         pixflow_save_unique_setting(post_id,post_detail);
                     });
                     shouldCheck = true;
-                    try{
-                        builder.saveContent();
-                    }catch (e){}
                 }else{
-                    try {
-                        pixflow_customizerObj().$('li.general-page-setting .circle').addClass('expand');
-                        pixflow_save_status('general', post_id, post_detail, 'save', function () {
+                    pixflow_customizerObj().$('li.general-page-setting .circle').addClass('expand');
+                    pixflow_save_status('general', post_id, post_detail, 'save', function () {
+                        try {
                             pixflow_customizerObj().$('input#save').click();
                             shouldCheck = true;
-                        });
-                    }catch(e){}
+                        }catch(e){
+                            customizerSaved=2;
+                            // pixflow message box
+                            pixflow_customizerObj().pixflow_messageBox(livepreview_var.cantSave,'caution',livepreview_var.cantSaveMsg,livepreview_var.cantSaveBtn,function() {
+                                pixflow_customizerObj().pixflow_closeMessageBox();
+                            });
+                        }
+                    });
                 }
-            try {
                 // pixflow_customizerObj().$('#customize-preview #save-btn').css({'background-color':'#0f94e9',color:'#fff'});
-                pixflow_customizerObj().$('#customize-preview #save-btn').addClass('saving');
-                pixflow_customizerObj().$('#customize-preview #save-btn .save-loading').animate({width: '90%'}, 7000);
-                pixflow_customizerObj().$('#customize-preview #save-btn .text').html(livepreview_var.saving);
+                pixflow_customizerObj().$('#save-btn').addClass('saving');
+                pixflow_customizerObj().$('#save-btn .save-loading').animate({width: '90%'}, 7000);
+                pixflow_customizerObj().$('#save-btn .text').html(livepreview_var.saving);
                 s = setInterval(function () {
-                    if (!checkedCustomizer && !pixflow_customizerObj().$('body.saving').length && shouldCheck) {
-                        customizerSaved++;
-                        checkedCustomizer = true;
-                    }
-                    if (!$('body.content-saving').length && shouldCheck) {
-                        customizerSaved++;
-                    }
-                    if (customizerSaved == 2) {
-                        clearInterval(s);
-                        pixflow_customizerObj().$('#customize-preview #save-btn .save-loading').stop().animate({'width': '100%'}, 200, 'swing', function () {
-                            pixflow_customizerObj().$('#customize-preview #save-btn .text').html(livepreview_var.save_preview);
-                            setTimeout(function () {
-                                pixflow_customizerObj().$('#customize-preview #save-btn').removeClass('saving');
-                                pixflow_customizerObj().$('#customize-preview #save-btn .text').html(pixflow_customizerObj().customizerSentences.saveAndView);
-                            }, 2000);
-                            pixflow_customizerObj().$('#customize-preview #save-btn .save-loading').css('width', '0%');
-                            pixflow_customizerObj().$('#customize-header-actions #save').val('Saved');
-                            window.top.pixflow_refreshFrame();
-                            if (typeof pixflow_customizerObj().saveCallbackFunction == 'function') {
+                    try {
+                        if (!checkedCustomizer && !pixflow_customizerObj().$('body.saving').length && shouldCheck) {
+                            customizerSaved++;
+                            checkedCustomizer = true;
+                        }
+
+                        if (customizerSaved == 1) {
+                            clearInterval(s);
+                            pixflow_customizerObj().$('#save-btn .save-loading').stop().animate({'width': '100%'}, 200, 'swing', function () {
+                                pixflow_customizerObj().$('#save-btn .text').html(livepreview_var.save_preview);
                                 setTimeout(function () {
-                                    pixflow_customizerObj().saveCallbackFunction();
-                                }, 1);
-                            }
-                            if ($this.hasClass('save-preview')) {
-                                window.top.location = window.top.wp.customize.previewer.previewUrl();
-                            }
-                            pixflow_customizerObj().$('.customizer-btn#save-btn .cd-dropdown-wrapper').removeClass('active-dropdown-view');
+                                    pixflow_customizerObj().$('#save-btn').removeClass('saving');
+                                    pixflow_customizerObj().$('#save-btn .text').html(pixflow_customizerObj().customizerSentences.saveAndView);
+                                }, 2000);
+                                pixflow_customizerObj().$('#save-btn .save-loading').css('width', '0%');
+                                pixflow_customizerObj().$('#customize-header-actions #save').val('Saved');
+                                window.top.pixflow_refreshFrame();
+                                if (typeof pixflow_customizerObj().saveCallbackFunction == 'function') {
+                                    setTimeout(function () {
+                                        pixflow_customizerObj().saveCallbackFunction();
+                                    }, 1);
+                                }
+                                if ($this.hasClass('save-preview')) {
+                                    window.top.location = window.top.wp.customize.previewer.previewUrl();
+                                }
+                            });
+                        }
+                    }catch(e){
+                        // pixflow message box
+                        clearInterval(s);
+                        pixflow_customizerObj().pixflow_messageBox(livepreview_var.cantSave,'caution',livepreview_var.cantSaveMsg,livepreview_var.cantSaveBtn,function() {
+                            pixflow_customizerObj().pixflow_closeMessageBox();
+                            pixflow_customizerObj().$('#save-btn .save-loading').stop().animate({'width': '100%'}, 200, 'swing', function () {
+                                pixflow_customizerObj().$('#save-btn .text').html(pixflow_customizerObj().customizerSentences.saveAndView);
+                                setTimeout(function () {
+                                    pixflow_customizerObj().$('#save-btn').removeClass('saving');
+                                    pixflow_customizerObj().$('#save-btn .text').html(pixflow_customizerObj().customizerSentences.saveAndView);
+                                }, 2000);
+                                pixflow_customizerObj().$(' #save-btn .save-loading').css('width', '0%');
+                            });
                         });
                     }
                 }, 100);
-            }catch (e){}
+            }catch (e){
+                // pixflow message box
+                pixflow_customizerObj().pixflow_messageBox(livepreview_var.cantSave,'caution',livepreview_var.cantSaveMsg,livepreview_var.cantSaveBtn,function() {
+                    pixflow_customizerObj().pixflow_closeMessageBox();
+                });
+            }
         });
 
 
@@ -632,118 +657,6 @@ if(window.top != window.self) {
             $('.item-setting').css('opacity', '1');
         }
 
-    }
-
-    function pixflow_portfolioItemsPanel() {
-        'use strict';
-
-        var $portfolioItem = $('.portfolio-multisize .isotope .item'),
-            panelSetting = '<div class="portfolio-panel-setting">' +
-                '                   <div class="tooltip">SET IMAGE SIZE</div>'+
-                '                   <div class="setting-holder">' +
-                '                       <div class="state"></div>'+
-                '                       <span data-size="thumbnail-small" class="small-size portfolio-size"></span>' +
-                '                       <span data-size="thumbnail-medium" class="average-size portfolio-size"></span>' +
-                '                       <span data-size="thumbnail-large" class="large-size portfolio-size"></span>' +
-                '                   </div>' +
-                '               </div>';
-
-        $portfolioItem.append(panelSetting);
-        $portfolioItem.find('.portfolio-size').each(function (index, value) {
-            $(this).attr('data-item_id', $(this).parent().parent().attr('data-item_id'));
-        });
-
-        $portfolioItem.hover(function () {
-            var $this =$(this),
-                position = parseInt($this.css('padding-top'))+10;
-
-            $this.find('.portfolio-panel-setting').css({top: position,right:position, opacity: '1'});
-        }, function () {
-            var $this =$(this),
-                position = parseInt($this.css('padding-top'));
-
-            $(this).find('.portfolio-panel-setting').css({top: position,right:position+10, opacity: '0'});
-
-        });
-
-
-        $portfolioItem.find('.portfolio-panel-setting').hover(function(){
-            $(this).addClass('hovering');
-            TweenMax.fromTo($(this).find('.tooltip'),.3, {top:-60,opacity:0}, {top:-33,opacity:1});
-        },function(){
-            $(this).removeClass('hovering');
-            TweenMax.fromTo($(this).find('.tooltip'),.3, {top:-33,opacity:1}, {top:-70,opacity:0});
-        });
-
-        $portfolioItem.find('.portfolio-panel-setting span').click(function () {
-            if ($(this).hasClass('small-size')) {
-                $(this).parents('.item').removeClass('thumbnail-medium thumbnail-large').addClass('thumbnail-small');
-                $(this).siblings('.state').removeClass('active-average active-large').addClass('active-small');
-                $(this).siblings().removeClass('current');
-                $(this).addClass('current');
-                pixflow_portfolioMultisize();
-            } else if ($(this).hasClass('average-size')) {
-                $(this).parents('.item').removeClass('thumbnail-small thumbnail-large').addClass('thumbnail-medium');
-                $(this).siblings().removeClass('current');
-                $(this).siblings('.state').removeClass('active-large active-small').addClass('active-average');
-                $(this).addClass('current');
-                pixflow_portfolioMultisize();
-            } else if ($(this).hasClass('large-size')) {
-                $(this).parents('.item').removeClass('thumbnail-medium thumbnail-small').addClass('thumbnail-large');
-                $(this).siblings().removeClass('current');
-                $(this).addClass('current');
-                $(this).siblings('.state').removeClass('active-average active-small').addClass('active-large');
-                pixflow_portfolioMultisize();
-            } else if ($(this).hasClass('setting')) {
-                $(this).closest('.vc_md_portfolio_multisize').find('a[title="Edit Portfolio Multi-Size"]')[0].click();
-            }
-            var item = $(this).parents('.portfolio-item'),
-                post_id = item.data("item_id"),
-                size = $(this).attr('data-size');
-            jQuery.ajax({
-                type: "post",
-                url: livepreview_var.url,
-                data: "action=pixflow_portfolio_size&nonce=" + livepreview_var.nonce + "&portfolio_size=" + size + "&post_id=" + post_id,
-                success: function (res) {
-                    return res;
-                }
-            })
-        });
-
-        $portfolioItem.find('.portfolio-panel-setting span').hover(function(){
-           var $item = $(this);
-
-            if($item.hasClass('small-size')){
-                $item.siblings('.state').removeClass('average large').addClass('small');
-
-            }else if($item.hasClass('average-size')){
-                $item.siblings('.state').removeClass('large small').addClass('average');
-
-            }else{
-                $item.siblings('.state').removeClass('average small').addClass('large');
-
-            }
-        },function(){
-            var $item = $(this);
-            if($item.hasClass('small-size')){
-                $item.siblings('.state').removeClass('average large').addClass('small');
-
-            }else if($item.hasClass('average-size')){
-                $item.siblings('.state').removeClass('large small').addClass('average');
-
-            }else{
-                $item.siblings('.state').removeClass('average small').addClass('large');
-
-            }
-
-            $('.state').removeClass('average small large');
-
-        });
-
-    $('.portfolio .shortcode-btn a').click(function(e){
-        e.preventDefault();
-        return;
-    })
     }
 
     function pixflow_loadRelatedSidebar(){
@@ -789,94 +702,15 @@ if(window.top != window.self) {
         pixflow_widgetDragDrop();
         pixflow_loadVC();
 		pixflow_customizerObj().$('.customizer-loading').css('display' , 'none');
-        window.top.pixflow_openShortcodePanel();
-        $($('iframe',window.top.document)[0]).contents().find('body').css({margin:0});
         window.onbeforeunload = null;
 
     });
-
     $(window).load(function () {
         //pixflow_portfolioItemsPanel();
-
         pixflow_loadRelatedSidebar();
-        window.top.pixflow_customizeMenu();
         //Hide overflow from header icons
         $( "header.top:not(.top-modern) .icons-pack li.icon").wrapAll( "<div class='wrap' />");
         $('header .hidden-tablet').removeClass('hidden-tablet');
-
-        $(document).on('mouseenter', '.vc_row', function () {
-            var mainPadding = parseInt($('main').css('padding-top')),
-                top = mainPadding,
-                num = 0,
-                firstRow = $('main .vc_row').first(),
-                $firstRowControls = firstRow.find('> .wrap + .mBuilder_row_controls'),
-                $headerTop = $('header[class *= "top"]'),
-                headerHeight = $headerTop.height()+3;//50 is header gizmo height
-
-            firstRow.addClass('first-row');
-
-            if (!$(this).closest('.first-row').length ){
-                return;
-            }
-
-            if($('header').is('.left') || $('header').is('.right')){
-                $firstRowControls.css('top', '0');
-            }else {
-
-                if (!$(this).hasClass('vc_inner')) {
-
-                    if (mainPadding >= headerHeight + 45) {
-                        //content is not under header now check if row has space to view its settings or not
-                        if (!$firstRowControls.hasClass('flag')) {
-                            $firstRowControls.css('top', '-45px');
-                            $firstRowControls.addClass('flag')
-                        }
-                    } else {
-                        //row has enough space to view its setting
-                        // check if it is under header or not
-                        var headerTop = parseInt($headerTop.css('top'));
-                        headerHeight += headerTop;
-                        num = (headerHeight + 45 <= mainPadding ) ? -45 : headerHeight - mainPadding;
-
-                        if(num < 0)
-                            num = 2;
-
-                        if (!$firstRowControls.hasClass('flag')) {
-                            $firstRowControls.css({'top': num,'left':'50px'});
-                            $firstRowControls.addClass('flag')
-                        }
-                    }
-                } else {
-                    var $innerRow = $(this),
-                        $innerRowControls = $innerRow.find('.mBuilder_row_controls'),
-                        rowTop = $innerRowControls.closest('.first-row').find('> .mBuilder_row_controls').position().top;
-
-                    //num = $firstRowControls.position().top - parseInt(firstRow.css('padding-top')) + 45;
-                    if ($innerRowControls.offset().top <= rowTop){
-                        $innerRowControls.css({'top':rowTop});
-                    }
-                }
-            }
-        });
-
-        $(document).on('mouseleave', '.vc_row ', function () {
-
-            var firstRow = $('main .vc_row').first(),
-                firstRowControls = firstRow.find('> .wrap + .mBuilder_row_controls');
-
-            if($(this).hasClass('vc_inner')){
-                if (! $(this).closest('.first-row').length){
-                    return;
-                }
-            }else if (! $(this).hasClass('first-row')){
-                return;
-            }
-            firstRow.removeClass('first-row');
-            
-            if (firstRowControls.hasClass('flag')) {
-                firstRowControls.removeClass('flag')
-            }
-        });
 
     });
 }

@@ -69,23 +69,22 @@ class VP_FileSystem
 	function dir_contains_children($dir, $ext = null)
 	{
 		$result = false;
-		if (is_link($dir))
-		{
-			$dir = readlink($dir);
-		}
-
-		if($dh = opendir($dir))
-		{
-			while(!$result && ($file = readdir($dh)) !== false)
-			{
-				$result = $file !== "." && $file !== "..";
-				if(!is_null($ext))
-				{
-					$result = pathinfo($file, PATHINFO_EXTENSION) === $ext;
-				}
-			}
-			closedir($dh);
-		}
+        /*if (is_link($dir))
+        {
+            $dir = readlin$dir);
+        }
+        /*if($dh = opendir($dir))
+        {
+            while(!$result && ($file = readdir($dh)) !== false)
+            {
+                $result = $file !== "." && $file !== "..";
+                if(!is_null($ext))
+                {
+                    $result = pathinfo($file, PATHINFO_EXTENSION) === $ext;
+                }
+            }
+            closedir($dh);
+        }*/
 		return $result;
 	}
 

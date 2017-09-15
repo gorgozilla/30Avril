@@ -26,7 +26,7 @@ function pixflow_validate_checkbox($value ) {
     return ( ( isset( $value ) && true == $value ) ? true : false );
 }
 function pixflow_validate_description($value ) {
-    return wp_filter_post_kses( $value );;
+    return wp_filter_post_kses( $value );
 }
 function pixflow_validate_gradient($value ) {
     return $value;

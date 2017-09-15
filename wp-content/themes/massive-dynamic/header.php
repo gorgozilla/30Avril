@@ -23,9 +23,10 @@ pixflow_decodeSetting();
 </head>
 
 <body <?php body_class();?> >
+    <?php do_action('pixflow_body_start'); ?>
     <div id="pageLoadingOverlay" class="<?php echo (pixflow_get_theme_mod('loading_type',PIXFLOW_LOADING_TYPE) == 'dark')? "dark-loading-overlay":"light-loading-overlay";?>">
         <h6 class='loading-text'>
-            <img src='<?php echo esc_url(pixflow_get_theme_mod('preloader_logo',PIXFLOW_PRELOADER_LOGO));?>'><br>
+            <img src=''><br>
             <div class="preloader-text"><?php echo nl2br(esc_textarea(pixflow_get_theme_mod('loading_text',PIXFLOW_LOADING_TEXT)));?></div>
         </h6>
     </div>
@@ -42,14 +43,14 @@ pixflow_decodeSetting();
         <div class="texture-overlay"></div>
         <div class="bg-image"></div>
     <?php
-    do_action('pixflow_body_start');
+
 
     if( pixflow_get_theme_mod('header_theme',PIXFLOW_HEADER_THEME) == 'gather') {
         get_template_part('templates/header-gather-overlay');
     }
     ?>
 
-    <div class="layout" style="width: <?php echo esc_attr(pixflow_get_theme_mod('site_width',PIXFLOW_SITE_WIDTH))?>%;">
+    <div class="layout">
         <?php
         do_action('pixflow_before_header');
         ?>

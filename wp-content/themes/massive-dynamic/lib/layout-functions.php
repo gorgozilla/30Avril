@@ -220,7 +220,7 @@ function pixflow_generate_content($pageVar, $loop = 'blog'){
         <?php
         //adding related class if footer is set on parallax
         $footer_parallax = pixflow_get_theme_mod('footer_parallax',PIXFLOW_FOOTER_PARALLAX);
-        if($footer_parallax == 'on' || $footer_parallax == '1'){
+        if($footer_parallax == 'on' || $footer_parallax == '1' || $footer_parallax == 'true'){
         $footer_parallax = 'has-parallax-footer';
         } else{
         $footer_parallax = '';
@@ -278,9 +278,9 @@ function pixflow_generate_content($pageVar, $loop = 'blog'){
 
                             <div class="image"></div>
 
-                            <strong style="font-size:36px;"><?php esc_attr_e('404', 'massive-dynamic'); ?></strong>
+                            <strong><?php esc_attr_e('404', 'massive-dynamic'); ?></strong>
 
-                            <p style="font-size:21px;"><?php esc_attr_e('page is not available', 'massive-dynamic'); ?></p>
+                            <p><?php esc_attr_e('page is not available', 'massive-dynamic'); ?></p>
 
                         </div>
                         <?php
@@ -351,7 +351,7 @@ function pixflow_generate_footer($pageVar){
 
             pixflow_get_sidebar($pageVar['sidebar']['id'],'sticky',$pageVar['sidebar']['class']);
 
-        }else if (pixflow_not($pageVar['headerPosition']) == $pageVar['sidebar']['position'] || $pageVar['sidebar']['position'] == 'double'){
+        }else if ($pageVar['headerPosition'] != $pageVar['sidebar']['position'] || $pageVar['sidebar']['position'] == 'double'){
 
             pixflow_get_sidebar($pageVar['sidebar']['id'],'sticky',$pageVar['sidebar']['class']);
 

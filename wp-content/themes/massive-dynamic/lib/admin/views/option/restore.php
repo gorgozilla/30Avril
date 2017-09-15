@@ -12,9 +12,9 @@
 			<div class="buttons">
 				<input class="vp-js-restore vp-button button button-primary" type="button" value="<?php esc_attr_e('Restore Default', 'massive-dynamic') ?>" />
 				<p><?php esc_attr_e('** Please make sure you have already make a backup data of your current settings. Once you click this button, your current settings will be gone.', 'massive-dynamic'); ?></p>
-				<span style="margin-left: 10px;">
-					<span class="vp-field-loader vp-js-loader" style="display: none;"><img src="<?php VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" style="vertical-align: middle;"></span>
-					<span class="vp-js-status" style="display: none;"></span>
+				<span class="px-margin-left">
+					<span class="vp-field-loader vp-js-loader px-display-none"><img src="<?php VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" class="px-middle"></span>
+					<span class="vp-js-status px-display-none" ></span>
 				</span>
 			</div>
 		</div>

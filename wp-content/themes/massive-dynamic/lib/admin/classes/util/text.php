@@ -52,9 +52,9 @@ class VP_Util_Text
 	public static function out($string, $default)
 	{
 		if( empty($string) )
-			echo $default;
+			echo esc_attr($default);
 		else
-			echo $string;
+			echo esc_attr($string);
 	}
 
 	public static function prefix(&$item, $key, $prefix)

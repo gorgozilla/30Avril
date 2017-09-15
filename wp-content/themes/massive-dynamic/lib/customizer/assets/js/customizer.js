@@ -48,7 +48,7 @@ setTimeout(function(){
             }
         }
     })
-},80000)
+},80000);
 
 function pixflow_livePreviewObj() {
     "use strict";
@@ -67,111 +67,6 @@ function pixflow_livePreviewObj() {
 }
 
 /*---------- Functions ----------*/
-function pixflow_getNotifications(){
-    "use strict";
-    jQuery.ajax({
-        type: 'post',
-        url: customizerValues.ajax_url,
-        data: {
-            action: 'pixflow_checkNotifications',
-            nonce: customizerValues.ajax_nonce,
-        },
-        success: function (response) {
-            var json = $.parseJSON(response);
-            pixflow_showNotifications(json);
-        }
-    });
-}
-
-var $notificationCenter = $('.notification-center #opt1 .newsletter-content');
-function pixflow_showNotifications(messages){
-    "use strict";
-    var html = '',
-        li,
-        notifyCounter = 0,
-        id;
-    for(id in messages) {
-        if (messages[id][0] == 'new') {
-            var cls = "new";
-            notifyCounter++;
-        } else {
-            var cls = '';
-        }
-        li = "<li data-notify-id='" + id + "'>" +
-            '<div class="remove-notify px-icon icon-close"></div>' +
-            '<div class="notify-title"><div class="bullet ' + cls + '"></div>' + messages[id][1]['title'] + '</div>';
-        if (messages[id][0] == 'new') {
-            li += '<div class="notify-new"></div>';
-        }
-        li += '<p class="notify-text">' + messages[id][1]['body'] + '</p>' +
-            "</li>";
-        if (cls == "new") {
-            html = li + html;
-        } else {
-            html += li;
-        }
-    }
-    if(html != ''){
-        $notificationCenter.append(html);
-    }else{
-        var noNewsletterHtml='<li><p class="no-newsletter">'+customizerValues.noNewsletter+'</p></li>';
-        $notificationCenter.addClass('no-newsletter-ul').append(noNewsletterHtml);
-    }
-
-    if(notifyCounter>0){
-        $('.customizer-header').prepend("<div class='notify-num'>"+ notifyCounter +"</div>");
-    }
-}
-
-function pixflow_setAsReadNotifications(){
-    "use strict";
-    jQuery.ajax({
-        type: 'post',
-        url: customizerValues.ajax_url,
-        data: {
-            action: 'pixflow_setAsReadNotifications',
-            nonce: customizerValues.ajax_nonce,
-        },
-        success: function (response) {
-            //Be Cool!
-        }
-    });
-}
-
-function pixflow_deleteNotification(id){
-    "use strict";
-    jQuery.ajax({
-        type: 'post',
-        url: customizerValues.ajax_url,
-        data: {
-            action: 'pixflow_deleteNotification',
-            del:id,
-            nonce: customizerValues.ajax_nonce,
-        },
-        success: function (response) {
-            if($('.notification-center #opt1 .newsletter-content li').length<1){
-                var noNewsletterHtml='<li><p class="no-newsletter">'+customizerValues.noNewsletter+'</p></li>';
-                $notificationCenter.addClass('no-newsletter-ul').append(noNewsletterHtml);
-            }
-        }
-    });
-}
-
-function pixflow_clearNotifications(){
-    "use strict";
-    jQuery.ajax({
-        type: 'post',
-        url: customizerValues.ajax_url,
-        data: {
-            action: 'pixflow_clearNotifications',
-            nonce: customizerValues.ajax_nonce,
-        },
-        success: function (response) {
-            var noNewsletterHtml='<li><p class="no-newsletter">'+customizerValues.noNewsletter+'</p></li>';
-            $notificationCenter.addClass('no-newsletter-ul').append(noNewsletterHtml);
-        }
-    });
-}
 
 function pixflow_customizerLoading() {
     "use strict";
@@ -350,13 +245,13 @@ function pixflow_customRequired() {
             if(sidebar){
                 $('#customize-control-'+bgs[i]+'_bg').nextAll().css('display','none');
             }else{
-                $('#accordion-section-'+bgs[i]+'_bg_sec li.customize-control').not('#customize-control-'+bgs[i]+'_bg').css('display','none');
+                $('#sub-accordion-section-'+bgs[i]+'_bg_sec li.customize-control').not('#customize-control-'+bgs[i]+'_bg').css('display','none');
             }
         }else{
             if(sidebar){
                 $('#customize-control-'+bgs[i]+'_bg').nextAll().css('display','block');
             }else{
-                $('#accordion-section-'+bgs[i]+'_bg_sec li.customize-control').not('#customize-control-'+bgs[i]+'_bg').css('display','block');
+                $('#sub-accordion-section-'+bgs[i]+'_bg_sec li.customize-control').not('#customize-control-'+bgs[i]+'_bg').css('display','block');
             }
         }
         $bg.change(function() {
@@ -370,13 +265,13 @@ function pixflow_customRequired() {
                 if(sidebar){
                     $('#customize-control-'+bg_id+'_bg').nextAll().css('display','none');
                 }else{
-                    $('#accordion-section-'+bg_id+'_bg_sec li.customize-control').not('#customize-control-'+bg_id+'_bg').css('display','none');
+                    $('#sub-accordion-section-'+bg_id+'_bg_sec li.customize-control').not('#customize-control-'+bg_id+'_bg').css('display','none');
                 }
             }else{
                 if(sidebar){
                     $('#customize-control-'+bg_id+'_bg').nextAll().css('display','block');
                 }else{
-                    $('#accordion-section-'+bg_id+'_bg_sec li.customize-control').not('#customize-control-'+bg_id+'_bg').css('display','block');
+                    $('#sub-accordion-section-'+bg_id+'_bg_sec li.customize-control').not('#customize-control-'+bg_id+'_bg').css('display','block');
                 }
             }
         });
@@ -450,9 +345,8 @@ function pixflow_headerSecondSetting() {
         "<input value='" + headerTopWidth + "'                                                        id='headerTopWidth'                 type='hidden' />" +
         "<input value='" + layoutWidth + "'                                                           id='layoutWidth'                    type='hidden' />" +
         "</span>");
-
     try{
-        $('#customize-preview > iframe').contentWindow.pixflow_showHeaderChanges();
+        pixflow_livePreviewObj().pixflow_showHeaderChanges();
     }catch (e){}
 }
 
@@ -463,7 +357,7 @@ function pixflow_headerFirstSetting() {
 
 function pixflow_customizerCheckboxStyleSwitchery() {
     "use strict";
-    var elems = Array.prototype.slice.call(document.querySelectorAll('.customizer-checkbox input'));
+    var elems = Array.prototype.slice.call(document.querySelectorAll('.pixflow-customizer-checkbox input'));
     elems.forEach(function (html) {
         var switchery = new Switchery(html, {color: '#0ad1b7', disabledOpacity: 1, speed: '0.4s'});
     });
@@ -495,7 +389,7 @@ function pixflow_setClassGlue() {
 
     $btnSet.each(function () {
         $(this).parent('li').addClass('buttonset');
-    })
+    });
 }
 
 /* Select Element(Tag) Functions */
@@ -549,42 +443,33 @@ function pixflow_selectField() {
 
             var lisHeight = 0;
             if ($nextLis.length > 0) {
-                $nextLis.each(function () {
+               /* $nextLis.each(function () {
                     if (!$(this).hasClass('controller-hide'))
                         lisHeight += $(this).outerHeight(true);
-                });
+                });*/
             }
 
             if (lisHeight < sH) {
                 ulHeight += sH - lisHeight;
-                if ($ul.css('height') != 'auto') {
+                /*if ($ul.css('height') != 'auto') {
                     $ul.attr('style','height:'+ ulHeight + 'px !important;');
-                }
+                }*/
 
                 $sItemsContainer.addClass('down').attr('shift', ulHeight - (sH - lisHeight));
 
-                $sItemsContainer.find('>.select').niceScroll({
-                    horizrailenabled: false,
-                    cursorcolor: "rgba(204, 204, 204, 0.2)",
-                    cursorborder: "1px solid rgba(204, 204, 204, 0.2)",
-                    cursorwidth: "2px"
-                });
-
             } else {
                 $sItemsContainer.addClass('down');
-                if (typeof $sItemsContainer.attr('shift') != 'undefined')
-                    $sItemsContainer.attr('shift', ulHeight - (sH - lisHeight));
             }
         }
     });
 
     $(document).click(function(e){
-        var $this = $(e.target);
-        if ($this.hasClass('ios-select')||($this.parents('.ios-select').length && !$this.hasClass('select-item'))){
-        }else{
-            pixflow_closeDropDown();
-        }
-    })
+         pixflow_closeDropDown();
+    });
+
+    $('.ios-select , .select-outline').click(function(e){
+        e.stopPropagation();
+    });
 
     /* select clicked option */
     $('.customize-control-select .select .select-item').click( function(){
@@ -610,27 +495,20 @@ function pixflow_closeDropDown(){
         var lisHeight = 0;
         if ($nextLis.length > 0) {
             $nextLis.each(function () {
-                if (!$(this).hasClass('controller-hide'))
-                    lisHeight += $(this).outerHeight(true);
+                /*if (!$(this).hasClass('controller-hide'))
+                    lisHeight += $(this).outerHeight(true);*/
             });
         }
 
         if (lisHeight < sH){
             $sItemsContainer.removeClass('down');
             ulHeight -= sH - lisHeight;
-            $ul.attr('style','height : auto !important;');
+            // $ul.attr('style','height : auto !important;');
 
         }else{
             $sItemsContainer.removeClass('down');
         }
     }
-
-    $ul.niceScroll({
-        horizrailenabled: false,
-        cursorcolor: "rgba(204, 204, 204, 0.2)",
-        cursorborder: "1px solid rgba(204, 204, 204, 0.2)",
-        cursorwidth: "2px"
-    });
 }
 
 function pixflow_initSliderControllers(){
@@ -676,9 +554,6 @@ function pixflow_initSliderControllers(){
             $sliderValue.html(pixflow_updateDesimal(values[0],step) + prefix);
         });
         MDslider.noUiSlider.on('set', function(values){
-            if($slider.attr('data-transform') == 'refresh'){
-                pixflow_vcChangedContent();
-            }
             $input.val(pixflow_updateDesimal(values[0],step)).keyup();
             $sliderValue.html(pixflow_updateDesimal(values[0],step) + prefix);
             if($slider.attr('data-transform') == 'refresh'){
@@ -705,14 +580,18 @@ function pixflow_colorController(){
             showInput: true,
             className: id + '_alpha',
             change: function(color) {
-                if('refresh' == transport) {
-                    pixflow_vcChangedContent();
-                }
                 $( "#input_"+id ).val(color.toRgbString() );
                 var numberPattern = /\d+/g,
                     colorObj = color.toRgbString().match(numberPattern),
-                    item = $('li#customize-control-'+id+' label div.sp-replacer div.sp-preview div.sp-preview-inner');
-                item.css('border','none');
+                    item = $('li#customize-control-'+id+' label div.sp-replacer div.sp-preview div.sp-preview-inner'),
+                    num1 = parseInt(colorObj[0]),
+                    num2 = parseInt(colorObj[1]),
+                    num3 = parseInt(colorObj[2]);
+                if(num1 >= 250 && num2 >= 250 && num3 >= 250 ){
+                    item.css('border','1px solid #f4f4f4');
+                }else{
+                    item.css('border','none');
+                }
                 if('refresh' == transport) {
                     pixflow_customizerLoading('rgba');
                 }
@@ -723,8 +602,15 @@ function pixflow_colorController(){
         });
         var numberPattern = /\d+/g,
             colorObj = currentPicker.attr('data-default-color').match(numberPattern),
-            item = $('li#customize-control-'+id+' label div.sp-replacer div.sp-preview div.sp-preview-inner');
-        item.css('border','none');
+            item = $('li#customize-control-'+id+' label div.sp-replacer div.sp-preview div.sp-preview-inner'),
+            num1 = parseInt(colorObj[0]),
+            num2 = parseInt(colorObj[1]),
+            num3 = parseInt(colorObj[2]);
+        if(num1 >= 250 && num2 >= 250 && num3 >= 250 ){
+            item.css('border','1px solid #f4f4f4');
+        }else{
+            item.css('border','none');
+        }
         if('portfolio_accent' == id){
             var b = true;
         }
@@ -754,11 +640,6 @@ function pixflow_switchController(){
             if($parent.hasClass('first')&& $parent.hasClass('last')&& $parent.hasClass('glue')) {
                 $parent.removeClass('last');
             }
-        }
-        if(transport == 'refresh'){
-            $('#'+id).click(function() {
-                pixflow_vcChangedContent();
-            });
         }
 
         $('#'+id).change(function() {
@@ -878,62 +759,6 @@ function pixflow_colorConvertor(color, to, alpha){
 
     }
 
-
-}
-
-function pixflow_updateMainContentSlider() {
-    "use strict";
-
-    var max = 100,
-        $sidebar = pixflow_livePreviewObj().$('div.sidebar'),
-        $input = $('#slider_mainC-width'),
-        MDslider = document.getElementById('slider_mainC-width');
-
-    //get sidebar with & update main content max width
-    if ($sidebar.length) {
-        var res = parseInt(pixflow_getStyle($sidebar, 'width:'));
-        if (pixflow_livePreviewObj().$('div.sidebar').length == 1) {
-            max = 100 - res;
-        } else if (pixflow_livePreviewObj().$('div.sidebar').length == 2) {
-            max = 100 - res * 2;
-        }
-    }
-
-    //update main content slider after sidebar width changed
-    MDslider.noUiSlider.destroy();
-    var $this = $input,
-        start = parseInt($this.attr('value')),
-        min   = parseInt($this.attr('min')),
-        step  = parseInt($this.attr('step')),
-        prefix  = $this.attr('unit');
-
-    noUiSlider.create(MDslider, {
-        start: [ start ], // Handle start position
-        step: step, // Slider moves in increments of '10'
-        range: { // Slider can select '0' to '100'
-            'min': min,
-            'max': max
-        }
-    });
-
-    function pixflow_updateDecimal(val,step){
-        if(step>=1){
-            return val.substr(0, val.length-3);
-        }else if(step >= 0.1){
-            return val.substr(0, val.length-1);
-        }else if(step <0.1){
-            return val;
-        }
-    }
-    MDslider.noUiSlider.on('slide', function(values){
-        $("#decimal_mainC-width").html(pixflow_updateDecimal(values[0],step) + prefix);
-        $('#input_mainC-width').val(pixflow_updateDecimal(values[0],step)).keyup();
-    });
-
-    MDslider.noUiSlider.on('set', function(values){
-        $('#input_mainC-width').val(pixflow_updateDecimal(values[0],step)).keyup();
-        $("#decimal_mainC-width").html(pixflow_updateDecimal(values[0],step) + prefix);
-    });
 
 }
 
@@ -1233,6 +1058,44 @@ function pixflow_documentReady() {
     });
 
     /*******************************************************************
+     *                  Header Menu Button
+     ******************************************************************/
+    wp.customize('menu_button_style', function (value) {
+        value.bind(function (newval) {
+            if( pixflow_livePreviewObj().$('.top-classic').length ){
+                pixflow_livePreviewObj().$('header.top-classic  nav > ul >.item_button').removeClass('rectangle-style oval-style oval_outline-style rectangle_outline-style').addClass(newval+'-style');
+                set_menu_button_background($('#input_button_bg_color').val());
+            }
+        });
+    });
+
+    wp.customize('button_bg_color', function (value) {
+        value.bind(function (newval) {
+            set_menu_button_background(newval);
+            pixflow_header_button_hover();
+        });
+    });
+
+    wp.customize('button_text_color', function (value) {
+        value.bind(function (newval) {
+            set_menu_button_text_color(newval);
+            pixflow_header_button_hover();
+        });
+    });
+
+    wp.customize('button_hover_bg_color', function (value) {
+        value.bind(function (newval) {
+            pixflow_header_button_hover();
+        });
+    });
+
+    wp.customize('button_hover_text_color', function (value) {
+        value.bind(function (newval) {
+            pixflow_header_button_hover();
+        });
+    });
+
+    /*******************************************************************
      *                  Typography Controls
      ******************************************************************/
 
@@ -1247,14 +1110,14 @@ function pixflow_documentReady() {
     //h1 Size
     wp.customize('h1_size', function (value) {
         value.bind(function (newval) {
-            pixflow_livePreviewObj().$('h1').css('font-size', newval + 'px');
+            pixflow_livePreviewObj().$('h1:not(.inline-editor-title h1)').css('font-size', newval + 'px');
         });
     });
 
     //h1 Height
     wp.customize('h1_lineHeight', function (value) {
         value.bind(function (newVal) {
-            pixflow_livePreviewObj().$('h1').css({'line-height': newVal + 'px'});
+            pixflow_livePreviewObj().$('h1:not(.inline-editor-title h1)').css({'line-height': newVal + 'px'});
         })
     });
 
@@ -1277,7 +1140,7 @@ function pixflow_documentReady() {
     });
 
     /******* h2 *******/
-        //h2 Color
+    //h2 Color
     wp.customize('h2_color', function (value) {
         value.bind(function (newval) {
             pixflow_livePreviewObj().$('h2').css('color', newval);
@@ -1287,14 +1150,14 @@ function pixflow_documentReady() {
     //h2 size
     wp.customize('h2_size', function (value) {
         value.bind(function (newval) {
-            pixflow_livePreviewObj().$('h2').css('font-size', newval + 'px');
+            pixflow_livePreviewObj().$('h2:not(.inline-editor-title h2)').css('font-size', newval + 'px');
         });
     });
 
     //h2 Height
     wp.customize('h2_lineHeight', function (value) {
         value.bind(function (newVal) {
-            pixflow_livePreviewObj().$('h2').css({'line-height': newVal + 'px'});
+            pixflow_livePreviewObj().$('h2:not(.inline-editor-title h2)').css({'line-height': newVal + 'px'});
         })
     });
 
@@ -1317,7 +1180,7 @@ function pixflow_documentReady() {
     });
 
     /******* h3 ********/
-        //h3 color
+    //h3 color
     wp.customize('h3_color', function (value) {
         value.bind(function (newval) {
             pixflow_livePreviewObj().$('h3').css('color', newval);
@@ -1327,14 +1190,14 @@ function pixflow_documentReady() {
     //h3 size
     wp.customize('h3_size', function (value) {
         value.bind(function (newval) {
-            pixflow_livePreviewObj().$('h3').css('font-size', newval + 'px');
+            pixflow_livePreviewObj().$('h3:not(.inline-editor-title h3)').css('font-size', newval + 'px');
         });
     });
 
     //h3 Height
     wp.customize('h3_lineHeight', function (value) {
         value.bind(function (newVal) {
-            pixflow_livePreviewObj().$('h3').css({'line-height': newVal + 'px'});
+            pixflow_livePreviewObj().$('h3:not(.inline-editor-title h3)').css({'line-height': newVal + 'px'});
         })
     });
 
@@ -1357,7 +1220,7 @@ function pixflow_documentReady() {
     });
 
     /******* h4 *******/
-        //h4 color
+    //h4 color
     wp.customize('h4_color', function (value) {
         value.bind(function (newval) {
             pixflow_livePreviewObj().$('h4').css('color', newval);
@@ -1367,14 +1230,14 @@ function pixflow_documentReady() {
     //h4 size
     wp.customize('h4_size', function (value) {
         value.bind(function (newval) {
-            pixflow_livePreviewObj().$('h4').css('font-size', newval + 'px');
+            pixflow_livePreviewObj().$('h4:not(.inline-editor-title h4)').css('font-size', newval + 'px');
         });
     });
 
     //h4 Height
     wp.customize('h4_lineHeight', function (value) {
         value.bind(function (newVal) {
-            pixflow_livePreviewObj().$('h4').css({'line-height': newVal + 'px'});
+            pixflow_livePreviewObj().$('h4:not(.inline-editor-title h4)').css({'line-height': newVal + 'px'});
         })
     });
 
@@ -1397,7 +1260,7 @@ function pixflow_documentReady() {
     });
 
     /******* h5 *******/
-        //h5 color
+    //h5 color
     wp.customize('h5_color', function (value) {
         value.bind(function (newval) {
             pixflow_livePreviewObj().$('h5').css('color', newval);
@@ -1407,14 +1270,14 @@ function pixflow_documentReady() {
     //h5 size
     wp.customize('h5_size', function (value) {
         value.bind(function (newval) {
-            pixflow_livePreviewObj().$('h5').css('font-size', newval + 'px');
+            pixflow_livePreviewObj().$('h5:not(.inline-editor-title h5)').css('font-size', newval + 'px');
         });
     });
 
     //h5 Height
     wp.customize('h5_lineHeight', function (value) {
         value.bind(function (newVal) {
-            pixflow_livePreviewObj().$('h5').css({'line-height': newVal + 'px'});
+            pixflow_livePreviewObj().$('h5:not(.inline-editor-title h5)').css({'line-height': newVal + 'px'});
         })
     });
 
@@ -1437,7 +1300,7 @@ function pixflow_documentReady() {
     });
 
     /******* h6 *******/
-        //h6 color
+    //h6 color
     wp.customize('h6_color', function (value) {
         value.bind(function (newval) {
 
@@ -1448,7 +1311,7 @@ function pixflow_documentReady() {
     //h6 size
     wp.customize('h6_size', function (value) {
         value.bind(function (newval) {
-            pixflow_livePreviewObj().$('h6').css('font-size', newval + 'px');
+            pixflow_livePreviewObj().$('h6:not(.inline-editor-title h6)').css('font-size', newval + 'px');
         });
     });
 
@@ -1605,7 +1468,7 @@ function pixflow_documentReady() {
                 'header.top-block:not(.header-clone) .style-style2 nav > ul > li > a .hover-effect span ,' +
                 'header:not(.header-clone) .icons-pack .elem-container .title-content,' +
                 'header:not(.header-clone) .icons-pack .shopcart-item .number,' +
-                '.gather-btn .icon-gathermenu,'+
+                '.gather-btn .gather-menu-icon,'+
                 'header.side-classic nav > ul > li.has-dropdown:not(.megamenu) a')  .css('color', newval); // menu text color
 
             pixflow_livePreviewObj().$(
@@ -1885,8 +1748,7 @@ function pixflow_documentReady() {
         value.bind(function (newval) {
             pixflow_livePreviewObj().$('header .top .icons-pack .icon span,header.top-block .icons-pack li .title-content .icon,header.top-modern .icons-pack li .title-content .icon,header .icons-pack a').css({fontSize:newval+'px'});
             pixflow_livePreviewObj().$('header .icons-pack a.shopcart .icon-shopcart2').css({fontSize: (parseInt(newval)+3)+'px'});
-            pixflow_livePreviewObj().$('.gather-btn .icon-gathermenu').css({fontSize:(newval*1.5)+'px'});
-            pixflow_livePreviewObj().$('.gather-btn .icon-hamburger-menu').css({fontSize:(newval*1.5)+'px'});
+            pixflow_livePreviewObj().$('.gather-btn .gather-menu-icon').css({fontSize:(newval*1.5)+'px'});
         })
     });
 
@@ -2691,7 +2553,7 @@ function pixflow_documentReady() {
     wp.customize('header-side-width', function (value) {
         value.bind(function (newval) {
 
-            pixflow_livePreviewObj().$('header').css('width', newval + '%');
+            pixflow_livePreviewObj().$('header:not(.top)').css('width', newval + '%');
 
             var $content     = pixflow_livePreviewObj().$('.layout > .wrap'),
                 $mainContent = pixflow_livePreviewObj().$('main #content'),
@@ -2803,7 +2665,6 @@ function pixflow_documentReady() {
                     $mainContent = 100 - newval;
                     $content.css({width: $mainContent + '%'});
                 }
-                //pixflow_updateMainContentSlider();
                 pixflow_setShortcodesResponsive();
             });
         });
@@ -3526,6 +3387,12 @@ function pixflow_documentReady() {
                 theClass = m[1] + m[2] + m[3];
             }
             $elem.removeClass(theClass).addClass(className);
+            //remove and set styles of buttons in header
+            if (newval == 'none'){
+                set_menu_button_background($('#input_button_bg_color').val());
+            }else{
+                set_menu_button_background('transparent');
+            }
             if ( 'border' == newval ){
                 pixflow_livePreviewObj().$('header.top-classic .style-border nav > ul > li.menu-item').last().css('padding-right','35px');
             }else {
@@ -3674,6 +3541,7 @@ function pixflow_documentReady() {
 
             if(newval=='style3') {
                 pixflow_livePreviewObj().$('header').css({width:$('#input_header_top_width').val()+'%'});
+                pixflow_livePreviewObj().$('.second-header-bg').css('height', $('#input_header-top-height').val() + 'px');
                 pixflow_livePreviewObj().$('body').animate({
                         scrollTop: 0
                     },400,'swing',function() {
@@ -3858,16 +3726,25 @@ function pixflow_documentReady() {
         value.bind(function (newval) {
 
             var layout = $("input:radio[name='_customize-radio-header_position']:checked").val(),
-                nav_color = wp.customize.control('nav_color').setting();
+                nav_color = wp.customize.control('nav_color').setting(),
+                nav_color_second = wp.customize.control('nav_color_second').setting();
 
-            if ( newval && layout == 'top')
-                pixflow_livePreviewObj().$('header:not(.header-clone) > .color-overlay').css({ borderBottom: '1px solid', borderBottomColor: pixflow_colorConvertor(nav_color,'rgba',0.3) });
-            else if ( newval && layout == 'left')
-                pixflow_livePreviewObj().$('header:not(.header-clone) > .color-overlay').css({ borderRight: '1px solid', borderRightColor: pixflow_colorConvertor(nav_color,'rgba',0.3) });
-            else if ( newval && layout == 'right')
-                pixflow_livePreviewObj().$('header:not(.header-clone) > .color-overlay').css({ borderLeft: '1px solid', borderLeftColor: pixflow_colorConvertor(nav_color,'rgba',0.3) });
-            else
+            if ( newval && layout == 'top') {
+                pixflow_livePreviewObj().$('header:not(.header-clone) > .color-overlay').css({borderBottom: '1px solid', borderBottomColor: pixflow_colorConvertor(nav_color, 'rgba', 0.3)});
+                pixflow_livePreviewObj().$('.second-header-bg').css({borderBottom: '1px solid', borderBottomColor: pixflow_colorConvertor(nav_color_second, 'rgba', 0.3)});
+            }
+            else if ( newval && layout == 'left') {
+                pixflow_livePreviewObj().$('header:not(.header-clone) > .color-overlay').css({borderRight: '1px solid', borderRightColor: pixflow_colorConvertor(nav_color, 'rgba', 0.3)});
+                pixflow_livePreviewObj().$('header:not(.header-clone) > .color-overlay.style-second').css({borderRight: '1px solid', borderRightColor: pixflow_colorConvertor(nav_color_second, 'rgba', 0.3)});
+            }
+            else if ( newval && layout == 'right') {
+                pixflow_livePreviewObj().$('header:not(.header-clone) > .color-overlay').css({borderLeft: '1px solid', borderLeftColor: pixflow_colorConvertor(nav_color, 'rgba', 0.3)});
+                pixflow_livePreviewObj().$('header:not(.header-clone) > .color-overlay.style-second').css({borderLeft: '1px solid', borderLeftColor: pixflow_colorConvertor(nav_color_second, 'rgba', 0.3)});
+            }
+            else {
                 pixflow_livePreviewObj().$('header > .color-overlay').css('border', 'none');
+                pixflow_livePreviewObj().$('.second-header-bg').css('border', 'none');
+            }
 
         });
     });
@@ -4546,44 +4423,6 @@ function pixflow_documentReady() {
         });
     });
     /* second document ready*/
-    //pixflow_customizerAnimation();
-
-    $('#customize-controls').prepend('<button class="back-btn" style="display: none;">'+customizerValues.back+'</button>');
-
-    $('#create-new-menu-submit').click(function(){
-        $('.back-btn').css('display','block').addClass('button');
-    });
-
-    $('body').on('click','li.accordion-section,li.customize-control-new_menu .button',function(){
-        var $this=$(this);
-        setTimeout(function(){
-            if($this.hasClass('open')){
-                $('.back-btn').css('display','block').addClass('this-section');
-            }else if ($this.hasClass('current-panel')){
-                $('.back-btn').css('display','block').addClass('this-panel');
-            }else{
-                $('.back-btn').css('display','none');
-            }
-        },10);
-    });
-
-    $('.back-btn').click(function(event){
-        event.preventDefault();
-
-        if( $(this).hasClass('this-section') ) {
-            $('.open .customize-section-back').click();
-            $(this).removeClass('this-section');
-        }else if($(this).hasClass('button')){
-            $('.open .customize-section-back').click();
-            $(this).removeClass('button');
-        }else if( $(this).hasClass('this-panel') ){
-            $('.current-panel .customize-panel-back').click();
-            $(this).removeClass('this-panel');
-        }else{
-            $('.open .customize-section-back').click();
-        }
-    });
-
     wp.customize.Section.prototype.defaultExpandedArguments = {duration: 420};
     pixflow_imageUploader();
    // pixflow_dropDownController();
@@ -4779,126 +4618,10 @@ function pixflow_showNewLogo(){
 
 }
 
-// pixflow_debounce so filtering doesn't happen every millisecond
-function pixflow_debounce(fn, threshold ) {
-    "use strict";
-
-    var timeout;
-    return function pixflow_debounced() {
-        if ( timeout ) {
-            clearTimeout( timeout );
-        }
-        function pixflow_delayed() {
-            fn();
-            timeout = null;
-        }
-        timeout = setTimeout( pixflow_delayed, threshold || 100 );
-    }
-}
-
-var dropped = false;
-
-
-function pixflow_openShortcodePanel(){
-    "use strict";
-
-    if ($('.shortcodes-panel').css('display') != 'block' && $('.shortcodes-panel').css('opacity') == 1) {
-        $('.shortcodes-panel-button').click();
-    }
-
-    pixflow_livePreviewObj().$('body').off('click');
-    pixflow_livePreviewObj().$('body').on('click','#vc_no-content-add-element,.vc_empty-element,.vc_templates-blank, .vc_add-element-action, .vc_control-btn-append,.vc_add-element-not-empty-button',function(e){
-        if ($('.shortcodes-panel').css('display') != 'block') {
-            $('.shortcodes-panel-button').click();
-        }else{
-            if(!dropped){
-                $('.shortcodes-panel').css({'background-color':'#f77705'});
-                $('.shortcodes-panel').stop().animate({'background-color':'#f1f1f1'},1000);
-            }
-            dropped = false;
-        }
-    });
-}
-
-function pixflow_customizerAnimation() {
-    //"use strict";
-    //
-    //wp.customize.Panel.prototype.onChangeExpanded = function (expanded, args) {
-    //
-    //    // Immediately call the complete callback if there were no changes
-    //    if (args.unchanged) {
-    //        if (args.completeCallback) {
-    //            args.completeCallback();
-    //        }
-    //        return;
-    //    }
-    //
-    //    // Note: there is a second argument 'args' passed
-    //    var position, scroll,
-    //        panel = this,
-    //        section = panel.container.closest('.accordion-section'),
-    //        overlay = section.closest('.wp-full-overlay'),
-    //        container = section.closest('.wp-full-overlay-sidebar-content'),
-    //        siblings = container.find('.open'),
-    //        topPanel = overlay.find('#customize-theme-controls > ul > .accordion-section > .accordion-section-title').add('#customize-info > .accordion-section-title'),
-    //        backBtn = overlay.find('.control-panel-back'),
-    //        panelTitle = section.find('.accordion-section-title').first(),
-    //        content = section.find('.control-panel-content');
-    //
-    //    if (expanded) {
-    //
-    //        // Collapse any sibling sections/panels
-    //        wp.customize.section.each(function (section) {
-    //            if (!section.panel()) {
-    //                section.collapse({duration: 0});
-    //            }
-    //        });
-    //        wp.customize.panel.each(function (otherPanel) {
-    //            if (panel !== otherPanel) {
-    //                otherPanel.collapse({duration: 0});
-    //            }
-    //        });
-    //        content.show(0, function () {
-    //            content.parent().show();
-    //            position = content.offset().top;
-    //            scroll = container.scrollTop();
-    //            content.css('position', 'absolute');
-    //            content.css('top', 190 - position - scroll );
-    //            $('#customize-theme-controls').css({'margin-top':0});
-    //            section.addClass('current-panel');
-    //            overlay.addClass('in-sub-panel');
-    //            container.scrollTop(0);
-    //            if (args.completeCallback) {
-    //                args.completeCallback();
-    //            }
-    //        });
-    //        topPanel.attr('tabindex', '-1');
-    //        backBtn.attr('tabindex', '0');
-    //        backBtn.focus();
-    //    } else {
-    //        siblings.removeClass('open');
-    //        section.removeClass('current-panel');
-    //        overlay.removeClass('in-sub-panel');
-    //        $('#customize-theme-controls').css({'margin-top':0});
-    //
-    //        content.delay(1200).hide(0, function () {
-    //            content.css('top', '0'); // Reset
-    //            if (args.completeCallback) {
-    //                args.completeCallback();
-    //            }
-    //        });
-    //        topPanel.attr('tabindex', '0');
-    //        backBtn.attr('tabindex', '-1');
-    //        panelTitle.focus();
-    //        container.scrollTop(0);
-    //    }
-    //};
-}
-
 function pixflow_collapse() {
     "use strict";
 
-    var $collapseBtn = $('#customize-preview .collaps'),
+    var $collapseBtn = $('.customizer-options-menu .collaps'),
         teamMemberstyleNone = $('<style>.sliphover-container { display: none; }</style>'),
         teamMemberstyleBlock = $('<style>.sliphover-container { display: block; }</style>');
 
@@ -4908,67 +4631,31 @@ function pixflow_collapse() {
     pixflow_livePreviewObj().$('html > head').append(teamMemberstyleNone);
     $collapseBtn.unbind('click');
     $collapseBtn.click(function () {
-        var builder = pixflow_detectBuilder();
         var $iframe = $('#customize-preview > iframe').contents(),
             cntWin = $('iframe')[0].contentWindow;
 
+        $('#customize-controls').toggleClass('form-closed');
         if($(this).hasClass('hold-collapse')){
-            if($iframe.find('body.compose-mode').length){
-                pixflow_livePreviewObj().$('.mBuilder_row_controls').css('display','flex');
-                pixflow_livePreviewObj().$('.mBuilder_controls').css('display','block');
-                pixflow_livePreviewObj().$( ".mBuilder-vc_column .vc_column-inner > .wpb_wrapper" ).removeClass("disable-sort");
-                pixflow_livePreviewObj().$( ".content-container" ).removeClass("disable-sort");
-                pixflow_livePreviewObj().$('.inline-editor-title , .inline-editor').attr('contenteditable' , 'true' );
-                pixflow_livePreviewObj().$('.disable-edit , .disable-edit-title').css('z-index' , '-100');
-            }
-            try {
-                pixflow_livePreviewObj().$(".px_tabs_nav").sortable("enable");
-                pixflow_livePreviewObj().$('.mBuilder-element:not(.vc_row,.mBuilder-vc_column)').draggable("enable");
-            }catch(e){}
-
             $iframe.find('body.compose-mode').removeClass('gizmo-off');
             TweenMax.to('body:not(.md-isIE) .wp-full-overlay',.3,{
                 'margin-left':285
             });
-            //$('body').removeClass('customizer-view');
-
 
             $('#customize-controls').stop().delay(300).fadeIn();
             pixflow_livePreviewObj().$('html > head').append(teamMemberstyleNone);// Fix team member Hover Bug
             try{
                 $(this).removeClass('hold-collapse');
-                $('.shortcodes-panel,.shortcode-button-holder').removeClass('md-hidden');
                 $iframe.find('.vc_welcome').css('display','block');
                 $iframe.find('.wpb_content_element .px_tabs_nav.md-custom-tab > li:last-child').css('display','inline-block');
-                if('vc' == builder){
-                    $iframe.find('.vc_row .vc_vc_column').css('border','1px dashed rgba(0,0,0,0.2)');
-                }
                 $iframe.find('.sortable-handle').css('border','1px dashed rgba(92,92,92,.9)');
                 $iframe.find('.footer-setting').removeClass('md-hidden');
                 $iframe.find('div.widget-area-column').addClass('ui-sortable-handle');
                 cntWin.pixflow_itemOrderSetter('enable');
-                if('vc' == builder){
-                    pixflow_openShortcodePanel();
-                }
+
             }catch (e){}
         }else {
             if($iframe.find('body.compose-mode').length){
-                pixflow_livePreviewObj().$('.mBuilder_row_controls,.mBuilder_controls').css('display','none');
-                pixflow_livePreviewObj().$( ".mBuilder-vc_column .vc_column-inner > .wpb_wrapper" ).addClass("disable-sort");
-                pixflow_livePreviewObj().$( ".content-container" ).addClass("disable-sort");
                 $iframe.find('body.compose-mode').addClass('gizmo-off');
-                try {
-                    pixflow_livePreviewObj().$(".px_tabs_nav").sortable("disable");
-                    pixflow_livePreviewObj().$('.mBuilder-element:not(.vc_row,.mBuilder-vc_column)').draggable("disable");
-                }catch(e){}
-                pixflow_livePreviewObj().$('.inline-editor-title , .inline-editor').attr('contenteditable' , 'false' );
-				if( pixflow_livePreviewObj().$('.disable-edit , .disable-edit-title').length){
-					pixflow_livePreviewObj().$('.disable-edit , .disable-edit-title').css('z-index' , '100');
-                }
-                else {
-                pixflow_livePreviewObj().$('.md-text-content').prepend('<div class="disable-edit" style="z-index:100" ></div>');
-				pixflow_livePreviewObj().$('.md-text-title').prepend('<div class="disable-edit-title" style="z-index:100"></div>');
-                }
             }
 
             TweenMax.to('body:not(.md-isIE) .wp-full-overlay',.3,{
@@ -4985,11 +4672,8 @@ function pixflow_collapse() {
 
             try {
                 $(this).addClass('hold-collapse');
-                $('.shortcodes-panel,.shortcode-button-holder').addClass('md-hidden');
-                $iframe.find('body').off('click','.vc_empty-element,.vc_templates-blank, .vc_add-element-action, .vc_control-btn-append, .vc_element-container');
-                $iframe.find('.vc_row .vc_vc_column,.sortable-handle').css('border','none');
+                $iframe.find('.sortable-handle').css('border','none');
                 $iframe.find('.vc_welcome').css('display','none');
-                $iframe.find('.wpb_content_element .px_tabs_nav.md-custom-tab > li:last-child').css('display','none');
                 $iframe.find('.footer-setting').addClass('md-hidden');
                 $iframe.find('div.widget-area-column').removeClass('ui-sortable-handle');
                 cntWin.pixflow_itemOrderSetter('disable');
@@ -5030,9 +4714,14 @@ function pixflow_messageBox(title, customClass, text, btn1, callback1, btn2, cal
             }
         });
     }
+    if(!btn2){
+        $btn1.css("width","100%");
+    }
 
-    var $close = $messageBox.find('.message-box-close');
-    $close.click(function(){
+    var $close = $messageBox;
+    $close.on('click', function(e) {
+        if (e.target !== this)
+            return;
         if(typeof closeCallback == 'function'){
             closeCallback();
         }
@@ -5065,9 +4754,9 @@ function pixflow_isJson(str) {
 function pixflow_demoImporter(){
     "use strict";
     var demos = [
-        { "name":"general", "revslider":true, "category":"business store" , "importFile":"0" , "demo":"http://demo.massivedynamic.co/general" },
+        { "name":"general", "category":"business store" , "importFile":"0" , "demo":"http://demo.massivedynamic.co/general" },
         { "name":"business-agency", "category":"business" , "importFile":"1" , "demo":"http://demo.massivedynamic.co/business-agency" },
-        { "name":"restaurant", "revslider":true, "category":"career" , "importFile":"2" , "demo":"http://demo.massivedynamic.co/restaurant/"},
+        { "name":"restaurant",  "category":"career" , "importFile":"2" , "demo":"http://demo.massivedynamic.co/restaurant/"},
         { "name":"seo", "revslider":true, "category":"business store" , "importFile":"3" , "demo":"http://demo.massivedynamic.co/seo/" },
         { "name":"minimal-agency", "category":"career" , "importFile":"4" , "demo":"http://demo.massivedynamic.co/minimal-agency"},
         { "name":"branding", "category":"career" , "importFile":"5" , "demo":"http://demo.massivedynamic.co/branding"},
@@ -5091,11 +4780,11 @@ function pixflow_demoImporter(){
         { "name":"blog-masonry", "category":"blog" , "importFile":"23" , "demo":"http://demo.massivedynamic.co/blog-masonry/" },
         { "name":"blog - vertical", "revslider":true, "category":"blog" , "importFile":"24" , "demo":"http://demo.massivedynamic.co/blog-vertical/" },
         { "name":"blog - boxed", "revslider":true, "category":"blog" , "importFile":"25" , "demo":"http://demo.massivedynamic.co/blog-boxed/" },
-        { "name":"construction", "revslider":true, "category":"career" , "importFile":"26" , "demo":"http://demo.massivedynamic.co/construction/" },
+        { "name":"construction", "category":"career" , "importFile":"26" , "demo":"http://demo.massivedynamic.co/construction/" },
         { "name":"business-modern", "category":"business" , "importFile":"27" , "demo":"http://demo.massivedynamic.co/business-modern/" },
-        { "name":"store-handicraft", "revslider":true, "category":"store" , "importFile":"28" , "demo":"http://demo.massivedynamic.co/store-handicraft/" },
+        { "name":"store-handicraft", "revslider":true, "category":"store" , "importFile":"28" , "demo":"http://demo2.massivedynamic.co/store-handicraft/" },
         { "name":"Artistic" , "category":"career" , "importFile":"29" , "demo":"http://demo.massivedynamic.co/artistic/" },
-        { "name":"Corporate" , "revslider":true, "category":"business store" , "importFile":"30" , "demo":"http://demo.massivedynamic.co/corporate-1/" },
+        { "name":"Corporate" , "category":"business store" , "importFile":"30" , "demo":"http://demo.massivedynamic.co/corporate-1/" },
         { "name":"fashion-photography" , "category":"career" , "importFile":"31" , "demo":"http://demo.massivedynamic.co/fashion-photography/" },
         { "name":"portfolio-web-design" , "category":"personal" , "importFile":"32" , "demo":"http://demo.massivedynamic.co/portfolio-web-design/" },
         { "name":"resume-graphic-designer" , "category":"career" , "importFile":"33" , "demo":"http://demo.massivedynamic.co/resume-graphic-designer" },
@@ -5111,7 +4800,22 @@ function pixflow_demoImporter(){
         { "name":"empire-business" , "revslider":true, "category":"business store" , "importFile":"43" , "demo":"http://demo.massivedynamic.co/empire-business" },
         { "name":"business-consulting" , "category":"business" , "importFile":"44" , "demo":"http://demo.massivedynamic.co/business-consulting" },
         { "name":"communication" , "category":"business" , "importFile":"45" , "demo":"http://demo.massivedynamic.co/communication/" },
-        { "name":"business-clean" , "category":"business" , "importFile":"46" , "demo":"http://demo.massivedynamic.co/business-clean/" }
+        { "name":"business-clean" , "category":"business" , "importFile":"46" , "demo":"http://demo.massivedynamic.co/business-clean/" },
+        { "name":"strategy" , "category":"business" , "importFile":"47" , "demo":"http://demo.massivedynamic.co/strategy/" },
+        { "name":"association" , "category":"business" , "revslider":true, "importFile":"48" , "demo":"http://demo.massivedynamic.co/association/" },
+        { "name":"app2" , "category":"business" , "revslider":true, "importFile":"49" , "demo":"http://demo.massivedynamic.co/app2/" },
+        { "name":"creative-studio" , "category":"business" , "revslider":true, "importFile":"50" , "demo":"http://demo.massivedynamic.co/creative-studio/" },
+        { "name":"seo2" , "category":"business" , "revslider":true, "importFile":"51" , "demo":"http://demo.massivedynamic.co/seo-2/" },
+        { "name":"portfolio-minimal" , "category":"portfolio store" , "revslider":true, "importFile":"52" , "demo":"http://demo.massivedynamic.co/portfolio-minimal/" },
+        { "name":"technology" , "category":"business" , "importFile":"53" , "demo":"http://demo.massivedynamic.co/technology/" },
+        { "name":"christmas" ,  "category":"business store" , "importFile":"54" , "demo":"http://demo2.massivedynamic.co/christmas/" },
+        { "name":"landing" , "category":"business" , "importFile":"55" , "demo":"http://demo.massivedynamic.co/landing/" },
+        { "name":"media-agency" , "category":"business" , "importFile":"56" , "demo":"http://demo.massivedynamic.co/media-agency/" },
+        { "name":"innovation-agency" , "category":"business" , "importFile":"57" , "demo":"http://demo.massivedynamic.co/innovation-agency/" },
+        { "name":"interactive-agency" , "category":"business" , "importFile":"58" , "demo":"http://demo.massivedynamic.co/interactive-agency/" },
+        { "name":"startup2" , "category":"career" , "importFile":"59" , "demo":"http://demo.massivedynamic.co/startup2/" },
+        { "name":"rtl-agency" , "category":"career" , "importFile":"60" , "demo":"http://theme.pixflow.net/massive-dynamic/rtl-agency/" } ,
+        { "name":"design-Studio" ,"revslider":true,  "category":"portfolio business" , "importFile":"61" , "demo":"http://theme.pixflow.net/massive-dynamic/design-studio/" }
     ];
 
     $('.customizer-btn.import').click(function(){
@@ -5141,7 +4845,9 @@ function pixflow_demoImporter(){
             if(typeof demos[i].revslider != "undefined"){
                 itemRevSlider = true;
             }
-           demosHtml += '<div data-revslider="'+itemRevSlider+'" data-index="'+i+'" class ="'+ itemClass+'"><span style="background-image:url(http://massivedynamic.co/dummydata/demo'+itemID+'/preview.png)"></span><div class="hover-overlay"><a href="#">DEMO DETAIL</a></div></div>';
+           demosHtml += '<div data-revslider="'+itemRevSlider+'" data-index="'+i+'" class ="'+ itemClass+'"><span style="background-image:url(http://massivedynamic.co/dummydata/demo'+itemID+'/preview.png)"></span><div class="hover-overlay"><a href="#">DEMO DETAIL</a></div>' +
+               '<section class="demo-importer-title">' + demos[i].name + '</section>'  +
+               '</div>';
         }
 
 
@@ -5204,7 +4910,7 @@ function pixflow_demoImporter(){
                 '<span class="import-option  checked last" data-option="media"><i class="option-icon icon-check"></i>'+customizerValues.media+'</span>' +
                 '<p>'+customizerValues.demoImporter3+'</p>' +
                 '<input class="agree" type="checkbox" value="no"><span>'+customizerValues.importConfirm+'</span>' +
-                '<a class="import-demo purchase-code-' + wp.customize.control('purchase_code_status').setting() + '" data-revslider="'+revslider+'" data-id="'+importUrl+'">'+customizerValues.importDemo+'</a></div>' +
+                '<a class="import-demo" data-revslider="'+revslider+'" data-id="'+importUrl+'">'+customizerValues.importDemo+'</a></div>' +
                 '</div>' +
                 '</div>';
 
@@ -5422,22 +5128,24 @@ function pixflow_doImport(isStore,loaded,total){
                         });
                         $('.import-demo').text(customizerValues.imported);
                         trying=0;
-                        pixflow_messageBox('Successfully Done','caution',"Import process is completed. Please reload the builder to see the demo.<br><br> After reloading the builder, if header navigation is not set correctly, go to Massive Builder > Menus and set the correct menu as primary and mobile menu.",'Reload Now',function(){
-                            window.location.reload();
+                        pixflow_messageBox('Successfully Done','caution',"Import process is completed. Please reload the builder to see the demo.<br><br> After reloading the builder, if header navigation is not set correctly, go to Massive Builder > Menus and set the correct menu as primary and mobile menu. <br><br> Also if you want to get the correct size of imported images, you can install and use <a  target='_blank' style='text-decoration: none' href='https://wordpress.org/plugins/regenerate-thumbnails/'>Regenerate Thumbnails</a> .",'Reload Now',function(){
+                            window.location.href = customizerValues.customizer_url ;
                         });
 
                     },
                     // Failed Import
                     success: function (data) {
-                        if(data.indexOf("Permission is Not Avaialable">0)){
-                            $(".import-demo").after('<p class="import-err"><span class="icon-cancel3"></span>' + customizerValues.faildImportPermission + '</p>');
-                        }
+                        if (typeof data != 'undefind') {
+                            if (data.indexOf("Permission is Not Avaialable" > 0)) {
+                                $(".import-demo").after('<p class="import-err"><span class="icon-cancel3"></span>' + customizerValues.faildImportPermission + '</p>');
+                            }
 
-                        if(data.indexOf('Remote Function Failed')>0){
-                            $(".import-demo").after('<p class="import-err"><span class="icon-cancel3"></span>' + customizerValues.faildImportServer + '</p>');
-                        }
-                        else{
-                            $(".import-demo").after('<p class="import-err"><span class="icon-cancel3"></span>' + customizerValues.faildImport + '</p>');
+                            if (data.indexOf('Remote Function Failed') > 0) {
+                                $(".import-demo").after('<p class="import-err"><span class="icon-cancel3"></span>' + customizerValues.faildImportServer + '</p>');
+                            }
+                            else {
+                                $(".import-demo").after('<p class="import-err"><span class="icon-cancel3"></span>' + customizerValues.faildImport + '</p>');
+                            }
                         }
 
                         $('.import-demo .loader').stop().animate({width: '0%'}, 100, function () {
@@ -5504,7 +5212,6 @@ function pixflow_masterSetting() {
         if (currentStatus == 'general') {
             return;
         }
-        $('#customize-preview #page-option-btn').css({'background-color':'#e1e1e1 ','color':'#000'});
         var detailStatus = pixflow_livePreviewObj().$('meta[name="post-id"]').attr('detail');
         var text = customizerValues.mastersettingMsg1;
         pixflow_messageBox(customizerValues.mastersettingMsgTitle,'caution',text,customizerValues.mastersettingMsgYes,function(){
@@ -5530,7 +5237,6 @@ function pixflow_masterSetting() {
         if (currentStatus == 'unique') {
             return;
         }
-        $('#customize-preview #page-option-btn').css({'background-color':'#e1e1e1 ','color':'#000'});
         var detailStatus = pixflow_livePreviewObj().$('meta[name="post-id"]').attr('detail');
         if (detailStatus == 'post' || detailStatus == 'portfolio' || detailStatus == 'product') {
             var text;
@@ -5541,7 +5247,7 @@ function pixflow_masterSetting() {
             }else if(detailStatus == 'product'){
                 text = customizerValues.mastersettingMsgProduct;
             }
-            pixflow_messageBox(customizerValues.mastersettingMsgTitle,'caution',text,customizerValues.mastersettingMsgYes,function(){
+            pixflow_messageBox(customizerValues.mastersettingMsgTitle1,'caution',text,customizerValues.mastersettingMsgYes1,function(){
                 pixflow_livePreviewObj().$('meta[name="post-id"]').attr('setting-status', 'unique');
                 try {
                     pixflow_livePreviewObj().pixflow_save_status('unique', pixflow_livePreviewObj().$('meta[name="post-id"]').attr('content'), detailStatus, 'change',function(){
@@ -5549,7 +5255,7 @@ function pixflow_masterSetting() {
                         pixflow_closeMessageBox();
                     });
                 }catch(e){}
-            },customizerValues.mastersettingMsgNo,function(){
+            },customizerValues.mastersettingMsgNo1,function(){
                 $('li.general-page-setting').click();
                 pixflow_closeMessageBox();
             },function(){
@@ -5669,11 +5375,7 @@ function pixflow_loadRelatedSetting(status){
                         }
                     }
                 }
-
-                $('#page-option-btn .save-loading').stop().animate({width:'99%'},200,'swing',function(){
-                    $(this).css('width',0);
-                    $('#page-option-btn').removeAttr('style');
-                });
+                
                 $('#customize-header-actions #save').val('Saved');
             }
         });
@@ -5695,7 +5397,6 @@ function pixflow_refreshFrame(){
 function pixflow_setUniqueCustomizer(){
     "use strict";
 
-    $('.customizer-btn.setting .text').html(customizerValues.uniqueSetting);
     pixflow_loadRelatedSetting('unique');
     /* Unique setting customizer headings */
     var uniqueSwitch =
@@ -5743,7 +5444,6 @@ function pixflow_setUniqueCustomizer(){
 function pixflow_setGeneralCustomizer(){
     "use strict";
 
-    $('.customizer-btn.setting .text').html(customizerValues.generalSetting);
     pixflow_loadRelatedSetting('general');
     /* Unique setting customizer headings */
 
@@ -5753,64 +5453,6 @@ function pixflow_setGeneralCustomizer(){
     setTimeout(function(){
         $('#accordion-section-branding,#accordion-panel-typography,#accordion-section-social_item,#accordion-panel-nav_menus,#accordion-panel-widgets,#accordion-section-notification_main').css({'opacity':'1'});
     },100);
-}
-
-// Get VC content before iframe refresh and save it to session
-var oldContent;
-function pixflow_vcChangedContent(){
-    'use strict';
-    var builder = pixflow_detectBuilder(),
-        content;
-    if('mbuilder' == builder){
-        var t = pixflow_livePreviewObj().builder;
-        for(var index in t.models.models) {
-            var $el = pixflow_livePreviewObj().$('div[data-mBuilder-id='+index+']'),
-                $parent = $el.parent().closest('.mBuilder-element');
-            if($parent.length){
-                var parentId = $parent.attr('data-mBuilder-id');
-                t.models.models[index].parentId = parentId;
-            }
-        }
-        // Calculate orders
-        pixflow_livePreviewObj().$('.mBuilder-element').each(function(){
-            var $el = $(this),
-                id = $el.attr('data-mBuilder-id');
-
-            var order = 1;
-            $el.siblings( ".mBuilder-element" ).andSelf().each(function(){
-                t.models.models[$(this).attr('data-mbuilder-id')]['order']=order++;
-            });
-        });
-        $.ajax({
-            type: 'post',
-            url: customizerValues.ajax_url,
-            data: {
-                action: 'mBuilder_getContent',
-                nonce: customizerValues.ajax_nonce,
-                models:  JSON.stringify( t.models.models ),
-                then:'doSaveTemp'
-            },
-            success: function (response) {
-                oldContent = response;
-            }
-        });
-    }else{
-        return;
-    }
-    function save_temp_content(){
-        jQuery.ajax({
-            type: 'post',
-            url: customizerValues.ajax_url,
-            data: {
-                action: 'pixflow_save_temp_vc_content',
-                nonce: customizerValues.ajax_nonce,
-                content: content
-            },
-            success: function (response) {
-            }
-        });
-        oldContent = content;
-    }
 }
 
 /*--------------- $(window).load  ---------------*/
@@ -5851,22 +5493,6 @@ function pixflow_loaded(){
 
     });
 
-    $('#customize-preview > iframe').contents().find('iframe').contents().find('#message').css({display:'none'});
-
-    $('#customize-preview > iframe').contents().find('iframe').contents().find('#vc_ui-panel-edit-element .vc_general.vc_ui-control-button.vc_ui-close-button, #vc_ui-panel-edit-element .vc_ui-panel-footer-container .vc_general.vc_ui-button:first-child').click(function(){
-        var iconPicker = $('#customize-preview > iframe').contents().find('iframe').contents().find('.popover.iconpicker-popover');
-
-        if (iconPicker.length){
-            iconPicker.remove();
-        }
-    });
-    if(firstTime){
-        // notify about version3 on first time visit
-        pixflow_messageBox("WHAT'S NEW IN VERSION 3.0",'caution-v3','Check the amazing features of Massive Dynamic in "New Features video" and read the changelog.',"<a href='//massivedynamic.co/youtube.html' target='_blank'>WATCH NOW</a>",function(){
-            pixflow_closeMessageBox();
-        });
-        firstTime = false;
-    }
 }
 
 function pixflow_oneItemChecked(){
@@ -5894,422 +5520,12 @@ function pixflow_oneItemChecked(){
 
 }
 
-function pixflow_tourGuide() {
-    'use strict';
-
-    var flagClicked = false;
-
-    // Run tour guide on click
-    $('.take-tour-btn').click(function() {
-
-        $('#customize-preview.wp-full-overlay-main').css('z-index', ' initial');
-
-        // Close Notify Box
-        $('.notify-remove.px-icon.icon-close').click();
-
-        // Add Some style to customzer left side sidebar
-        $('#customize-controls').addClass('active');
-
-        // Call Tour Guide JS
-        var intro = introJs();
-
-        intro.setOptions({
-            steps: [
-
-                {
-                    element: document.querySelectorAll('.tour-parent-first')[0],
-                    intro: customizerValues.layout_options + " </br> <p> " + customizerValues.layout_options_desc + " </p>",
-                    position: 'right'
-                },
-                {
-                    element: '.tour-parent-second',
-                    intro: customizerValues.builder_save + " </br> <p> " + customizerValues.builder_save_desc + " </p>",
-                    position: 'left'
-                },
-                {
-                    element: '.customizer-btn.import',
-                    intro: customizerValues.demo_importer + " </br> <p> " + customizerValues.demo_importer_desc + " </p>",
-                    position: 'bottom'
-                },
-                {
-                    element: '#customize-preview > iframe',
-                    intro: customizerValues.website_preview + " </br> <p> " + customizerValues.website_preview_desc + " </p>",
-                    position: 'left'
-                },
-                {
-                    element: '.shortcodes-panel-button',
-                    intro: customizerValues.shortcodes_panel + " </br> <p> " + customizerValues.shortcodes_panel_desc + " </p>",
-                    position: 'right'
-                },
-                {
-                    element: '.shortcodes-panel',
-                    intro: customizerValues.using_shortcodes + " </br> <p> " + customizerValues.using_shortcodes_desc + " </p>",
-                    position: 'right'
-                }
-            ]
-        });
-
-        // Run on change like next/prev btn click
-        intro.start().onchange(function () {
-
-            if ( $('.shortcodes-panel-button').hasClass('introjs-showElement') ) {
-                $(".introjs-helperLayer").hide();
-            }
-
-            pixflow_resetStyles();
-        }).onexit(function () {
-            pixflow_resetStyles();
-            $('#customize-preview.wp-full-overlay-main').css('z-index', ' 11');
-        });
-
-        $('.introjs-skipbutton').click( function() {
-            $('.tour-parent-first').show();
-            $(".shortcodes-panel").css({ display: 'none', opacity: '0' });
-            $('#customize-preview.wp-full-overlay-main').css('z-index', ' 11');
-        });
-
-    });
-
-    // Wait plugin do it's changes then our code run
-    function pixflow_resetStyles() {
-        'use strict';
-        var introjsFixedTooltip;
-
-        setTimeout(function () {
-
-            // Disapear Skip button and show Done button at the end
-            if ( $('.introjs-nextbutton').hasClass('introjs-disabled') ) {
-                $('.introjs-nextbutton').hide();
-
-                $('.introjs-skipbutton').appendTo('.introjs-tooltipbuttons');
-                $('.introjs-skipbutton').show();
-            }
-            else {
-                $('.introjs-nextbutton').show();
-                $('.introjs-skipbutton').hide();
-            }
-
-            // First step
-            if ($('.tour-parent-first').hasClass('introjs-showElement')) {
-                setTimeout(function () {
-                    $('#customize-controls').addClass('active');
-                }, 200);
-            }
-            else {
-                $('#customize-controls').removeClass('active');
-            }
-
-            // Second step
-            if ($('.tour-parent-second').hasClass('introjs-showElement') ) {
-
-                setTimeout(function () {
-                    $('.tour-parent-second').addClass('active');
-                }, 100);
-
-                setTimeout(function () {
-                    introjsFixedTooltip = $('.introjs-fixedTooltip').offset().left + 16;
-                    $('.introjs-fixedTooltip').css({ transition: 'all .1s', left: introjsFixedTooltip });
-                }, 400);
-            }
-            else {
-                $('.tour-parent-second').removeClass('active');
-            }
-
-            // Fourth step
-            if ($('.shortcodes-panel-button').hasClass('introjs-showElement')) {
-
-                setTimeout(function () {
-                    $('.tour-parent-first').hide();
-                    $('.shortcode-button-holder').addClass('active');
-                    $('.shortcodes-panel-button').parents('form').addClass('active3');
-                }, 100);
-            }
-            else {
-                $('.tour-parent-first').show();
-                $('.shortcodes-panel-button').parents('form').removeClass('active3');
-                $('.shortcode-button-holder').removeClass('active');
-            }
-
-            // Fifth Step
-            if ( $('.shortcodes-panel').hasClass('introjs-showElement') ) {
-
-                $(".tour-parent-first").hide();
-                $(".shortcodes-panel").css({ display: 'block' });
-
-                // Show Shortcode panel
-                $(".shortcodes-panel").css({ transform: 'scale(1)', top: '75px' });
-                setTimeout( function(){
-                    $(".shortcodes-panel").css({ opacity: '1' });
-                },200)
-
-                $('#customize-controls').addClass('active2');
-                $('.introjs-helperLayer').addClass('hidden');
-                flagClicked = true;
-            }
-            else {
-                $('#customize-controls').removeClass('active2');
-                if (flagClicked) {
-                    $(".shortcodes-panel").css({ display: 'none', opacity: '0' });
-                    $('.introjs-helperLayer').removeClass('hidden');
-                    flagClicked = false;
-                }
-
-                $(".tour-parent-first").show();
-            }
-
-        }, 250);
-    }
-
-}
-
-function pixflow_tourGuideHints() {
-    'use strict';
-
-    // Add Hint ********************************************************************************************************
-
-    var intro = introJs();
-
-    intro.setOptions({
-        hints: [
-            {
-                element: document.querySelector('#accordion-section-header_layout .accordion-section-content'),
-                hint: " <div class='image'> <img alt='tooltip' src="+ customizerValues.THEME_CUSTOMIZER_URI+'/assets/images/tooltip02.png' +" /> <a class='video-link-part video-link-part1 icon-play' target='_blank' href='https://www.youtube.com/watch?v=bDsQ6GswZSc'></a> </div> <div class='text'>Lets get familiar with header options</div>",
-                hintPosition: 'top-middle'
-            },
-            {
-                element: document.querySelector('#page-option-btn .drop-down-title'),
-                hint: " <div class='image'> <img alt='tooltip' src="+ customizerValues.THEME_CUSTOMIZER_URI+'/assets/images/tooltip02.png' +" /> <a class='video-link-part video-link-part2 icon-play' target='_blank' href='https://www.youtube.com/watch?v=3rvJ_CkZQYw'></a> </div> <div class='text'>Learn about general and unique settings</div>",
-                hintPosition: 'top-middle'
-            },
-            {
-                element: document.querySelector('#accordion-section-header_dropdown .accordion-section-content'),
-                hint: " <div class='image'> <img alt='tooltip' src="+ customizerValues.THEME_CUSTOMIZER_URI+'/assets/images/tooltip02.png' +" /> <a class='video-link-part video-link-part3 icon-play' target='_blank' href='https://www.youtube.com/watch?v=ie41CCE5a_k'></a> </div> <div class='text'>Learn about navigation and mega menu</div>",
-                hintPosition: 'top-middle'
-            },
-            {
-                element: document.querySelector('#accordion-section-layout_sec .accordion-section-content'),
-                hint: " <div class='image'> <img alt='tooltip' src="+ customizerValues.THEME_CUSTOMIZER_URI+'/assets/images/tooltip02.png' +" /> <a class='video-link-part video-link-part4 icon-play' target='_blank' href='https://www.youtube.com/watch?v=Ieju0zjQKs4'></a> </div> <div class='text'>Learn the difference between site and main width</div>",
-                hintPosition: 'top-middle'
-            }
-            ,
-            {
-                element: document.querySelector('#accordion-section-main_layout .accordion-section-content'),
-                hint: " <div class='image'> <img alt='tooltip' src="+ customizerValues.THEME_CUSTOMIZER_URI+'/assets/images/tooltip02.png' +" /> <a class='video-link-part video-link-part5 icon-play' target='_blank' href='https://www.youtube.com/watch?v=Ieju0zjQKs4'></a> </div> <div class='text'>Learn the difference between site and main width</div>",
-                hintPosition: 'top-middle'
-            }
-        ]
-    });
-
-    intro.addHints();
-
-    // Add Remove Icon to Tooltip
-    $('body').on('mouseup','.introjs-hints', function() {
-
-        setTimeout( function() {
-            // Hint Button
-            $('<span class="icon icon-cancel3" ></span>').appendTo('.introjs-hintReference .introjs-button');
-        }, 100)
-
-    });
-
-
-    /* ******************* Add Text to hints ********************************** */
-    $('.introjs-hints .introjs-hint').append('<div class="text"> Video Tuts </div>');
-
-    var dropdownoffset1=$("#massive-page-setting-drop").offset();
-    var dropdownheight=$("#massive-page-setting-drop").height();
-    var dropdownwidth=$("#massive-page-setting-drop").width();
-    var widthoffset=$(".introjs-hint[data-step='1']").width()
-    $(".introjs-hint[data-step='1']").offset({ top: (dropdownoffset1.top+dropdownheight)+20 , left: (dropdownoffset1.left+dropdownwidth)-80 });
-
-}
-
-var introHint = -1,
-    hintCustomizer = false;
-
-function pixflow_tourGuidSetParams() {
-    'use strict';
-
-    // Run first time, for effect FadeIn animation
-    $('.introjs-hint').fadeOut();
-
-    /* Add data attributes to each guide part */
-
-    // First Step : Customizer Left (Sidebar)
-    var $customizeControls = $('#customize-controls');
-
-    $customizeControls.find('.customizer-header').wrap( "<div class='tour-parent-first' data-step='1'></div>" );
-    $customizeControls.find('#widgets-right').appendTo('.tour-parent-first');
-    $customizeControls.find('#widgets-right').addClass('.tour');
-
-    // Second Step : Customizer right top
-    var $customizePrev = $('#customize-preview .customizer-btn');
-    $('#customize-preview .customizer-btn.collaps').wrap( "<div class='tour-parent-second' data-step='2'></div>" );
-
-    $customizePrev.each(function() {
-        $(this).appendTo('.tour-parent-second');
-    });
-
-    // Third Step : Main Content
-    $('#customize-preview > iframe').attr({ 'data-step': '3' }).addClass('tour-parent-third');
-
-    // Fourth Step : Shortcodes
-    $('.shortcodes-panel-button').attr({ 'data-step': '4' }).addClass('tour-parent-fourth');
-
-    // Fifth Step : Shortcodes
-    $('.shortcodes-panel').attr({ 'data-step': '5' }).addClass('tour-parent-fifth');
-
-    // Add hint
-    $('.tour-parent-second').attr({ 'data-hint': 'Get it, use it.'/*, 'data-position': 'left'*/ }).addClass('tour-hint-01');
-
-
-    /* ******************* Hint Step 1 ********************************** */
-
-    // Header / Header Layout
-    $('#accordion-section-header_layout .accordion-section-title').click(function(){
-        introHint = 0;
-        hintCustomizer = true;
-        $('.introjs-hint[data-step=0]').stop().delay(500).fadeIn(1000);
-    });
-
-    /* ******************* Hint Step 2 ********************************** */
-
-    // General Setting Button
-    $('#page-option-btn').click(function(){
-        $('.introjs-hint[data-step=1]').stop().delay(500).fadeIn(1000);
-    });
-
-    /* ******************* Hint Step 3 ********************************** */
-
-    // Header / Drop Down &  Mega Menu
-    $('#accordion-section-header_dropdown .accordion-section-title').click(function(){
-        introHint = 2;
-        hintCustomizer = true;
-        $('.introjs-hint[data-step=2]').stop().delay(500).fadeIn(1000);
-    });
-
-    /* ******************* Hint Step 4 ********************************** */
-
-    // General Option / Site layout
-    $('#accordion-section-layout_sec .accordion-section-title').click(function(){
-        introHint = 3;
-        hintCustomizer = true;
-        $('.introjs-hint[data-step=3]').stop().delay(500).fadeIn(1000);
-    });
-
-    /* ******************* Hint Step 5 ********************************** */
-
-    // Site Content / Main Content
-    $('#accordion-section-main_layout .accordion-section-title').click(function(){
-        introHint = 4;
-        hintCustomizer = true;
-        $('.introjs-hint[data-step=4]').stop().delay(500).fadeIn(1000);
-    });
-
-    /* ******************* Show/hide Hints ********************************** */
-
-    var clearSteps;
-    // Hide Hint
-    $('body').on('mouseup','.back-btn', function() {
-
-        // It's not use for all steps
-        $('.introjs-hint[data-step=0], .introjs-hint[data-step=2], .introjs-hint[data-step=3], .introjs-hint[data-step=4]').fadeOut();
-
-        hintCustomizer = false;
-        introHint = -1;
-
-    });
-
-}
-
-function pixflow_hintShowHideDetection() {  // Detect if shortcode panel is open or collapse button clicked, hide hints else show exact hint
-    'use strict';
-
-    setTimeout( function() {
-
-        if (hintCustomizer) {
-            $('.introjs-hint:not([data-step=1])').stop().fadeOut();
-            hintCustomizer = false;
-        }
-        else if (introHint == 0) {
-            $('.introjs-hint[data-step=0]').stop().fadeIn(1000);
-            hintCustomizer = true;
-        } else if (introHint == 2) {
-            $('.introjs-hint[data-step=2]').stop().fadeIn(1000);
-            hintCustomizer = true;
-        } else if (introHint == 3) {
-            $('.introjs-hint[data-step=3]').stop().fadeIn(1000);
-            hintCustomizer = true;
-        } else if (introHint == 4) {
-            $('.introjs-hint[data-step=4]').stop().fadeIn(1000);
-            hintCustomizer = true;
-        }
-
-    }, 200);
-}
-
-function pixflow_shortcodeBtnHint() {
-    'use strict';
-
-    var clearClick;
-
-    $('.shortcode-button-holder').click( function() {
-        pixflow_hintShowHideDetection();
-    });
-
-}
-
-function pixflow_customizerToggleHints() {
-    'use strict';
-
-    $('.help-center-container2').click( function() {
-
-        if ( $('.show-hints').hasClass('hints-toggle') ){
-            $('.hide-hints').addClass('hints-toggle');
-            $('.show-hints').removeClass('hints-toggle');
-            $('.introjs-hints').fadeIn();
-        }
-        else if ( $('.hide-hints').hasClass('hints-toggle') ){
-
-            $('.hide-hints').removeClass('hints-toggle');
-            $('.show-hints').addClass('hints-toggle');
-            $('.introjs-hints').fadeOut();
-        }
-
-    });
-}
-
-function pixflow_collapseBtnHint() {
-    'use strict';
-
-    $('body').on('mouseup','.collaps.customizer-btn', function() {
-        pixflow_hintShowHideDetection();
-    });
-}
-
-function pixflow_mainTourGuide() {
-    'use strict';
-    $(".take-a-tour").click(function(){
-            if( !$('body').hasClass("introjs-activate") ){
-                pixflow_tourGuidSetParams();        // Set variables and parameters
-                pixflow_tourGuide();                // Call Tour Guide    ----- Tour Guide plugin
-                pixflow_tourGuideHints();           // Call Hints   ----- Tour Guide plugin
-                pixflow_shortcodeBtnHint();         // Hints reaction on shortcode button clicked
-                pixflow_customizerToggleHints();    // Add Text on/off for Hints
-                pixflow_collapseBtnHint();          // Hints reaction on collapse button clicked
-                $('body').addClass("introjs-activate");
-            }
-    });
-
-}
-
 function pixflow_isMobile() {
     'use strict';
-
     try {
         if(/Android|webOS|iPhone|iPad|iPod|pocket|psp|kindle|avantgo|blazer|midori|Tablet|Palm|maemo|plucker|phone|BlackBerry|symbian|IEMobile|mobile|ZuneWP7|Windows Phone|Opera Mini/i.test(navigator.userAgent)) {
             return true;
-        };
+        }
         return false;
     } catch(e){ console.log("Error in isMobile"); return false; }
 }
@@ -6346,11 +5562,6 @@ function pixflow_dropDownController(id){
         $select.prev('.items').text($(this).text());
         if(wp.customize.control(id).setting.transport == 'refresh'){
             if ( !$(this).hasClass('selected')){
-                pixflow_vcChangedContent();
-            }
-        }
-        if(wp.customize.control(id).setting.transport == 'refresh'){
-            if ( !$(this).hasClass('selected')){
                 pixflow_customizerLoading();
             }
         }
@@ -6385,19 +5596,22 @@ function pixflow_customizeMenu(){
     if($('.menu-desc-holder').length){
         return;
     }
-    $('.assigned-to-menu-location .accordion-section-title,.assigned-to-menu-location .customize-section-description-container h3').html(customizerValues.menuName);
+    $('.assigned-to-menu-location .accordion-section-title,.assigned-to-menu-location .customize-section-description-container h3').find('span').remove();
     $('.customize-control-nav_menu_name .menu-name-field').val(customizerValues.menuName);
     $('#accordion-section-add_menu button:not(#create-new-menu-submit)').html(customizerValues.addMenu);
-    $('#accordion-panel-nav_menus .accordion-sub-container').append(
-        '<li class="menu-desc-holder">'+
-        '<table>'+
-        '<tr><td colspan="2" class="menu-desc-title">'+customizerValues.howToUse+'</td></tr>'+
-        '<tr><td class="menu-desc-text">1.</td><td class="menu-desc-text"><span>'+customizerValues.editMenuSystem+'</span></td></tr>'+
-        '<tr><td class="menu-desc-text">2.</td><td class="menu-desc-text"><span>'+customizerValues.createMegaMenu+'</span></td></tr>'+
-        '<tr><td class="menu-desc-text">3.</td><td class="menu-desc-text"><span>'+customizerValues.createSubMenu+'</span></td></tr>'+
-        '</table>'+
-        '<img class="menu-desc-img" src="'+customizerValues.THEME_CUSTOMIZER_URI+'/assets/images/add-menu-guid.png" />'+
-        '</li>');
+   setTimeout(function(){
+       $('#accordion-panel-nav_menus .accordion-sub-container').append(
+           '<li class="menu-desc-holder">'+
+           '<table>'+
+           '<tr><td colspan="2" class="menu-desc-title">'+customizerValues.howToUse+'</td></tr>'+
+           '<tr><td class="menu-desc-text">1.</td><td class="menu-desc-text"><span>'+customizerValues.editMenuSystem+'</span></td></tr>'+
+           '<tr><td class="menu-desc-text">2.</td><td class="menu-desc-text"><span>'+customizerValues.createMegaMenu+'</span></td></tr>'+
+           '<tr><td class="menu-desc-text">3.</td><td class="menu-desc-text"><span>'+customizerValues.createSubMenu+'</span></td></tr>'+
+           '</table>'+
+           '<img class="menu-desc-img" src="'+customizerValues.THEME_CUSTOMIZER_URI+'/assets/images/add-menu-guid.png" />'+
+           '</li>');
+   } , 100);
+
 
     $('.assigned-to-menu-location .customize-control-nav_menu_name').append(
         '<p class="menu-name-desc">'+customizerValues.editMenuSysBtn+'</p>');
@@ -6411,9 +5625,6 @@ function pixflow_checkBoxController(){
     'use strict';
     $('[data-controller-type="checkbox"]').each(function(){
         if($(this).attr('data-controller-transport') == 'refresh'){
-            $(this).click(function(){
-                pixflow_vcChangedContent();
-            });
             $(this).change(function() {
                 pixflow_customizerLoading();
             });
@@ -6424,9 +5635,6 @@ function pixflow_checkBoxController(){
 function pixflow_textController(){
     $('[data-controller-type="text"]').each(function(){
         if($(this).attr('data-controller-transport') == 'refresh'){
-            $(this).focus(function() {
-                pixflow_vcChangedContent();
-            });
             $(this).keyup(function() {
                 pixflow_customizerLoading();
             });
@@ -6454,9 +5662,6 @@ function pixflow_radioController(){
     $('[data-controller-type="radio"]').each(function() {
         $(this).buttonset();
         if($(this).attr('data-controller-transport') == 'refresh') {
-            $('input[name='+$(this).attr('data-name')+']').click(function () {
-                pixflow_vcChangedContent();
-            });
             $('input[name='+$(this).attr('data-name')+']').change(function () {
                 pixflow_customizerLoading();
             });
@@ -6470,20 +5675,6 @@ function pixflow_detect_screen(){
     }
     if((('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0))){
         $('body').addClass('touch-screen');
-    }
-}
-
-/*Detect builder type
- return vc when load in Visual Composer
- return mbuilder when load in Massive Dynamic Builder
- return none when load without builder */
-function pixflow_detectBuilder(){
-    'use strict';
-    var $top = top.location.href;
-    if(pixflow_livePreviewObj().$('.mBuilder-element').length){
-        return 'mbuilder';
-    }else{
-        return 'none';
     }
 }
 
@@ -6527,7 +5718,7 @@ function pixflow_purchaseValidate(){
 
         var pcode=$("#purchase_code").val().toString().trim();
         if(pcode==''){
-            pixflow_messageBox('Enter Purchase Code','caution',"Plese Make Sure You Entered Purchase Code","Got It",function(){
+            pixflow_messageBox("<div class='msgbox-align-title'> Enter Purchase Code</div>",'caution',"<div class='msgbox-align-des'>Plese Make Sure You Entered Purchase Code</div>","Got It",function(){
                 pixflow_closeMessageBox();
             });
             return;
@@ -6572,10 +5763,14 @@ function pixflow_purchaseValidate(){
                 });
         });
 
-
-
-
     });
+}
+
+//check demo shoud be open or not when user come from MD builder
+function pixflow_check_demo_status(){
+    if( window.location.hash == "#open-demo" ){
+        $('.customizer-btn.import').click();
+    }
 }
 
 $(window).load(function () {
@@ -6585,10 +5780,10 @@ $(window).load(function () {
     pixflow_setClassGlue();
     pixflow_selectField();
     pixflow_oneItemChecked(); // if notification has just one item, it's title will disappear
-    //pixflow_mainTourGuide(); // Tour Guide & Hint Part
     pixflow_loaded();
-    pixflow_getNotifications();
+    pixflow_check_demo_status();
 	pixflow_pageLoading();
+    pixflow_customizeMenu();
 });
 
 function pixflow_rtl_fix() {
@@ -6628,6 +5823,9 @@ $(document).ready(function () {
     pixflow_colorController();
     pixflow_switchController();
     pixflow_purchaseValidate();
+    pixflow_change_remove_name();
+    pixflow_change_remove_to_x();
+    
 	 if(!$('.customizer-loading').length){
         $('#customize-preview').prepend('<div class="customizer-loading">'  +
 		'<div class="showbox_loading"><div class="loader_loading">' +
@@ -6638,6 +5836,103 @@ $(document).ready(function () {
     }
 
     pixflow_detectIE();
+
+    $('#customize-controls').prepend('<button class="back-btn" style="display: none;">'+customizerValues.back+'</button>');
+    $('#create-new-menu-submit').click(function(){
+        $('.back-btn').css('display','block').addClass('button');
+    });
+
+    $('body').on('click','li.accordion-section,li.customize-control-new_menu .button',function(){
+        var $this=$(this);
+        setTimeout(function(){
+            if($('.customize-pane-child').hasClass('open')){
+                $('.back-btn').css('display','block').addClass('this-section');
+            }else if ($('.customize-pane-child').hasClass('current-panel')){
+                $('.back-btn').css('display','block').addClass('this-panel');
+            }else{
+                $('.back-btn').css('display','none');
+            }
+        },10);
+    });
+
+    $('.back-btn').click(function(event){
+        event.preventDefault();
+
+        if( $(this).hasClass('this-section') ) {
+            $('.open .customize-section-back').click();
+            $(this).removeClass('this-section');
+        }else if($(this).hasClass('button')){
+            $('.open .customize-section-back').click();
+            $(this).removeClass('button');
+        }else if( $(this).hasClass('this-panel') ){
+            $('.current-panel .customize-panel-back').click();
+            $(this).removeClass('this-panel');
+        }else{
+            $('.open .customize-section-back').click();
+        }
+
+        $('.menu-desc-holder').remove();
+        $('#accordion-panel-nav_menus .accordion-sub-container').append(
+            '<li class="menu-desc-holder">'+
+            '<table>'+
+            '<tr><td colspan="2" class="menu-desc-title">'+customizerValues.howToUse+'</td></tr>'+
+            '<tr><td class="menu-desc-text">1.</td><td class="menu-desc-text"><span>'+customizerValues.editMenuSystem+'</span></td></tr>'+
+            '<tr><td class="menu-desc-text">2.</td><td class="menu-desc-text"><span>'+customizerValues.createMegaMenu+'</span></td></tr>'+
+            '<tr><td class="menu-desc-text">3.</td><td class="menu-desc-text"><span>'+customizerValues.createSubMenu+'</span></td></tr>'+
+            '</table>'+
+            '<img class="menu-desc-img" src="'+customizerValues.THEME_CUSTOMIZER_URI+'/assets/images/add-menu-guid.png" />'+
+            '</li>');
+        if(!$(this).hasClass('this-panel') && !$(this).hasClass('this-section') && !$(this).hasClass('button')){
+            $(this).css({display : 'none'});
+        }
+
+    });
+
 });
 
+function pixflow_change_remove_name() {
+    "use strict";
+    $('.attachment-media-view-image .actions .remove-button').html('x');
+
+}
+function pixflow_change_remove_to_x(){
+    "use strict";
+    $('body').on('click','.search-form', function(){
+    $('.attachment-media-view-image .actions .remove-button').html('x');
+});
+}
+
+function pixflow_header_button_hover() {
+    pixflow_livePreviewObj().$('header.top-classic  nav > ul >.item_button').hover(function () {
+        set_menu_button_background($('#input_button_hover_bg_color').val(),true);
+        set_menu_button_text_color($('#input_button_hover_text_color').val());
+    },function () {
+        set_menu_button_background($('#input_button_bg_color').val());
+        set_menu_button_text_color($('#input_button_text_color').val());
+    })
+    
+}
+
+function set_menu_button_background(bg_color,hover) {
+    var $this = pixflow_livePreviewObj().$('header.top-classic  nav > ul >.item_button a');
+    hover = (typeof hover == 'undefined')?false:true;
+    if( pixflow_livePreviewObj().$('.top-classic').length ) {
+        if ($('#input_menu_button_style').val() == 'oval' || $('#input_menu_button_style').val() == 'rectangle') {
+            $this.css({'border-color': '','background-color': bg_color});
+        }else{
+
+            if (hover){
+                $this.css({'background-color': bg_color,'border-color': bg_color});
+            }else{
+                $this.css({'background-color': '','border-color': bg_color});
+            }
+        }
+    }
+}
+
+function set_menu_button_text_color(text_color) {
+    if( pixflow_livePreviewObj().$('.top-classic').length ){
+        pixflow_livePreviewObj().$('header.top-classic  nav > ul >.item_button').css({'color':text_color});
+    }
+}
 /*--------------- $(window).load End ---------------*/

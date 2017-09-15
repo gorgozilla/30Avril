@@ -157,11 +157,11 @@ return array(
 		'always' => array('tipsy', 'font-awesome'),
 		'paths' => array(
 			'bootstrap-colorpicker' => array(
-				'path' => VP_PUBLIC_URL . '/css/vendor/bootstrap-colorpicker.css',
+				'path' => VP_PUBLIC_URL . '/css/vendor/bootstrap-colorpicker.min.css',
 				'deps' => array(),
 			),
 			'tipsy' => array(
-				'path' => VP_PUBLIC_URL . '/css/vendor/tipsy.css',
+				'path' => VP_PUBLIC_URL . '/css/vendor/tipsy.min.css',
 				'deps' => array(),
 			),
 			'jqui' => array(
@@ -173,11 +173,11 @@ return array(
 				'deps' => array(),
 			),
 			'select2' => array(
-				'path' => VP_PUBLIC_URL . '/css/vendor/select2.css',
+				'path' => VP_PUBLIC_URL . '/css/vendor/select2.min.css',
 				'deps' => array(),
 			),
 			'reveal' => array(
-				'path' => VP_PUBLIC_URL . '/css/vendor/reveal.css',
+				'path' => VP_PUBLIC_URL . '/css/vendor/reveal.min.css',
 				'deps' => array(),
 			),
 			'vp-option' => array(

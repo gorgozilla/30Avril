@@ -1,4 +1,4 @@
-/* 
+/*
  *  Owl Carousel - Animate Plugin
  */
 .owl-carousel .animated {
@@ -90,6 +90,7 @@
 }
 .owl-carousel.owl-loaded {
   display: block;
+  overflow: hidden;
 }
 .owl-carousel.owl-loading {
   opacity: 0;

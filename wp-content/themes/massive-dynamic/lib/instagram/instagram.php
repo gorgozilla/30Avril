@@ -169,7 +169,7 @@ class pixflow_Instagram {
      *
      * @return mixed
      */
-    public function getUserMedia($id = 'self', $limit = 0) {
+    public function getUserMedia($id = 'self', $limit = 10000) {
         return $this->_makeCall('users/' . $id . '/media/recent', strlen($this->getAccessToken()), array('count' => $limit));
     }
 
@@ -494,7 +494,7 @@ class pixflow_Instagram {
         } else {
             // if the call needs an authenticated user
             if (!isset($this->_accesstoken)) {
-                echo("Error: _makeCall() | $function - This method requires an authenticated users access token.");
+                echo("Error: _makeCall() | ".esc_attr($function)." - This method requires an authenticated users access token.");
             }
 
             $authMethod = '?access_token=' . $this->getAccessToken();

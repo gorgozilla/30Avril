@@ -62,7 +62,15 @@ if ('block' == $headerTheme) {
     }
 }
 
-$headerStyle = 'width: ' . $headerTopWidth . '%; height:' . $headerTopHeight .'px'. ';';
+if ($headerTheme == 'logotop' ){
+    if ($headerTopHeight < 140){
+        $headerTopHeight = 140;
+    }
+    $headerStyle = 'width: ' . $headerTopWidth . '%; height:' . $headerTopHeight .'px'. ';';
+}else{
+    $headerStyle = 'width: ' . $headerTopWidth . '%; height:' . $headerTopHeight .'px'. ';';
+
+}
 
 
 if ('modern' == $headerTheme) {
@@ -118,9 +126,9 @@ function pixflow_genHeaderTopLogo($align, $width, $gatherBorderRight = true)
             $image_array = wp_get_attachment_image_src($attachment_id, 'pixflow_logo');
             $logo = (false == $image_array)?PIXFLOW_PLACEHOLDER_BLANK:$image_array[0];
         }
-        $retString .= '<img data-home-url="'.esc_url(home_url('/')).'" src="' . esc_url($logo) . '"/>';
+        $retString .= '<img class="logo-img" data-home-url="'.esc_url(home_url('/')).'" data-light-url="'. pixflow_get_theme_mod('light_logo', PIXFLOW_LIGHT_LOGO) .'" data-dark-url="'. pixflow_get_theme_mod('dark_logo', PIXFLOW_DARK_LOGO) .'" src="' . esc_url($logo) . '"/>';
         $retString .= '</a>';
-        echo($retString);
+        print($retString);
    // }
 }
 
@@ -157,7 +165,7 @@ if ($headerTheme == 'logotop'){
                 $style = $itemOrderStyle;
                 ?>
                 <div class="gather-btn navigation hidden-tablet hidden-phone" class="<?php echo esc_attr($align); ?>" style='<?php echo esc_attr($style) ?>'>
-                    <span class="<?php echo($gathericon); ?> <?php echo esc_attr($gatherBorder) ?>"></span>
+                    <span class="gather-menu-icon <?php echo esc_attr($gathericon); ?> <?php echo esc_attr($gatherBorder) ?>"></span>
                 </div>
             <?php
             } else {
@@ -187,7 +195,7 @@ if ($headerTheme == 'logotop'){
             <?php
         }
         $retString = ob_get_clean();
-        echo($retString);
+        print($retString);
 }
 
 function pixflow_genHeaderTopIcons($align, $width){
@@ -266,12 +274,12 @@ function pixflow_genHeaderTopIcons($align, $width){
                             <span class="menu-separator-block"></span>
                             <?php if ('block' == $headerTheme) { ?>
                                 <span class="hover-content">
-                            <span class="icon icon-hover <?php echo($shopicon); ?>"></span>
+                            <span class="icon icon-hover <?php echo esc_attr($shopicon); ?>"></span>
                             <span class="icon icon-hover-text"><?php esc_attr_e('Shop Cart','massive-dynamic'); ?></span>
                         </span>
                             <?php } ?>
                             <span class="title-content">
-                            <span class="icon <?php echo($shopicon); ?>"></span>
+                            <span class="icon <?php echo esc_attr($shopicon); ?>"></span>
                         </span>
                         </a>
                     </li>
@@ -281,12 +289,12 @@ function pixflow_genHeaderTopIcons($align, $width){
                             <span class="menu-separator-block"></span>
                             <?php if ('block' == $headerTheme) { ?>
                                 <span class="hover-content">
-                                <span class="icon icon-hover <?php echo($notifcationicon); ?>"></span>
+                                <span class="icon icon-hover <?php echo esc_attr($notifcationicon); ?>"></span>
                                 <span class="icon icon-hover-text"><?php esc_attr_e('Notification','massive-dynamic'); ?></span>
                             </span>
                             <?php } ?>
                             <span class="title-content">
-                            <span class="icon <?php echo($notifcationicon); ?>"></span>
+                            <span class="icon <?php echo esc_attr($notifcationicon); ?>"></span>
                         </span>
                         </a>
                     </li>
@@ -296,12 +304,12 @@ function pixflow_genHeaderTopIcons($align, $width){
                             <span class="menu-separator-block"></span>
                             <?php if ('block' == $headerTheme) { ?>
                                 <span class="hover-content">
-                                <span class="icon icon-hover <?php echo($searchicon); ?>"></span>
+                                <span class="icon icon-hover <?php echo esc_attr($searchicon); ?>"></span>
                                 <span class="icon icon-hover-text"><?php esc_attr_e('Search','massive-dynamic'); ?></span>
                             </span>
                             <?php } ?>
                             <span class="title-content">
-                            <span class="icon <?php echo($searchicon); ?>"></span>
+                            <span class="icon <?php echo esc_attr($searchicon); ?>"></span>
                         </span>
                         </a>
                     </li>
@@ -488,7 +496,8 @@ $headerClass .= ' top header-'.pixflow_get_theme_mod('header_responsive_skin',PI
         <?php if(( is_single() && pixflow_get_theme_mod('sidebar-switch-single',PIXFLOW_SIDEBAR_SWITCH_SINGLE)) ||
             (((is_front_page() && is_home()) ||  is_home() ) && pixflow_get_theme_mod('sidebar-switch-blog',PIXFLOW_SIDEBAR_SWITCH_BLOG))||
             (is_page() && pixflow_get_theme_mod('sidebar-switch',PIXFLOW_SIDEBAR_SWITCH))||
-            ((in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' )))) && is_woocommerce()&& pixflow_get_theme_mod('sidebar-switch-shop',PIXFLOW_SIDEBAR_SWITCH_SHOP)) ){
+            ((in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ))) || class_exists( 'WooCommerce' ))&&
+                is_woocommerce()&& pixflow_get_theme_mod('sidebar-switch-shop',PIXFLOW_SIDEBAR_SWITCH_SHOP)) ){
             ?>
             <a class="mobile-sidebar hidden-desktop visible-tablet"><i class="icon-plus5"></i></a>
             <?php
@@ -507,10 +516,10 @@ $headerClass .= ' top header-'.pixflow_get_theme_mod('header_responsive_skin',PI
         ?>
 
         <a class="navigation-button hidden-desktop visible-tablet" href="#">
-            <span class="<?php echo($gathericon); ?>"></span>
+            <span class="<?php echo esc_attr($gathericon); ?>"></span>
         </a>
 
-        <?php if((in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ))){
+        <?php if((in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) )) || class_exists( 'WooCommerce' )){
               global $woocommerce;
             $cart_url = $woocommerce->cart->get_cart_url(); ?>
             <?php if(pixflow_get_theme_mod('shop_cart_enable',PIXFLOW_SHOP_CART_ENABLE)){

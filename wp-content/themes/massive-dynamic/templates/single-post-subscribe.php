@@ -1,5 +1,5 @@
 <?php
-if ( in_array( 'mailchimp-for-wp/mailchimp-for-wp.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) )) {
+if (function_exists( 'mc4wp' )|| in_array( 'mailchimp-for-wp/mailchimp-for-wp.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) )) {
     if(get_post_meta( get_the_ID(), 'subscribe-section', true)== 'show'){
        ?><div class="subscribe-section"> <?php
         $title = __('Newsletter','massive-dynamic');

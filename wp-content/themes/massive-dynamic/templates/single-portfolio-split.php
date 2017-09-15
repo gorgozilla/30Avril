@@ -8,6 +8,8 @@ $videoPosition = pixflow_metabox('portfolio_options.standard_group.0.video_posit
 $terms = get_the_terms($post->ID, 'skills', 'string');
 $portfolioFormat =  get_post_format() ? get_post_format() : 'standard';
 $videoImage = "";
+wp_enqueue_script('pinbox',PIXFLOW_THEME_JS_URI.'/jquerypinbox.min.js',array(),PIXFLOW_THEME_VERSION,true);
+
 if('video' == $portfolioFormat){
     $videoType = pixflow_metabox('portfolio_options.standard_group.0.video_group.0.video_src','youtube');
     //youtube or vimeo
@@ -32,7 +34,7 @@ if(count($images)>0){
                 <?php if ($terms != false) { ?>
                     <div class="category">
                         <?php for($i = 0; $i < count($terms);$i++ ){
-                                echo '<span>'.$terms[$i]->name.'</span>';
+                                echo '<span>'.esc_attr($terms[$i]->name).'</span>';
                         }  ?>
 
                     </div>
@@ -49,8 +51,12 @@ if(count($images)>0){
                     $emptyArray = (count($attrs) == 1 && $attrs[0]['attr_title'] == '' && $attrs[0]['attr_value'] == '')?true:false;
                     if (!$emptyArray){?>
                     <div class="attributes">
-                        <?php for($index = 0; $index < count($attrs);$index++ ){ ?>
-                            <div class="attribute clearfix">
+                        <?php for($index = 0; $index < count($attrs);$index++ ){
+                            $attrClass = 'attribute clearfix';
+                            if (!intval($attrs[$index]['attr_icon_enable'])){
+                                $attrClass.=' no-icon';
+                            }?>
+                            <div class="<?php echo esc_attr($attrClass); ?>">
                                 <div class="left">
                                     <?php if ($attrs[$index]['attr_title'] != ''){ ?>
                                         <span class="title"><?php echo esc_attr($attrs[$index]['attr_title']); ?></span>
@@ -58,11 +64,11 @@ if(count($images)>0){
                                         <div class="desc"><?php echo wpautop($attrs[$index]['attr_value']); ?></div>
                                     <?php } ?>
                                 </div>
+                                <?php if(intval($attrs[$index]['attr_icon_enable'])){ ?>
                                 <div class="right">
-                                    <?php if(intval($attrs[$index]['attr_icon_enable'])){ ?>
                                         <i class="<?php echo esc_attr($attrs[$index]['attr_icon']); ?>"></i>
-                                    <?php } ?>
                                 </div>
+                                <?php } ?>
                             </div>
                         <?php }  ?>
                     </div>
@@ -98,9 +104,9 @@ if(count($images)>0){
                         ?>
                             <?php
                             if ($video['type'] == 'youtube')
-                                $src = "http://www.youtube.com/embed/" . esc_attr($video['id']);
+                                $src = "https://www.youtube.com/embed/" . esc_attr($video['id']);
                             else
-                                $src = "http://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
+                                $src = "https://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
                             ?>
                             <div class="item video">
                                 <iframe src="<?php echo esc_url($src); ?>" width="100%" height="500px" frameborder="0"
@@ -123,9 +129,9 @@ if(count($images)>0){
                         ?>
                         <?php
                         if ($video['type'] == 'youtube')
-                            $src = "http://www.youtube.com/embed/" . esc_attr($video['id']);
+                            $src = "https://www.youtube.com/embed/" . esc_attr($video['id']);
                         else
-                            $src = "http://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
+                            $src = "https://player.vimeo.com/video/" . esc_attr($video['id']) . "?color=ff4c2f";
                         ?>
                         <div class="item video">
                             <iframe src="<?php echo esc_attr($src); ?>" width="100%" height="500px"  frameborder="0"

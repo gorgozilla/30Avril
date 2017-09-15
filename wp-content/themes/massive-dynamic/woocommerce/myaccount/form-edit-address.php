@@ -10,10 +10,10 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     http://docs.woothemes.com/document/template-structure/
+ * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 2.6.0
+ * @version 3.1.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,11 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-$page_title = ( $load_address === 'billing' ) ? __( 'Billing Address', 'woocommerce' ) : __( 'Shipping Address', 'woocommerce' );
-
+$page_title = ( $load_address === 'billing' ) ? __( 'Billing Address', 'massive-dynamic' ) : __( 'Shipping Address', 'massive-dynamic' );
+do_action( 'woocommerce_before_edit_account_address_form' );
 	wc_print_notices();
-
-	wc_get_template('myaccount/navigation.php');
 ?>
 
 
@@ -49,7 +47,7 @@ $page_title = ( $load_address === 'billing' ) ? __( 'Billing Address', 'woocomme
 			<?php do_action( "woocommerce_after_edit_address_form_{$load_address}" ); ?>
 
 			<p>
-				<input type="submit" class="button" name="save_address" value="<?php esc_attr_e( 'Save Address', 'woocommerce' ); ?>" />
+				<input type="submit" class="button" name="save_address" value="<?php esc_attr_e( 'Save Address', 'massive-dynamic' ); ?>" />
 				<?php wp_nonce_field( 'woocommerce-edit_address' ); ?>
 				<input type="hidden" name="action" value="edit_address" />
 			</p>
@@ -58,3 +56,4 @@ $page_title = ( $load_address === 'billing' ) ? __( 'Billing Address', 'woocomme
 
 	<?php endif; ?>
 </div>
+<?php do_action( 'woocommerce_after_edit_account_address_form' ); ?>

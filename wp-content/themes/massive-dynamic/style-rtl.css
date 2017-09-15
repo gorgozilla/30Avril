@@ -42,7 +42,8 @@
 37. Widget. Recent Entries
 38. SC. Portfolio Full
 39. SC. Subscribe
-
+40. text shortcode
+41. Double slider
 
 */
 
@@ -59,7 +60,6 @@ html {
 body {
 
 }
-
 
 body .layout-container {
     direction: rtl;
@@ -191,10 +191,11 @@ body .layout-container .wpb_md_toggle2 .wpb_toggle_header .icon_left {
     left: inherit;
 }
 
-body .layout-container .wpb_md_toggle2 .wpb_toggle_header a {
+body .layout-container .wpb_md_toggle2 h3.wpb_toggle_header a{
     text-align: right;
     display: block;
     padding-right: 3.9em;
+    padding-left:0;
 }
 
 
@@ -346,7 +347,7 @@ body .layout-container .isotope.clearfix.portfolio-container {
 }
 
 body .layout-container .portfolio.inside .overlay-background {
-    left: inherit;
+    left: 0;
 }
 
 body .layout-container .portfolio.inside .item-meta {
@@ -819,6 +820,15 @@ body .layout-container footer .widget-area .widget.widget_recent_entries ul li a
     margin-right: 20px;
     margin-left: inherit;
 }
+/* Widget Recent Post */
+body .widget.widget-md-recent-post .item-image{
+    float: right;
+    margin-right:auto;
+    margin-left: 10px;
+}
+body .widget.widget-md-recent-post .item-info{
+    float: right;
+}
 
 /* 38. SC. Portfolio Full */
 
@@ -834,6 +844,26 @@ body .layout-container .sc-subscribe button i.button-icon.icon-angle-right {
     display: inline-block;
     vertical-align: middle;
 }
+/* team member modern*/
+body .team-member-top{
+    direction: ltr;
+}
+
+/* 40.SC text */
+.md-text-container .md-text .md-text-content p,
+.md-text-container .md-text .md-text-title,
+.md-text-container .md-text .md-text-title *{
+    font-family: inherit;
+}
+
+/* 41. Double slider */
+.double-slider {
+    direction: ltr;
+}
+
+body .layout-container .mBuilder_row_controls,body .layout-container .mBuilder_controls {
+    direction: ltr;
+}
 
 @media (max-width: 800px) {
 
@@ -842,8 +872,16 @@ body .layout-container .sc-subscribe button i.button-icon.icon-angle-right {
         text-align: right;
     }
 }
+body .list-shortcode ul li{
+    text-align:right;
+}
+body .iconbox-side2.style2 .description {
+    text-align: right;
+}
+body div.layout .blog-masonry-container{
+    text-align: right;
+}
 
-
-body .layout-container .mBuilder_row_controls,body .layout-container .mBuilder_controls {
-    direction: ltr;
+body .row-equal-column-height .wrap{
+    flex-direction: row-reverse;
 }

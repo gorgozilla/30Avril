@@ -51,7 +51,7 @@ update_post_meta($post->ID, 'fg_temp_metadata', $galleryString); // Overwrite th
 <button class="button<?php echo esc_attr($visible . $oldfix); ?>"
         id="fg_removeall"><?php esc_attr_e('Remove All', 'massive-dynamic'); ?></button>
     <ul><?php echo wp_kses($galleryHTML,$md_allowed_HTML_tags); ?></ul>
-<div style="clear:both;"></div><?php
+<div class="clearfix"></div><?php
 }
 
 function pixflow_fg_save_perm_metadata($post_id, $post)

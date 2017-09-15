@@ -1,13 +1,13 @@
 <?php
 /*
-Post Like System
+Portfolio Like System
 */
  
 /**
  * (1) Enqueue scripts for like system
  */
 function pixflow_like_scripts() {
-	wp_enqueue_script( 'md_like_post', pixflow_path_combine(PIXFLOW_THEME_LIB_URI,'/assets/script/post-like.min.js'), array('jquery'), '1.0', 1 );
+	wp_enqueue_script( 'md_like_post', pixflow_path_combine(PIXFLOW_THEME_LIB_URI,'/assets/script/post-like.min.js'), array('jquery'), null , 1 );
 	wp_localize_script( 'md_like_post', 'ajax_var', array(
 		'url' => admin_url( 'admin-ajax.php' ),
 		'nonce' => wp_create_nonce( 'ajax-nonce' )

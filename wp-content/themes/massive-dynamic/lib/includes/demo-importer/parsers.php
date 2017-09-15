@@ -64,7 +64,7 @@ class Pixflow_WXR_Parser_SimpleXML {
 			$old_value = libxml_disable_entity_loader( true );
 		}
 		$content_file = content_url().'/uploads/demo/content.xml';
-		$file_content = file_get_contents($content_file);
+		$file_content = @file_get_contents($file);
 		$success = $dom->loadXML( $file_content );
 		if ( ! is_null( $old_value ) ) {
 			libxml_disable_entity_loader( $old_value );
@@ -267,9 +267,11 @@ class Pixflow_WXR_Parser_XML {
 		xml_set_object( $xml, $this );
 		xml_set_character_data_handler( $xml, 'cdata' );
 		xml_set_element_handler( $xml, 'tag_open', 'tag_close' );
+        $upload_dir = wp_upload_dir();
+		$content_file = $upload_dir['basedir'].'/demo/content.xml';
 
-		$content_file = content_url().'/uploads/demo/content.xml';
-		$file_content = file_get_contents($content_file);
+		$file_content = @file_get_contents($content_file);
+
 		if ( ! xml_parse( $xml, $file_content, true ) ) {
 			$current_line = xml_get_current_line_number( $xml );
 			$current_column = xml_get_current_column_number( $xml );
@@ -418,7 +420,7 @@ class Pixflow_WXR_Parser_Regex {
 		}
 
 		if($wp_filesystem->exists($file)){
-			$text = $wp_filesystem->get_contents($file);
+			$text = @file_get_contents($file);
 			$text=explode("\n",$text);
 		}
 

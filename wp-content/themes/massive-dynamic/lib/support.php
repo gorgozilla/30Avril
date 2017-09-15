@@ -44,9 +44,6 @@ if ( function_exists( 'add_theme_support' ) ) {
     /* Portfolio Multisize Thumbnail */
     pixflow_add_image_size_retina( 'pixflow_multisize-thumb', 630, 542, true );
 
-    /* Client Thumbnail */
-    pixflow_add_image_size_retina( 'pixflow_client-thumb', 500, 500, true );
-
     /* Music Thumbnail */
     pixflow_add_image_size_retina( 'pixflow_music-thumb', 351, 334, true );
 
@@ -96,13 +93,15 @@ function pixflow_add_editor_styles() {
 add_action( 'after_setup_theme', 'pixflow_woocommerce_support');
 function pixflow_woocommerce_support() {
     add_theme_support( 'woocommerce' );
+    add_theme_support( 'wc-product-gallery-zoom' );
+    add_theme_support( 'wc-product-gallery-lightbox' );
+    add_theme_support( 'wc-product-gallery-slider' );
 }
 //WooCommerce Product Detail Summary Order
 //We need to unhook actions, then hook them again with different priority
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );
 
 add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 9 );
-
 
 /*-----------------------------------------------------------------------------------*/
 /*	Title Tag Support

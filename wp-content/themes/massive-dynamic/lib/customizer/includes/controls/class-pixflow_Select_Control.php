@@ -30,7 +30,7 @@ class Pixflow_Select_Control extends WP_Customize_Control {
             <?php endif; ?>
 
             <div class="ios-select" data-id="<?php echo esc_attr($this->id); ?>">
-                <input type="text" style="display: none" data-id="<?php echo esc_attr($this->id); ?>" data-controller-type="select" id="input_<?php echo esc_attr($this->id); ?>" disabled value="<?php echo esc_attr($this->value()); ?>" <?php $this->link(); ?>/>
+                <input type="text" data-id="<?php echo esc_attr($this->id); ?>" class=" px-display-none" data-controller-type="select" id="input_<?php echo esc_attr($this->id); ?>" disabled value="<?php echo esc_attr($this->value()); ?>" <?php $this->link(); ?>/>
                 <div class="flash"></div>
                 <div class="items"></div>
 

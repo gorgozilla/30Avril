@@ -6,16 +6,10 @@ global $headerSideTheme ;
 $headerSideTheme = pixflow_get_theme_mod('header_side_theme',PIXFLOW_HEADER_SIDE_THEME);
 $headerPosition = pixflow_get_theme_mod('header_position',PIXFLOW_HEADER_POSITION);
 $headerBorder = pixflow_get_theme_mod('header_border_enable', PIXFLOW_HEADER_BORDER_ENABLE);
-$headerSideWidth = (pixflow_get_theme_mod('header-side-width',PIXFLOW_HEADER_SIDE_WIDTH)>40)?40:pixflow_get_theme_mod('header-side-width',PIXFLOW_HEADER_SIDE_WIDTH);
-$headerSideWidth = ($headerSideTheme == 'modern')?3:$headerSideWidth;
+
 global $copyright;
 $copyright = pixflow_get_theme_mod('footer_copyright_text');
 $copyright = ($copyright === null)?PIXFLOW_FOOTER_COPYRIGHT_TEXT:$copyright;
-if($headerSideTheme == 'modern'){
-    $headerStyle = 'width: 65px;';
-}else{
-    $headerStyle = 'width: ' . $headerSideWidth . '%;';
-}
 
 global $menuStyle;
 if ( 'modern' == $headerSideTheme){
@@ -41,7 +35,7 @@ function pixflow_genHeaderSideLogo(){
     }
     $retString .= '<img src="'.esc_url($logo).'"/>';
     $retString .= '</a></div>';
-    echo($retString);
+    print($retString);
 
 }
 
@@ -78,7 +72,7 @@ function pixflow_genHeaderSideMenu(){
         <?php
         }
         $retString = ob_get_clean();
-        echo($retString);
+        print($retString);
 
 }
 
@@ -111,20 +105,20 @@ function pixflow_genHeaderSideIcons(){
             <ul class="icons-pack clearfix"  >
                 <li class="icon search-item">
                     <a class="elem-container search">
-                        <span class="<?php echo($searchicon) ?> default"></span>
-                        <span class="<?php echo($searchicon) ?> hover"></span>
+                        <span class="<?php echo esc_attr($searchicon) ?> default"></span>
+                        <span class="<?php echo esc_attr($searchicon) ?> hover"></span>
                     </a>
                 </li>
                 <li class="icon shopcart-item">
                     <a class="elem-container shopcart">
-                        <span class="<?php echo($shopicon) ?> default"></span>
-                        <span class="<?php echo($shopicon) ?> hover"></span>
+                        <span class="<?php echo esc_attr($shopicon) ?> default"></span>
+                        <span class="<?php echo esc_attr($shopicon) ?> hover"></span>
                     </a>
                 </li>
                 <li class="icon notification-item">
                     <a class="notification elem-container">
-                        <span class="<?php echo($notifcationicon) ?> default"></span>
-                        <span class="<?php echo($notifcationicon) ?> hover"></span>
+                        <span class="<?php echo esc_attr($notifcationicon) ?> default"></span>
+                        <span class="<?php echo esc_attr($notifcationicon) ?> hover"></span>
                     </a>
                 </li>
             </ul>
@@ -166,7 +160,7 @@ function pixflow_genHeaderSideFooter(){
 
                     <?php } } ?>
                     </ul>
-                    <div class="copyright <?php echo ("" == $copyright) ? 'md-hidden' : '';?>">
+                    <div class="copyright <?php $c = ("" == $copyright) ? 'md-hidden' : ''; echo esc_attr($c);?>">
                         <p><?php echo esc_attr($copyright)?></p>
                     </div>
                 </div>
@@ -256,7 +250,7 @@ $headerTheme = ($headerSideTheme == 'standard')?'classic':$headerSideTheme;
 $headerClass .= ($headerSideTheme == 'standard')?' standard-mode':'';
 ?>
 
-<header style="<?php echo esc_attr($headerStyle);?>" class="<?php echo esc_attr($headerPosition).' side-'.esc_attr($headerTheme).esc_attr($headerClass); ?>">
+<header  class="<?php echo esc_attr($headerPosition).' side-'.esc_attr($headerTheme).esc_attr($headerClass); ?>">
     <div class="color-overlay <?php echo 'border-'.esc_attr($headerPosition); if($headerBorder == true) echo " border-enabled"; else echo "border-disable";    ?>"></div>
     <div class="texture-overlay"></div>
     <div class="bg-image"></div>
@@ -274,7 +268,7 @@ $headerClass .= ($headerSideTheme == 'standard')?' standard-mode':'';
 
         ?>
         <a class="navigation-button hidden-desktop visible-tablet" href="#">
-            <span class="<?php echo($gathericon); ?>"></span>
+            <span class="<?php echo esc_attr($gathericon); ?>"></span>
         </a>
         <?php if(( is_single() && pixflow_get_theme_mod('sidebar-switch-single',PIXFLOW_SIDEBAR_SWITCH_SINGLE)) ||
             (((is_front_page() && is_home()) ||  is_home() ) && pixflow_get_theme_mod('sidebar-switch-blog',PIXFLOW_SIDEBAR_SWITCH_BLOG))||
@@ -283,14 +277,14 @@ $headerClass .= ($headerSideTheme == 'standard')?' standard-mode':'';
                 <a class="mobile-sidebar hidden-desktop visible-tablet"><i class="icon-plus5"></i></a>
                 <?php
                 }
-        if((in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ))){
+        if((in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) )) || class_exists( 'WooCommerce' )){
             if(is_woocommerce()&& pixflow_get_theme_mod('sidebar-switch-shop',PIXFLOW_SIDEBAR_SWITCH_SHOP)){?>
                 <a class="mobile-sidebar hidden-desktop visible-tablet"><i class="icon-plus5"></i></a>
-            <?php }
+            <?php
             global $woocommerce;
             $cart_url = $woocommerce->cart->get_cart_url(); ?>
             <a class="mobile-shopcart hidden-desktop visible-tablet" href="<?php echo esc_url($cart_url); ?>"><span class="icon-shopcart"></span></a>
-        <?php } ?>
+        <?php }} ?>
     </div>
 </header>
 <?php

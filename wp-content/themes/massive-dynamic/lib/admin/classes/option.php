@@ -501,7 +501,7 @@ class VP_Option
 
 	public function option_page_display()
 	{
-		echo $this->get_options_set()->render();
+		print($this->get_options_set()->render());
 	}
 
 	public function get_field_types()

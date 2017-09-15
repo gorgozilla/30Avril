@@ -15,11 +15,9 @@
  * @class
  * @classdesc initialize all of the mBuilder features.
  */
-$(window).load(function () {
-});
-var mBuilder = function(){
+var mBuilder = function () {
     // All shortcode attributes and contents stored in models, and should update after editing
-    if(typeof mBuilderModels == 'undefined'){
+    if (typeof mBuilderModels == 'undefined') {
         mBuilderModels = {};
         mBuilderModels.models = {}
     }
@@ -35,7 +33,7 @@ var mBuilder = function(){
         '.vc_column_container,' +
         '.wpb_accordion_content,' +
         '.wpb_toggle_content,' +
-        '.wpb_tour_tabs_wrapper,'+
+        '.wpb_tour_tabs_wrapper,' +
         '.wpb_tab';
 
     // Container shortcodes
@@ -44,27 +42,24 @@ var mBuilder = function(){
         'md_toggle_tab': '> .wpb_accordion_section > .wpb_toggle_content',
         'md_toggle_tab2': '> .wpb_accordion_section > .wpb_toggle_content',
         'md_tab': '> .wpb_tab',
-        'md_tabs':"> .wpb_tabs > .wpb_wrapper",
-        'md_modernTab':"> .wpb_tab",
-        'md_modernTabs':"> .wpb_tabs > .wpb_wrapper",
+        'md_tabs': "> .wpb_tabs > .wpb_wrapper",
+        'md_modernTab': "> .wpb_tab",
+        'md_modernTabs': "> .wpb_tabs > .wpb_wrapper",
         'vc_column': '> .wpb_column > .vc_column-inner> .wpb_wrapper',
         'vc_column_inner': '> .wpb_column > .vc_column-inner> .wpb_wrapper',
-        'md_hor_tab':"> .wpb_tab",
-        'md_hor_tabs':"> .wpb_tabs > .wpb_wrapper",
-        'md_hor_tab2':"> .wpb_tab",
-        'md_hor_tabs2':"> .wpb_tabs > .wpb_wrapper",
+        'md_hor_tab': "> .wpb_tab",
+        'md_hor_tabs': "> .wpb_tabs > .wpb_wrapper",
+        'md_hor_tab2': "> .wpb_tab",
+        'md_hor_tabs2': "> .wpb_tabs > .wpb_wrapper",
     };
 
     //Tab Shortcodes
     this.tabs = {
-        'md_tabs':['md_tab','<li data-model="md_tabs"><a href="#"><i class="left-icon icon-cog"></i><span>Tab</span></a></li>'],
-        'md_modernTabs':['md_modernTab','<li data-model="md_modernTabs"><a href="#"><i class="left-icon icon-cog"></i><div class="modernTabTitle">Tab</div></a></li>'],
-        'md_hor_tabs':['md_hor_tab','<li data-model="md_hor_tabs"><a href="#"><i class="right-icon icon-cog"></i><div class="horTabTitle">Tab</div><i class="right-icon icon-angle-right"></i></a></li>'],
-        'md_hor_tabs2':['md_hor_tab2','<li data-model="md_hor_tabs2"><a href="#"><i class="right-icon icon-cog"></i><div class="horTabTitle">Tab</div></a></li>'],
+        'md_tabs': ['md_tab', '<li data-model="md_tabs"><a href="#"><i class="left-icon icon-cog"></i><span>Tab</span></a></li>'],
+        'md_modernTabs': ['md_modernTab', '<li data-model="md_modernTabs"><a href="#"><i class="left-icon icon-cog"></i><div class="modernTabTitle">Tab</div></a></li>'],
+        'md_hor_tabs': ['md_hor_tab', '<li data-model="md_hor_tabs"><a href="#"><i class="right-icon icon-cog"></i><div class="horTabTitle">Tab</div><i class="right-icon icon-angle-right"></i></a></li>'],
+        'md_hor_tabs2': ['md_hor_tab2', '<li data-model="md_hor_tabs2"><a href="#"><i class="right-icon icon-cog"></i><div class="horTabTitle">Tab</div></a></li>'],
     };
-
-
-
     //Full shortcodes
     this.fullShortcodes = [
         'md_team_member_classic',
@@ -117,103 +112,120 @@ var mBuilder = function(){
 
 
     var isLocal = $.ui.tabs.prototype._isLocal;
-    $.ui.tabs.prototype._isLocal = function ( anchor ) {
+    $.ui.tabs.prototype._isLocal = function (anchor) {
         return true;
     };
-
+    
+    this.save_callback_function = null;
+    this.make_links_target_blank();
     this.renderControls();
     this.addEvents();
     this.setSortable();
     this.mediaPanel();
     this.multiMediaPanel();
     this.googleFontPanel();
-    this.renderShortcodePanel();
+    this.shortcode_panel_functionality();
+    this.set_parents();
+    this.preview_mode();
+    this.on_before_unload();
+    this.getEditorFonts();
 };
-
 
 /**
  * @summary makes shortcodes sortable.
  *
  * @since 1.0.0
  */
-mBuilder.prototype.setSortable = function(){
-    var t = this;
-    var lastObj = null;
+mBuilder.prototype.setSortable = function () {
+    "use strict";
+    var t = this,
+        lastObj = null;
     var fly = null;
-    $('.mBuilder-overlay').remove();
-    var d = $('<div style="position: absolute; height: 5px; z-index: 999999;"></div>').appendTo('body'),
-        overlay = $('<div class="mBuilder-overlay" style="position: fixed; height: 100%; z-index: 9999999; width: 100%; top: 0px; left: 0px; display: none;"></div>').appendTo('body'),
+    $('.mBuilder-overlay,.mBuilder-overlay-holder').remove();
+    var d = $('<div class="mBuilder-overlay-holder "></div>').appendTo('body'),
+        overlay = $('<div class="mBuilder-overlay"></div>').appendTo('body'),
         direction = 'down',
         overEmpty = false,
-        overs=$,
+        overs = $,
         helper;
-    overlay.click(function(){
-        d.css('width','');
-        overlay.css('display','none');
-    })
-
+    overlay.click(function () {
+        d.css('width', '');
+        overlay.css('display', 'none');
+    });
     $('.mBuilder-element:not(.vc_row,.mBuilder-vc_column)').draggable({
-        zIndex:999999,
-        helper:'clone',
-        appendTo:'body',
+        zIndex: 999999,
+        helper: 'clone',
+        appendTo: '.layout',
+        delay: 300,
+        containment: [$('.layout').offset().left, $('.layout').offset().top, $('.layout').offset().left+$('.layout').width(), $('.layout').offset().top+$('.layout').height()],
+        scroll: false,
         items: ":not(.disable-sort)",
-        start: function( event, ui ) {
+        start: function (event, ui) {
+            $('.layout').css('overflow','hidden');
             ui.helper.css({
-                width:$(this).width(),
-                height:$(this).height()
+                width: $(this).width(),
+                height: $(this).height()
             });
 
             clearInterval(fly);
             var that = this;
 
-            if($(this).hasClass("mBuilder-md_portfolio_multisize")){
+            if ($(this).hasClass("mBuilder-md_portfolio_multisize")) {
                 ui.helper.addClass("portfolio-draged");
             }
 
 
-            setTimeout(function(){
+            setTimeout(function () {
                 overs = $('.mBuilder-element:not(.vc_row,.mBuilder-vc_column),.vc_empty-element')
                     .not(ui.helper)
                     .not(ui.helper.find('.mBuilder-element:not(.vc_row,.mBuilder-vc_column),.vc_empty-element'))
                     .not($(that).find('.mBuilder-element:not(.vc_row,.mBuilder-vc_column),.vc_empty-element'));
-            },100);
+            }, 100);
             $(this).addClass('ui-sortable-helper');
-            overlay.css('display','block');
+            overlay.css('display', 'block');
         },
-        drag: function( event, ui ) {
+        drag: function (event, ui) {
+            t.removeColumnSeparator();
+            t.createColumnSeparator('all');
             clearInterval(fly);
-            if(event.clientY < 100){
-                fly = setInterval(function(){
-                    $(window).scrollTop($(window).scrollTop()-50)
-                },50);
-            }else if(event.clientY > $(window).height()-50){
-                fly = setInterval(function() {
+            if (event.clientY < 100) {
+                fly = setInterval(function () {
+                    if($(window).scrollTop()==0){
+                        clearInterval(fly);
+                    }
+                    $(window).scrollTop($(window).scrollTop() - 50)
+                }, 50);
+            } else if (event.clientY > $(window).height() - 50) {
+                fly = setInterval(function () {
+                    if($(window).scrollTop()>=$(document).height()-$(window).height()){
+                        clearInterval(fly);
+                    }
                     $(window).scrollTop($(window).scrollTop() + 50)
-                },50);
+                }, 50);
             }
             var el = null;
-            overs.each(function(){
-                if(
+            overs.each(function () {
+                if (
                     $(this).css('display') != 'none' &&
                     event.pageY > $(this).offset().top && event.pageY < $(this).offset().top + $(this).outerHeight() &&
                     event.pageX > $(this).offset().left && event.pageX < $(this).offset().left + $(this).outerWidth()
-                ){
+                ) {
                     el = this;
                 }
             });
 
-            if(el){
+            if (el) {
 
                 overEmpty = false;
                 var obj = $(el);
-                if(el != this && obj.length && !obj.hasClass('vc_empty-element')){
+                if (el != this && obj.length && !obj.hasClass('vc_empty-element')) {
 
-                    if(t.containers[obj.attr('data-mbuilder-el')] && !obj.find('.mBuilder-element').length){
+                    if (t.containers[obj.attr('data-mbuilder-el')] && !obj.find('.mBuilder-element').length) {
                         overEmpty = true;
-                    }else {
+                    } else {
                         d.css({border: '', borderTop: '4px solid #8fcbff'});
                     }
-                }else{
+                } else {
                     overEmpty = true;
 
                 }
@@ -221,113 +233,131 @@ mBuilder.prototype.setSortable = function(){
                     objLeft = obj.offset().left,
                     objHeight = obj.outerHeight(),
                     objWidth = obj.outerWidth(),
-                    objHalf = objTop + objHeight/2;
-                if(lastObj){
+                    objHalf = objTop + objHeight / 2;
+                if (lastObj) {
                     lastObj.css({'transform': ''})
                 }
-                if(!overEmpty) {
-                    if (event.pageY  < objHalf) {
+                if (!overEmpty) {
+                    if (event.pageY < objHalf) {
                         obj.not('.vc_row').css({'transform': 'translateY(5px)'});
-                        d.css({'top': objTop, 'left': objLeft, width: objWidth,height:5,background:''});
+                        d.css({'top': objTop, 'left': objLeft, width: objWidth, height: 5, background: ''});
                         direction = 'up';
                     } else {
                         obj.not('.vc_row').css({'transform': 'translateY(-5px)'});
-                        d.css({'top': objTop + objHeight, 'left': objLeft, width: objWidth,height:5,background:''});
+                        d.css({'top': objTop + objHeight, 'left': objLeft, width: objWidth, height: 5, background: ''});
                         direction = 'down';
                     }
-                }else{
-                    d.css({'top': objTop, 'left': objLeft,height:objHeight,width:objWidth,background:'rgba(136,206,255,0.4)',border:'solid 2px #8fcbff'});
+                } else {
+                    d.css({
+                        'top': objTop,
+                        'left': objLeft,
+                        height: objHeight,
+                        width: objWidth,
+                        background: 'rgba(136,206,255,0.4)',
+                        border: 'solid 2px #8fcbff'
+                    });
                 }
                 lastObj = obj;
-            }else{
-                if(lastObj){
+            } else {
+                if (lastObj) {
                     lastObj.css({'transform': ''})
                 }
                 lastObj = null;
-                d.css({width:'',border:''});
+                d.css({width: '', border: ''});
             }
         },
-        stop: function(event, ui){
-            try{
+        stop: function (event, ui) {
+            $('.layout').css('overflow','');
+            t.removeColumnSeparator();
+            try {
 
-                if(ui.helper.hasClass("portfolio-draged")){
+                if (ui.helper.hasClass("portfolio-draged")) {
                     ui.helper.removeClass("portfolio-draged");
                 }
 
                 clearInterval(fly);
                 $(this).removeClass('ui-sortable-helper');
-                if(!lastObj || !lastObj.length){
-                    d.css({'width':'',border:''});
-                    setTimeout(function(){overlay.css('display','none');},300);
+                if (!lastObj || !lastObj.length) {
+                    d.css({'width': '', border: ''});
+                    setTimeout(function () {
+                        overlay.css('display', 'none');
+                    }, 300);
                     return;
                 }
-                if(direction=='up') {
-                    if(lastObj.hasClass('vc_empty-element')) {
+                if (direction == 'up') {
+                    if (lastObj.hasClass('vc_empty-element')) {
                         var p = lastObj.find('.wpb_wrapper');
-                    }else if(t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty){
+                    } else if (t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty) {
                         var p = lastObj.find(t.containers[lastObj.attr('data-mbuilder-el')]);
-                    }else{
+                    } else {
                         var p = lastObj.prev('.insert-between-placeholder');
-                        if(!p.length){
+                        if (!p.length) {
                             var p = lastObj.parent().closest('.mBuilder-element').prev('.insert-between-placeholder');
                         }
                     }
-                }else{
-                    if(lastObj.hasClass('vc_empty-element')) {
+                } else {
+                    if (lastObj.hasClass('vc_empty-element')) {
                         var p = lastObj.find('.wpb_wrapper');
-                    }else if(t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty){
+                    } else if (t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty) {
                         var p = lastObj.find(t.containers[lastObj.attr('data-mbuilder-el')]);
-                    }else{
+                    } else {
                         var p = lastObj.next('.insert-between-placeholder');
-                        if(!p.length){
+                        if (!p.length) {
                             var p = lastObj.parent().closest('.mBuilder-element').next('.insert-between-placeholder');
                         }
                     }
                 }
-                placeholder =  p.get(0);
-                if(placeholder != null) {
-                    if($(this).closest('.vc_column_container').find('.mBuilder-element').not($(this).find('.mBuilder-element')).length<2 && lastObj.get(0) != this){
+                var placeholder = p.get(0);
+                if (placeholder != null) {
+                    if ($(this).closest('.vc_column_container').find('.mBuilder-element').not($(this).find('.mBuilder-element')).length < 2 && lastObj.get(0) != this) {
                         $(this).closest('.vc_column_container').addClass('vc_empty-element');
                     }
-                    if(lastObj.hasClass('vc_empty-element')){
+                    if (lastObj.hasClass('vc_empty-element')) {
                         $(this).appendTo(placeholder);
                         lastObj.removeClass('vc_empty-element')
-                    }else{
-                        if(!$(this).find(placeholder).length) {
-                            if(t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty) {
+                    } else {
+                        if (!$(this).find(placeholder).length) {
+                            if (t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty) {
                                 p.html('');
                                 $(this).appendTo(placeholder);
-                            }else{
+                            } else {
                                 $(this).insertAfter(placeholder);
                             }
                         }
                     }
-                    setTimeout(function(){
+                    setTimeout(function () {
                         t.createPlaceholders();
-                    },100)
+                    }, 100);
+                    $('body').addClass('changed');
                 }
-                d.css({'width':'',border:''});
-                setTimeout(function(){overlay.css('display','none');},300);
-            }catch(e){
+                d.css({'width': '', border: ''});
+                setTimeout(function () {
+                    overlay.css('display', 'none');
+                }, 300);
+            } catch (e) {
                 console.log(e);
-                d.css({'width':'',border:''});
-                setTimeout(function(){overlay.css('display','none');},300);
+                d.css({'width': '', border: ''});
+                setTimeout(function () {
+                    overlay.css('display', 'none');
+                }, 300);
             }
+            $(window).resize();
         }
-    })
+    });
 
     // Row movement
-    $( ".content-container" ).sortable({
+    $(".content-container,.post-content").sortable({
         cursor: "move",
         delay: 100,
         cancel: ".disable-sort",
         handle: ".mBuilder_row_move",
-        update: function( event, ui ) {
+        items: ".vc_row",
+        update: function (event, ui) {
             $('body').addClass('changed');
             t.createPlaceholders();
         }
     });
-    $( ".content-container" ).disableSelection();
+    //$(".content-container").disableSelection();
 };
 
 
@@ -336,133 +366,11 @@ mBuilder.prototype.setSortable = function(){
  *
  * @since 1.0.0
  */
-mBuilder.prototype.renderControls = function(){
+mBuilder.prototype.renderControls = function () {
     var t = this;
-	var countTiny = 0 ;
-    tinymce.init({
-        selector: '.inline-editor',
-    	theme_advanced_toolbar_location: "top",
-        forced_root_block: 'p',
-		force_p_newlines : false,
-		theme_advanced_resizing: false,
-    	theme_advanced_resizing_use_cookie : false,
-        force_br_newlines: false,
-        tabfocus_elements: ":next" ,
-		toolbar_items_size: 'small',
-		menubar: false,
-		block_formats: 'Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Header 5=h5;Header 6=h6',
-        inline: true,
-		setup: function(editor) {
-			editor.on('focus' , function(e){
-                e.stopPropagation();
-                $('#' + editor.id).addClass('do-save-text');
-			setTimeout(function(){
-			$('.mce-tinymce').each(function(){
-				 $(this).find('.mce-txt').eq(0).html('') ; 
-				 $(this).find('.mce-txt').eq(1).html('') ; 
-				 });
-			} , 100 );
-			});
-            editor.on('blur' , function(e){
-                var $doSaveText = $('.do-save-text');
-                if($doSaveText.length) {
-                    var id = $doSaveText.parents('.ui-draggable').data('mbuilder-id');
-                    if($doSaveText.text().trim() == ''){
-                        var $newContent = '';
-                        $('div[data-mbuilder-id=' + id + ']').addClass('no-text');
-                    }else{
-                        var $newContent = $doSaveText.html();
-                        $('div[data-mbuilder-id=' + id + ']').removeClass('no-text');
-                    }
-                    t.models.models[id].content = $newContent;
-                    if ( $doSaveText.closest('.no-text').length){
-                        $doSaveText.closest('.no-text').find('.mBuilder_controls').append('<a href="javascript:void(0)" class="add-content"> + content </a>');
-                    }
-                    $doSaveText.removeClass('do-save-text');
-                    document.getSelection().removeAllRanges();
-                }
-			});
-			editor.addButton('mybutton', {
-                text: 'More Option',
-                icon: false ,
-                onclick: function () {
-                    $('.do-save-text').blur();
-                    $('.do-save-text').closest('.gizmo-container').find(' > .mBuilder_controls .sc-setting').click();
-                }
-            });
-		},
-        fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt' ,
-        toolbar: 'formatselect fontsizeselect forecolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link | undo redo | mybutton' ,
-           plugins: 'textcolor link tabfocus'
-    });
-
-    tinymce.init({
-        selector: '.inline-editor-title',
-        theme_advanced_toolbar_location: "top",
-        forced_root_block: 'div',
-		force_p_newlines : false,
-		theme_advanced_resizing: false,
-    	theme_advanced_resizing_use_cookie : false,
-        force_br_newlines: false,
-		toolbar_items_size: 'small',
-        tabfocus_elements: ":next" ,
-		block_formats: 'Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Header 5=h5;Header 6=h6',
-        inline: true,
-        setup: function (editor) {
-			editor.on('focus' , function(){
-			setTimeout(function(){
-			$('.mce-tinymce').each(function(){
-				 $(this).find('.mce-txt').eq(0).html('') ; 
-				 $(this).find('.mce-txt').eq(1).html('') ; 
-				 });
-			} , 100 );
-			});
-            editor.on('blur', function () {
-                var $doSave = $('.do-save');
-                if ($doSave.length) {
-                    var id = $doSave.closest('.ui-draggable').data('mbuilder-id');
-                    if($doSave.text().trim() == ''){
-                        var $newTitle = '';
-                        $('div[data-mbuilder-id=' + id + ']').addClass('no-title');
-                    }else{
-                        var $newTitle = $doSave.html();
-                        $newTitle =  $newTitle.replace(new RegExp('"', 'g') ,  ' pixFLow_editor ');
-                        $('div[data-mbuilder-id=' + id + ']').removeClass('no-title');
-                    }
-                    if ( $('.do-save').closest('.no-title').length){
-                        $('.do-save').closest('.no-title').find('.mBuilder_controls').append('<a href="javascript:void(0)" class="add-title"> + title </a>');
-                    }
-                    $('.inline-editor-title').removeClass('do-save');
-                    t.setModelattr(id, 'md_text_title1', $newTitle);
-                    // set it to compatible with VC backend editor
-                    t.setModelattr(id, 'md_text_use_title_slider', 'yes');
-                    document.getSelection().removeAllRanges();
-
-                }
-            });
-			
-            editor.addButton('mybutton', {
-                text: 'More Option',
-                icon: false,
-                onclick: function () {
-                    $('.do-save').blur();
-                    $('.do-save').closest('.gizmo-container').find(' > .mBuilder_controls .sc-setting').click();
-                }
-            });
-        },
-        fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
-        toolbar: 'formatselect fontsizeselect forecolor | bold italic | alignleft aligncenter alignright alignjustify | link | undo redo | mybutton',
-        menubar: false,
-        plugins: 'textcolor link tabfocus'
-    });
+    var countTiny = 0;
 
     $('body').addClass('compose-mode');
-
-    $('body').on('click','a',function(){
-        if($(this).attr('href') == undefined){
-            $(this).attr('href','#');
-        }
-    });
 
     var settingSvg = '<span class="mdb-settingsvg" ></span>',
 
@@ -496,31 +404,30 @@ mBuilder.prototype.renderControls = function(){
 
         moveSvg = '<span class="mdb-movesvg" ></span>',
 
-        rowSettingSvg = '<span class="mdb-rowsettingsvg" ></span>' ;
+        rowSettingSvg = '<span class="mdb-rowsettingsvg" ></span>';
 
 
-
-    $('.mBuilder-element').not('.vc_row, .vc_row_inner,.mBuilder-vc_row_inner,.mBuilder-vc_column,.mBuilder-vc_column_inner').each(function(){
+    $('.mBuilder-element').not('.vc_row, .vc_row_inner,.mBuilder-vc_row_inner,.mBuilder-vc_column,.mBuilder-vc_column_inner').each(function () {
 
         var $this = $(this);
 
-        if(!$this.find('.mBuilder_controls').first().length) {
-            if ($this.hasClass('mBuilder-md_tabs') || $this.hasClass('mBuilder-md_toggle') ||
-                $this.hasClass('mBuilder-md_accordion') || $this.hasClass('mBuilder-md_modernTabs') ||
-                $this.hasClass('mBuilder-md_hor_tabs') || $this.hasClass('mBuilder-md_toggle2')||
-                $this.hasClass('mBuilder-md_hor_tabs2')){
-
+        if ($this.hasClass('mBuilder-md_tabs') || $this.hasClass('mBuilder-md_toggle') ||
+            $this.hasClass('mBuilder-md_accordion') || $this.hasClass('mBuilder-md_modernTabs') ||
+            $this.hasClass('mBuilder-md_hor_tabs') || $this.hasClass('mBuilder-md_toggle2') ||
+            $this.hasClass('mBuilder-md_hor_tabs2')) {
+            if (!$this.find('.tabs-family').length) {
                 var html = '<div class="mBuilder_controls tabs-family sc-control " >' +
-                    '<div class="mBuilder_move">'+moveSvg+'</div>'+
+                    '<div class="mBuilder_move">' + moveSvg + '</div>' +
                     '<div class="sc-setting setting">' + settingSvg + '</div>' +
                     '<div class="sc-delete">' + deleteSvg + '</div>' +
                     '</div>';
                 $this.append(html);
-
-            }else if($this.hasClass('mBuilder-md_tab')||$this.hasClass('mBuilder-md_toggle_tab')||
-                $this.hasClass('mBuilder-md_accordion_tab')||$this.hasClass('mBuilder-md_modernTab') ||
-                $this.hasClass('mBuilder-md_hor_tab')|| $this.hasClass('mBuilder-md_toggle_tab2') ||
-                $this.hasClass('mBuilder-md_hor_tab2') ) {
+            }
+        } else if (!$this.find('.mBuilder_controls').length) {
+             if ($this.hasClass('mBuilder-md_tab') || $this.hasClass('mBuilder-md_toggle_tab') ||
+                $this.hasClass('mBuilder-md_accordion_tab') || $this.hasClass('mBuilder-md_modernTab') ||
+                $this.hasClass('mBuilder-md_hor_tab') || $this.hasClass('mBuilder-md_toggle_tab2') ||
+                $this.hasClass('mBuilder-md_hor_tab2')) {
                 var html = '<div class="mBuilder_controls tab sc-control " >' +
                     '<div class="sc-setting setting">' + settingSvg + '</div>' +
                     '<div class="sc-delete">' + deleteSvg + '</div>';
@@ -531,63 +438,47 @@ mBuilder.prototype.renderControls = function(){
                 html += '</div>';
                 $this.append(html);
 
-            }else {
+            } else {
                 var el = $this.attr('data-mbuilder-el'),
                     fullClass = '';
-                if(t.fullShortcodes.indexOf(el) != -1){
+                if (t.fullShortcodes.indexOf(el) != -1) {
                     fullClass = 'md-full-shortcode-gizmo';
                 }
                 var $elem = $this;
-                if($this.find('.gizmo-container').length){
+                if ($this.find('.gizmo-container').length) {
                     $elem = $this.find('.gizmo-container').first();
                 }
-                if($this.hasClass('mBuilder-md_button')|| $this.hasClass('mBuilder-vc_empty_space')){
-                    $elem.append('<div class="mBuilder_controls sc-control " >' +
-                        '<a href="javascript:void(0)" class="sc-delete"><span>x</span></a>' +
-                        '<div class="settings-holder">' +
-                        '<div class="sc-setting setting">' + settingSvg + '</div>' +
-                        '</div>' +
-                        '</div>');
 
-                }else {
-                    var html = '<div class="mBuilder_controls sc-control " >' +
-                        '<span class="handel top-left"></span>' +
-                        '<span class="handel top-right"></span>' +
-                        '<span class="handel bottom-left"></span>' +
-                        '<span class="handel bottom-right"></span>' +
-                        '<div class="settings-holder">' +
-                        '<div class="sc-setting setting">' + settingSvg + '</div>' +
-                        '<div class="sc-option">' +
-                        '<div class="options-holder ' + fullClass + '">' +
-                        '<a href="javascript:void(0)" class="column-setting">' + mBuilderValues.columnText + '</a>' +
-                        '<a href="javascript:void(0)" class="sc-duplicate">' + duplicateSvg + '<span>' + mBuilderValues.duplicateText + '</span></a>' +
-                        '<a href="javascript:void(0)" class="sc-delete">' + deleteSvg + '<span>' + mBuilderValues.deleteText + '</span></a>' +
-                        '<a href="javascript:void(0)" class="sc-alignment">' +
-                        '<span class="left">' + leftAlignSvg + '</span>' +
-                        '<span class="center">' + centerAlignSvg + '</span>' +
-                        '<span class="right">' + rightAlignSvg + '</span>' +
-                        '</a>' +
-                        '</div>' +
-                        '<a href="javascript:void(0)" class="setting options-button">' + optionSvg + '</a>' +
-                        '</div>' +
-                        '</div>' ;
+                var html = '<div class="mBuilder_controls sc-control " >' +
+                    '<span class="handel top-left"></span>' +
+                    '<span class="handel top-right"></span>' +
+                    '<span class="handel bottom-left"></span>' +
+                    '<span class="handel bottom-right"></span>' +
+                    '<div class="settings-holder">' +
+                    '<div class="sc-setting setting">' + settingSvg + '</div>' +
+                    '<div class="sc-option">' +
+                    '<div class="options-holder ' + fullClass + '">' +
+                    '<a href="#" class="animation" data-tabName="Animation">' + mBuilderValues.animationText + '</a>' +
+                    '<a href="#" class="sc-duplicate"><span>' + mBuilderValues.duplicateText + '</span></a>' +
+                    '<a href="#" class="sc-delete"><span>' + mBuilderValues.deleteText + '</span></a>' +
+                    '<a href="#" class="sc-alignment">' +
+                    '<span class="left">' + leftAlignSvg + '</span>' +
+                    '<span class="center">' + centerAlignSvg + '</span>' +
+                    '<span class="right">' + rightAlignSvg + '</span>' +
+                    '</a>' +
+                    '</div>' +
+                    '<a href="#" class="setting options-button">' + optionSvg + '</a>' +
+                    '</div>' +
+                    '</div>';
 
-                    if ($this.hasClass('mBuilder-md_text')){
-                        if($this.hasClass('no-title')){
-                            html += '<a href="javascript:void(0)" class="add-title"> + title </a>';
-                        }
-                        if($this.hasClass('no-text')){
-                            html += '<a href="javascript:void(0)" class="add-content"> + content </a>';
-                        }
-                    }
-                    html += '</div>'
-                    $elem.append(html);
-                }
+
+                html += '</div>'
+                $elem.append(html);
             }
         }
 
-        if(t.shortcodes[$this.attr('data-mbuilder-el')] && t.shortcodes[$this.attr('data-mbuilder-el')].as_parent){
-            if(!$this.find(' > .mBuilder_controls [data-control="add_section"]').length) {
+        if (t.shortcodes[$this.attr('data-mbuilder-el')] && t.shortcodes[$this.attr('data-mbuilder-el')].as_parent) {
+            if (!$this.find(' > .mBuilder_controls [data-control="add_section"]').length) {
                 var btn = $('<span class="vc_btn-content"><span class="icon"></span></span>');
                 var link = $('<a class="vc_control-btn" title="Add new Section" data-control="add_section" href="#" target="_blank"></a>');
                 link.append(btn);
@@ -601,83 +492,82 @@ mBuilder.prototype.renderControls = function(){
     });
 
 
-    $('.mBuilder-element.vc_row,.vc_row.vc_inner').each(function(){
+    $('.mBuilder-element.vc_row,.vc_row.vc_inner').each(function () {
         var $this = $(this);
-        if(!$this.find('> .mBuilder_row_controls ').length) {
-            $this.find('>.wrap').after('\
-                <div class="mBuilder_row_controls">\
-                    <div href="javascript:void(0)" class="mBuilder_row_move">'+moveSvg+'</div>\
-                    <div class="mBuilder_setting_panel">\
-                        <a href="javascript:void(0)" class="title">'+rowSettingSvg+'<span>'+mBuilderValues.rowText+'</span></a>\
-                        <div class="mBuilder_container">\
-                        <a href="javascript:void(0)" class="mBuilder_row_setting">'+settingSvg+'<span>'+mBuilderValues.settingText+'</span></a>\
-                        <a href="javascript:void(0)" class="mBuilder_row_delete">'+deleteSvg+'<span>'+mBuilderValues.deleteText+'</span></a>\
-                        <a href="javascript:void(0)" class="mBuilder_row_duplicate">'+duplicateSvg+'<span>'+mBuilderValues.duplicateText+'</span></a>\
-                        </div>\
-                    </div>\
-                    <div class="mBuilder_row_layout">\
-                        <a href="javascript:void(0)" class="title">'+layoutSvg+'<span>'+mBuilderValues.layoutText+'</span></a>\
-                        <div class="mBuilder_container"><div class="holder">\
-                            <span class="col" data-colSize="12/12">'+col1_1Svg+'</span><span class="separator"></span> \
-                            <span class="col" data-colSize="6/12+6/12">'+col1_2Svg+'</span><span class="separator"></span> \
-                            <span class="col" data-colSize="4/12+4/12+4/12">'+col1_3Svg+'</span><span class="separator"></span>\
-                            <span class="col" data-colSize="3/12+3/12+3/12+3/12">'+col1_4Svg+'</span><span class="separator"></span>\
-                            <span class="col" data-colSize="2/12+8/12+2/12">'+col2_4Svg+'</span><span class="separator"></span>\
-                            <span class="col" data-colSize="10/12+2/12">'+col3_4Svg+'</span><span class="separator"></span>\
-                            <span class="col" data-colSize = "3/12+9/12">'+col3_9Svg+'</span>\
-                            <hr>\
-                            <label>'+mBuilderValues.customColText+'</label><input placeholder="12/12" name="cols" value=""><span class="submit">→</span>\
-                        </div></div>\
-                    </div>\
-                </div>\
-            ');
+        if (!$this.find('> .mBuilder_row_controls ').length) {
+            $this.find('>.wrap').after(''+
+                '<div class="mBuilder_row_controls">'+
+                    '<div href="#" class="mBuilder_row_move">' + moveSvg + '</div>'+
+                    '<div class="mBuilder_setting_panel">'+
+                        '<a href="#" class="title">' + rowSettingSvg + '<span>' + mBuilderValues.rowText + '</span></a>'+
+                        '<div class="mBuilder_container">'+
+                            '<a href="#" class="mBuilder_row_setting"><span>' + mBuilderValues.settingText + '</span></a>'+
+                            '<a href="#" class="mBuilder_row_delete"><span>' + mBuilderValues.deleteText + '</span></a>'+
+                            '<a href="#" class="mBuilder_row_duplicate"><span>' + mBuilderValues.duplicateText + '</span></a>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="mBuilder_row_layout">'+
+                        '<a href="#" class="title">' + layoutSvg + '<span>' + mBuilderValues.layoutText + '</span></a>'+
+                        '<div class="mBuilder_container"><div class="holder">'+
+                            '<span class="col" data-colSize="12/12">' + col1_1Svg + '</span><span class="separator"></span> '+
+                            '<span class="col" data-colSize="6/12+6/12">' + col1_2Svg + '</span><span class="separator"></span> '+
+                            '<span class="col" data-colSize="4/12+4/12+4/12">' + col1_3Svg + '</span><span class="separator"></span>'+
+                            '<span class="col" data-colSize="3/12+3/12+3/12+3/12">' + col1_4Svg + '</span><span class="separator"></span>'+
+                            '<span class="col" data-colSize="2/12+8/12+2/12">' + col2_4Svg + '</span><span class="separator"></span>'+
+                            '<span class="col" data-colSize="10/12+2/12">' + col3_4Svg + '</span><span class="separator"></span>'+
+                            '<span class="col" data-colSize = "3/12+9/12">' + col3_9Svg + '</span>'+
+                            '<hr>'+
+                            '<label>' + mBuilderValues.customColText + '</label><input placeholder="12/12" autocomplete="off" name="cols" value=""><span class="submit">&#8594;</span>'+
+                        '</div></div>'+
+                    '</div>'+
+                '</div>'+
+            '');
         }
+        var layoutValue='';
+        $this.find('>.wrap >.mBuilder-vc_column').each(function(){
 
-        if(!$this.hasClass('vc_inner')){
-            if (! $this.find('> .row_border ').length ){
-                $this.append('<div class="row_border top"></div><div class="row_border right"></div><div class="row_border left"></div>');
+            var row_str = $(this).attr("class");
+            var array_row_str = row_str.match(/col-sm-([0-9]+)/);
+
+            layoutValue += (array_row_str[1] + '/12+');
+
+        });
+
+        $this.find('> .mBuilder_row_controls input[name="cols"]').val(layoutValue.substr(0,layoutValue.length-1));
+
+        if (!$this.hasClass('vc_inner')) {
+            if (!$this.find('> .row_border ').length) {
+                $this.append('<div class="row_border top"></div><div class="row_border right"></div><div class="row_border left"></div><div class="row_border bottom"></div>');
             }
         }
     });
 
-    $('.mBuilder-vc_column,.mBuilder-vc_column_inner').each(function(){
-        var itemClass = ($(this).hasClass('mBuilder-vc_column'))?'element-vc_column':'element-vc_column_inner';
+    $('.mBuilder-vc_column,.mBuilder-vc_column_inner').each(function () {
+        var itemClass = ($(this).hasClass('mBuilder-vc_column')) ? 'element-vc_column' : 'element-vc_column_inner';
 
-        if(!$(this).find('> .vc_column_container > .element-vc_column').length) {
-            $(this).find(' > .vc_column_container').append('<div class=\"vc_element vc_active '+ itemClass +'\" >' +
-                '<a class="vc_control-btn vc_element-name vc_element-move vc_move-vc_column" title="Drag to move Column" target="_blank">' +
-                '<span class="vc_btn-content">Column</span>' +
-                '</a><span class="vc_advanced">' +
-                '<a class="vc_control-btn vc_control-btn-edit" href="#" title="Edit Column" target="_blank">' +
-                '<span class="vc_btn-content">' +
-                '<span class="icon"></span>' +
-                '</span></a>' +
-                '<a class="vc_control-btn vc_control-btn-prepend" href="#" title="Prepend to Column" target="_blank">' +
-                '<span class="vc_btn-content">' +
-                '<span class="icon"></span>' +
-                '</span></a>' +
-                '<a class="vc_control-btn vc_control-btn-delete" href="#" title="Delete Column" target="_blank">' +
-                '<span class="vc_btn-content">' +
-                '<span class="icon"></span>' +
-                '</span></a></span>' +
-                '<a class="vc_control-btn vc_control-btn-switcher" title="Show Column controls" target="_blank">' +
-                '<span class="vc_btn-content"><span class="icon"></span></span>' +
-                '</a>' +
+        if (!$(this).find('> .vc_column_container > .mbuilder-column-options').length) {
+            $(this).find(' > .vc_column_container').append('<div class=\"mbuilder-column-options ' + itemClass + '\" >' +
+                '<span class="mdb-menu"></span>' +
+                '<div class="extra-option">' +
+                '<span class="col-title">Column Setting</span>'+
+                '<a href="#" class="design" data-tabName = "Design">Design</a>' +
+                '<a href="#" class="spacing" data-tabName = "Spacing">Spacing</a>' +
+                '<a href="#" class="responsive" data-tabName = "Responsive">Responsive</a>' +
+                '</div>'+
+                '</a>'+
                 '</div>'
             );
         }
     });
 
-    for(var i in this.fullShortcodes){
-        $('.mBuilder-element[data-mbuilder-el="'+this.fullShortcodes[i]+'"]').find('.vc_control-btn-align').remove();
-        $('.mBuilder-element[data-mbuilder-el="'+this.fullShortcodes[i]+'"]').find('.vc_control-btn-edit').css('left',-99);
-        $('.mBuilder-element[data-mbuilder-el="'+this.fullShortcodes[i]+'"]').find('.vc_control-btn-clone').css('left',3);
-        $('.mBuilder-element[data-mbuilder-el="'+this.fullShortcodes[i]+'"]').find('.vc_control-btn-delete').css('left',105);
+    for (var i in this.fullShortcodes) {
+        $('.mBuilder-element[data-mbuilder-el="' + this.fullShortcodes[i] + '"]').find('.vc_control-btn-align').remove();
+        $('.mBuilder-element[data-mbuilder-el="' + this.fullShortcodes[i] + '"]').find('.vc_control-btn-edit').css('left', -99);
+        $('.mBuilder-element[data-mbuilder-el="' + this.fullShortcodes[i] + '"]').find('.vc_control-btn-clone').css('left', 3);
+        $('.mBuilder-element[data-mbuilder-el="' + this.fullShortcodes[i] + '"]').find('.vc_control-btn-delete').css('left', 105);
     }
 
-    try {
-        window.top.$('.shortcodes-panel').getNiceScroll().resize();
-    }catch(e){}
+
     this.createPlaceholders();
 };
 
@@ -688,61 +578,88 @@ mBuilder.prototype.renderControls = function(){
  * @since 1.0.0
  */
 
-mBuilder.prototype.addEvents = function(){
+mBuilder.prototype.addEvents = function () {
     var t = this,
         $bodyGizmoOff = $('body:not(.gizmo-off)'),
         $body = $('body');
 
-	// Inline Editor For Title
-
-    $bodyGizmoOff.on('mouseover' , '.inline-editor-title , .inline-editor' , function(e){
-        $(".content-container").enableSelection();
-        $('body:not(.gizmo-off) .ui-draggable').draggable("option", "disabled", true);
+    $('body').on('click','a[href="#"]',function(e){
+        e.preventDefault();
     });
 
-    $bodyGizmoOff.on('mouseleave' , '.inline-editor-title , .inline-editor' , function(e){
-        $(".content-container").disableSelection();
-        $('body:not(.gizmo-off) .ui-draggable').draggable("enable");
+    $('body').on( 'mouseenter' , '.vc_row:not(.vc_inner)' , function(){
+        var that = $(this) ;
+        if($(this).index() == 1){
+            setTimeout( function(){
+                var $row_controls = that.find('.mBuilder_row_controls') ,
+                    top_space  = parseInt( $row_controls.css('top') ) + $row_controls.height() ;
+                that.find('.mbuilder-column-options').css({
+                    top: top_space + 'px'
+                });
+            } , 10 );
+        }
     });
 
-    $(window).on('scroll' , function(){
-        $('.inline-editor-title , .inline-editor').trigger('blur');
+    $('body').on( 'mouseleave' , '.vc_row' , function(){
+        $('.mbuilder-column-options').first().css({
+            top: ''
+        });
     });
 
-    $body.on('click' , '.inline-editor-title' , function(e){
-		e.stopPropagation();
-		closeAll();
-		$(this).addClass('do-save');
-	});
-
-    $body.on('click','.add-title',function(){
-       var $this = $(this);
-        $this.closest('.no-title').removeClass('no-title');
-        $this.closest('.md-text').find('.without-title').removeClass('without-title');
+    $('.builder-save .save').click(function (e) {
+        e.preventDefault();
+        t.saveContent();
+    });
+    
+    $('.pixflow-shortcodes-panel').click(function(e){
+        e.stopPropagation();
     });
 
-    $body.on('click','.add-content',function(){
-        var $this = $(this);
-        $this.closest('.no-text').removeClass('no-text');
-        $this.closest('.md-text').find('.without-content').removeClass('without-content');
+    $('body').on('click' , '.meditor a' , function(e){
+        e.preventDefault();
     });
 
-    $(document).click(function(e){
+    $bodyGizmoOff.on('mousedown', '.meditor', function (e) {
+        e.stopPropagation();
+    });
+
+    $bodyGizmoOff.on('click', '.meditor', function (e) {
+        e.stopPropagation();
+     });
+
+    $bodyGizmoOff.on('mouseleave'  , '.pixflow-shortcodes-panel' , function(){
+        t.calc_time_out();
+    });
+    $bodyGizmoOff.on('mouseenter'  , '.pixflow-shortcodes-panel' , function(){
+        t.remove_time_out();
+    });
+
+    // Add hover mode for coulmn
+    $bodyGizmoOff.on('mouseenter', '.vc_row', function () {
+        t.createColumnSeparator($(this).attr('id'));
+
+    });
+    $bodyGizmoOff.on('mouseleave', '.vc_row', function () {
+        t.removeColumnSeparator();
+    });
+
+    $(document).click(function (e) {
         closeAll();
     });
 
-    function closeAll(notMe){
+    function closeAll(notMe) {
+        $('.mBuilder-element').removeClass('onTop');
         var $activeElems = $('.active-gizmo').not(notMe);
-        $activeElems.each(function(){
+        $activeElems.each(function () {
             var $this = $(this),
-                $innerRow = $this.closest('.mBuilder-vc_row_inner');
+                $innerRow = $this.closest('.mBuilder-vc_row_inner'),
+                $container = $this.find('>.mBuilder_container, .options-holder, > .extra-option');
 
             $this.removeClass('active-gizmo');
-
-            TweenMax.to($this.find('.options-holder'),.2,
+            TweenMax.to($this.find('.options-holder,.mBuilder_container'), .2,
                 {
-                    scale: .9, opacity: 0, delay:.4, onComplete: function () {
-                    TweenMax.set($this.find('>.mBuilder_container, .options-holder'), {height: 0, zIndex: -333});
+                    scale: .9, opacity: 0, delay: .4, onComplete: function () {
+                    TweenMax.set($container, {height: 0, zIndex: -333});
                 }
                 });
             $this.closest('div[class*=mBuilder-vc_column]').removeClass('upper_zIndex');
@@ -753,7 +670,7 @@ mBuilder.prototype.addEvents = function(){
 
             $this.find('>.mBuilder_container, .options-holder').removeClass('open');
 
-            if ($this.hasClass('mBuilder_row_layout')) {
+           if ($this.hasClass('mBuilder_row_layout')) {
                 $this.find('input').focus();
             }
 
@@ -763,45 +680,47 @@ mBuilder.prototype.addEvents = function(){
                 $innerRow.siblings('.mBuilder-element').removeClass('lower_inner_row_zIndex')
             }
 
-        })
+        });
     }
 
     // Row Layout
-    $body.on('click','.mBuilder-element .mBuilder_row_layout .col,.mBuilder-element .mBuilder_row_layout .submit',function(e){
+    $body.off('click.mbuilder', '.mBuilder-element .mBuilder_row_layout .col,.mBuilder-element .mBuilder_row_layout .submit');
+    $body.on('click.mbuilder', '.mBuilder-element .mBuilder_row_layout .col,.mBuilder-element .mBuilder_row_layout .submit', function (e) {
         e.stopPropagation();
         var row = $(this).closest('.vc_row'),
-            value =  $(this).attr('data-colSize');
-        if ($(this).hasClass('submit')){
-            value =  $(this).prev().val();
+            value = $(this).attr('data-colSize');
+        if ($(this).hasClass('submit')) {
+            value = $(this).prev().val();
         }
         $(this).closest('.mBuilder_row_layout').find('input[name="cols"]').val(value);
-        t.changeRowLayout(value,row);
+        t.changeRowLayout(value, row);
 
     });
 
-    //Column Setting
-    $body.on('click','.mBuilder-element .column-setting',function(){
-        var $btn = $(this).closest('.wpb_column').find('.vc_control-btn-edit'),
-            i = 0;
-        if($btn.length>1){
-            i = $btn.length-1;
-        }
-        $btn.eq(i).click();
-    });
 
     // Edit Element
-    $body.on('click','.mBuilder-element .vc_control-btn-edit,.mBuilder-element .mBuilder_row_setting,.mBuilder-element .sc-setting',function(e){
+    $body.off('click.mbuilder', '.mBuilder-element .extra-option > a,.mBuilder-element .mBuilder_row_setting,.mBuilder-element .sc-setting ,.mBuilder-element .animation');
+    $body.on('click.mbuilder', '.mBuilder-element .extra-option > a,.mBuilder-element .mBuilder_row_setting,.mBuilder-element .sc-setting ,.mBuilder-element .animation', function (e) {
         e.stopPropagation();
         var params = t.getModelParams($(this).closest('.mBuilder-element').attr('data-mBuilder-id')),
-            el_id = $(this).closest('.mBuilder-element').attr('data-mBuilder-id');
-
-        if(params==null){
+            el_id = $(this).closest('.mBuilder-element').attr('data-mBuilder-id'),
+            that = this;
+        if (params == null) {
             params = [];
             params['attr'] = '';
             params['content'] = '';
             params['type'] = $(this).closest('.mBuilder-element').attr('data-mbuilder-el');
         }
-        t.mBuilder_shortcodeSetting(t.shortcodes[params['type']].name + ' Settings','','<div class="mbuilder-spinner"></div>','Update',function(){},'Close',function(){});
+        t.active_setting_panel_model_id = el_id;
+        if(params['type'] == 'md_live_text'){
+            t.update_meditor_shortcode_model(el_id);
+        }
+        t.mBuilder_shortcodeSetting(t.shortcodes[params['type']].name + ' Settings', '', '<div class="mbuilder-spinner"></div>', 'Update', function () {
+        }, 'Close', function () {
+        });
+        if('vc_row_inner' == params['type']){
+            t.update_meditor_models();
+        }
         $.ajax({
             type: 'post',
             url: mBuilderValues.ajax_url,
@@ -809,46 +728,50 @@ mBuilder.prototype.addEvents = function(){
                 action: 'mBuilder_settingPanel',
                 nonce: mBuilderValues.ajax_nonce,
                 attr: params['attr'],
-                content : params['content'],
+                content: params['content'],
                 type: params['type'],
                 mbuilder_editor: true
             },
             success: function (response) {
-                t.mBuilder_shortcodeSetting(t.shortcodes[params['type']].name + ' Settings','dont-show',response,'Update',function(){
-                        if(params['type'] == 'vc_column' || params['type'] == 'vc_column_inner'){
+                t.htmlSource = response ;
+                t.mBuilder_shortcodeSetting(t.shortcodes[params['type']].name + ' Settings', 'dont-show', '<div class="mbuilder-spinner"></div><div class="waitforload" style="display: none" >' + response + '</div>' , 'Update', function () {
+                        if (params['type'] == 'vc_column' || params['type'] == 'vc_column_inner') {
                             var css = '{';
-                            $('#mBuilder-form #mBuilderDesignOptions .column-design-css input').each(function(){
-                                if($(this).closest('.column-design-css').hasClass('column-design-prefix-px')){
+                            $('#mBuilder-form #mBuilderSpacing .column-design-css input,#mBuilder-form #mBuilderDesign .column-design-css input,' +
+                                '#mBuilder-form #mBuilderSpacing .column-design-css select,#mBuilder-form #mBuilderDesign .column-design-css select ').each(function () {
+                                if ($(this).closest('.column-design-css').hasClass('column-design-prefix-px')) {
                                     var prefix = 'px';
-                                }else{
+                                } else {
                                     var prefix = '';
                                 }
-                                if($(this).parent().hasClass('mBuilder-upload-img')){
-                                    if($(this).val() != '' && $(this).val() != 'undefined'){
+                                if ($(this).parent().hasClass('mBuilder-upload-img')) {
+                                    if ($(this).val() != '' && $(this).val() != 'undefined') {
                                         var val = $(this).parent().css('background-image');
+                                    }else{
+                                        return;
                                     }
-                                }else{
+                                } else {
                                     var val = $(this).val()
                                 }
-                                css += $(this).attr('name').replace(/_/g,'-')+':'+val+prefix+';';
+                                css += $(this).attr('name').replace(/_/g, '-') + ':' + val + prefix + ';';
                             });
-                            $('#mBuilder-form #mBuilderDesignOptions .column-design-css select').each(function(){
-                                css += $(this).attr('name').replace(/_/g,'-')+':'+$(this).val()+';';
+                            $('#mBuilder-form #mBuilderDesignOptions .column-design-css select').each(function () {
+                                css += $(this).attr('name').replace(/_/g, '-') + ':' + $(this).val() + ';';
                             });
-                            css +='}';
-                            css = css.replace(/["]/g,'``');
+                            css += '}';
+                            css = css.replace(/["]/g, '``');
                             var cssInput = $('<input type="hidden" name="css">');
-                            cssInput.val(css).appendTo($('#mBuilder-form #mBuilderDesignOptions'));
+                            cssInput.val(css).appendTo($('#mBuilder-form #mBuilderSpacing'));
                         }
-                        $.fn.serializeObject = function()
-                        {
+
+                        $.fn.serializeObject = function () {
                             var o = {};
                             var a = this.serializeArray();
-                            $.each(a, function() {
-                                if(this.value == '' && !$('input[name="'+this.name+'"]').hasClass('simple-textbox') && $('[name="'+this.name+'"]').prop('tagName') != 'TEXTAREA'){
+                            $.each(a, function () {
+                                if ($('input[name="' + this.name + '"], textarea[name="' + this.name + '"]').hasClass('mbuilder-skip') || this.value == '' && !$('input[name="' + this.name + '"]').hasClass('simple-textbox') && $('[name="' + this.name + '"]').prop('tagName') != 'TEXTAREA') {
                                     return true;
                                 }
-                                if(this.value == 'Array'){
+                                if (this.value == 'Array') {
                                     this.value = '';
                                 }
                                 if (o[this.name] !== undefined) {
@@ -859,50 +782,66 @@ mBuilder.prototype.addEvents = function(){
                                 } else {
                                     o[this.name] = this.value || '';
                                 }
+                                if($('input[name="'+this.name+'"]').hasClass('md-base64')){
+                                    o[this.name] = 'pixflow_base64'+t.b64EncodeUnicode(o[this.name]);
+                                }
+                                if($('textarea[name="'+this.name+'"]').hasClass('textarea_raw_html')){
+                                    o[this.name] = t.b64EncodeUnicode(o[this.name]);
+                                }
                             });
                             return o;
                         };
                         var formData = $('#mBuilder-form').serializeObject();
                         var regex = /align="(.*?)"/;
-                        if(t.models.models[el_id].attr) {
+                        if (t.models.models[el_id].attr) {
                             var res = t.models.models[el_id].attr.match(regex);
-                        }else{
+                        } else {
                             var res = null;
                         }
-                        if(res != null){
+                        if (res != null) {
                             formData.align = res[1];
                         }
                         var isTab = false;
-                        if(t.tabs[params['type']] || params['type']=='vc_row_inner') isTab = true;
+                        if (t.tabs[params['type']] || params['type'] == 'vc_row_inner') isTab = true;
 
-                        t.updateShortcode(el_id,params['type'],formData,undefined,isTab);
-						cssInput && cssInput.remove();
-						//t.check_time();
+                        if (params['type'] == 'vc_column' || params['type'] == 'vc_column_inner') {
+                            if (params['attr'] && params['attr'] != '' && params['attr'].match(/^(width=['"].*?['"])|.*? width=['"].*?['"]/g)) {
+                                formData.width = params['attr'].match(/^(width=['"].*?['"])| width=['"].*?['"]/g);
+                                formData.width = formData.width[formData.width.length - 1].replace(/(width=)|(['"])|(undefined)|( )/g, '');
+                            }
+                        }
+                        t.updateShortcode(el_id, params['type'], formData, undefined, isTab);
+                        cssInput && cssInput.remove();
                     },
-                    'Close',function(){
+                    'Close', function () {
                         $('.setting-panel-close').click();
+                        t.active_setting_panel_model_id = '';
                     }
                 );
                 var isLocal = $.ui.tabs.prototype._isLocal;
-                $.ui.tabs.prototype._isLocal = function ( anchor ) {
+                $.ui.tabs.prototype._isLocal = function (anchor) {
                     return true;
                 };
                 $('#mBuilderTabs').tabs();
                 $('.setting-panel-wrapper .setting-panel-container').removeClass('dont-show');
-                setTimeout(function(){t.dependencyInjection();},1);
-
+                setTimeout(function () {
+                    t.dependencyInjection();
+                }, 1);
+                var name = $(that).attr('data-tabName');
+                $('.waitforload').find('a[href="#mBuilder'+name+'"]').click();
             }
         });
     });
 
     // Delete Element
-    $body.on('click','.mBuilder-element .mBuilder_row_delete,.mBuilder-element .sc-delete',function(e){
+    $body.off('click.mbuilder', '.mBuilder-element .mBuilder_row_delete,.mBuilder-element .sc-delete');
+    $body.on('click.mbuilder', '.mBuilder-element .mBuilder_row_delete,.mBuilder-element .sc-delete', function (e) {
         var el_id = $(this).closest('.mBuilder-element').attr('data-mBuilder-id');
         $(this).parents('.mBuilder_controls').addClass('active-gizmo');
         e.stopPropagation();
 
         var $elem = $('div[data-mbuilder-id=' + el_id + ']');
-        if ($elem.hasClass('mBuilder-md_button')||$elem.hasClass('mBuilder-vc_empty_space')){
+        if ($elem.hasClass('mBuilder-md_button')) {
             deleteFunc(el_id);
         } else if (!$(this).closest('.mBuilder_controls').find('.deleteMessage').length) {
 
@@ -911,7 +850,6 @@ mBuilder.prototype.addEvents = function(){
                 $optionsHolder = $(this).closest('.mBuilder_container, .options-holder');
 
             var deleteBox = '<div class="deleteMessage"><p>' + mBuilderValues.deleteDescText + '</p><a class="deleteBtn">' + mBuilderValues.deleteText + '</a></div>';
-
             TweenMax.to($optionsHolder, .2, {
                 scale: .9, opacity: 0, onComplete: function () {
                     TweenMax.set($optionsHolder, {height: 0, zIndex: -333});
@@ -925,31 +863,30 @@ mBuilder.prototype.addEvents = function(){
                         $deleteBtn = $deleteMsgBox.find('.deleteBtn');
 
 
-
                     //deletBox Animation
                     // for tab
                     if ($elem.hasClass('mBuilder-md_tab') || $elem.hasClass('mBuilder-md_modernTab')) {
 
                         var left = parseInt($elem.find(' > .mBuilder_controls.tab ').css('left'));
-                        left += 44 ;
-                        $elem.find(' > .deleteMessage').css({'left':left})
+                        left += 44;
+                        $elem.find(' > .deleteMessage').css({'left': left})
 
-                    }else if ($elem.hasClass('mBuilder-md_hor_tab') || $elem.hasClass('mBuilder-md_hor_tab2')){
+                    } else if ($elem.hasClass('mBuilder-md_hor_tab') || $elem.hasClass('mBuilder-md_hor_tab2')) {
                         var top = parseInt($elem.find(' > .mBuilder_controls.tab ').css('top'));
-                        top += 44 ;
-                        $elem.find(' > .deleteMessage').css({'top':top})
-                    }else if ($elem.hasClass('vc_row') ){
-                        if ( $('body .vc_row').first().attr('id') == $elem.attr('id') ){
-                            top='40%';
-                            $elem.find(' > .deleteMessage').css({'top':top})
-                         }
+                        top += 44;
+                        $elem.find(' > .deleteMessage').css({'top': top})
+                    } else if ($elem.hasClass('vc_row')) {
+                        if ($('body .vc_row').first().attr('id') == $elem.attr('id')) {
+                            top = '40%';
+                            $elem.find(' > .deleteMessage').css({'top': top})
+                        }
                     }
 
                     TweenMax.to($deleteMsgBox, .2, {opacity: 1, bottom: '30px'});
 
-                    if ($parent.hasClass('sc-control')){
+                    if ($parent.hasClass('sc-control')) {
                         $parent.addClass('deleteEffect')
-                    }else{
+                    } else {
                         $parent.siblings('.wrap,.sc-control').addClass('deleteEffect')
                     }
 
@@ -957,7 +894,7 @@ mBuilder.prototype.addEvents = function(){
                         deleteFunc(el_id);
                     })
 
-                    $(document).click(function(e){
+                    $(document).click(function (e) {
                         e.stopPropagation();
                         TweenMax.to($deleteMsgBox, .3, {
                             opacity: 0, bottom: '20px', onComplete: function () {
@@ -966,9 +903,9 @@ mBuilder.prototype.addEvents = function(){
                         });
                         $deleteMsgBox.parents('.mBuilder_controls').removeClass('active-gizmo');
 
-                        if ($parent.hasClass('sc-control')){
+                        if ($parent.hasClass('sc-control')) {
                             $parent.removeClass('deleteEffect')
-                        }else{
+                        } else {
                             $deleteMsgBox.siblings('.wrap').removeClass('deleteEffect');
 
                         }
@@ -981,7 +918,7 @@ mBuilder.prototype.addEvents = function(){
 
         }
 
-        function deleteFunc(el_id){
+        function deleteFunc(el_id) {
             t.deleteModel(el_id);
 
             var p = $('div[data-mbuilder-id=' + el_id + ']').parent().closest('.mBuilder-element');
@@ -992,61 +929,68 @@ mBuilder.prototype.addEvents = function(){
                 || $elem.hasClass('mBuilder-md_hor_tab') || $elem.hasClass('mBuilder-md_hor_tab2')) {
                 var id = $elem.children('.wpb_tab ').attr('id');
                 $('a[href="#' + id + '"]').parent().remove();
-                $(window).resize();
-
             }
 
             $('div[data-mbuilder-id=' + el_id + ']').remove();
-            if (p.attr('data-mbuilder-el') == 'vc_column') {
+            if (p.attr('data-mbuilder-el') == 'vc_column' || p.attr('data-mbuilder-el') == 'vc_column_inner') {
                 if (!p.find('.mBuilder-element').length) {
                     p.find('.wpb_column').addClass('vc_empty-element');
                 }
             }
 
             t.createPlaceholders();
+
+
+                $('body').css('height',$('body').css('height'));
+                $('body').css('height','auto');
+
         }
     });
 
     // Copy Element
-    $body.on('click','.mBuilder_row_duplicate,.mBuilder-element .sc-duplicate,.tab .sc-duplicate',function(e){
+    $body.off('click.mbuilder', '.mBuilder_row_duplicate,.mBuilder-element .sc-duplicate,.tab .sc-duplicate');
+    $body.on('click.mbuilder', '.mBuilder_row_duplicate,.mBuilder-element .sc-duplicate,.tab .sc-duplicate', function (e) {
         e.stopPropagation();
-
-        TweenMax.set($(this).closest('.options-holder'), {height: 0, zIndex: -333,scale: .9, opacity: 0});
+        TweenMax.set($(this).closest('.options-holder'), {height: 0, zIndex: -333, scale: .9, opacity: 0});
         closeAll();
 
         var t = builder;
         var el = $(this).closest('.mBuilder-element'),
             el_id = el.attr('data-mBuilder-id');
         do {
-            var newID = Math.floor(100+(Math.random() * 300) + 1);
+            var newID = Math.floor(100 + (Math.random() * 300) + 1);
         }
         while (t.models.models.hasOwnProperty(newID));
         t.models.models[newID] = JSON.parse(JSON.stringify(t.models.models[el_id]));
-        var $container = $('div[data-mbuilder-id='+el_id+']'),
+        var $container = $('div[data-mbuilder-id=' + el_id + ']'),
             $containerPlaceholder = $container.next('.insert-between-placeholder,.insert-after-row-placeholder'),
-            $newContainer = $container.clone().attr('data-mbuilder-id',newID),
+            $newContainer = $container.clone().attr('data-mbuilder-id', newID),
             $newContainerPlaceholder = $containerPlaceholder.clone();
         $containerPlaceholder.after($newContainer);
         $newContainer.after($newContainerPlaceholder);
-        if($(this).hasClass('mBuilder_row_duplicate')){
-            var el = $('div[data-mBuilder-id='+newID+']');
-            el.find('.mBuilder-element').each(function(){
+        if ($(this).hasClass('mBuilder_row_duplicate')) {
+            var el = $('div[data-mBuilder-id=' + newID + ']');
+            el.find('.mBuilder-element').each(function () {
                 var child_id = $(this).attr('data-mBuilder-id');
                 do {
-                    var newID = Math.floor(100+(Math.random() * 300) + 1);
+                    var newID = Math.floor(100 + (Math.random() * 300) + 1);
                 }
                 while (t.models.models.hasOwnProperty(newID));
                 t.models.models[newID] = JSON.parse(JSON.stringify(t.models.models[child_id]));
-                $(this).attr('data-mBuilder-id',newID);
+                $(this).attr('data-mBuilder-id', newID);
             });
         }
         t.renderControls();
         t.setSortable();
-
+        var $newElm = $('div[data-mbuilder-id=' + newID + ']');
+        if($newElm.find('.meditor').length){
+            t.bind_text_editor($newElm.find('.meditor'));
+        }
     });
 
     // Element Alignments
-    $body.on('click','.mBuilder-element .sc-alignment span',function(e){
+    $body.off('click.mbuilder', '.mBuilder-element .sc-alignment span');
+    $body.on('click.mbuilder', '.mBuilder-element .sc-alignment span', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -1054,26 +998,26 @@ mBuilder.prototype.addEvents = function(){
         var id = element.attr('data-mbuilder-id');
 
         var regex = /(align=".*?")/g;
-        t.models.models[id].attr = t.models.models[id].attr.replace(regex,'');
-        if($(this).hasClass('left')){
+        t.models.models[id].attr = t.models.models[id].attr.replace(regex, '');
+        if ($(this).hasClass('left') || $(this).hasClass('mdb-leftalignsvg')) {
             e.preventDefault();
-            t.models.models[id].attr += ' align="left"' ;
+            t.models.models[id].attr += ' align="left"';
             element.find('[class *= "md-align-"]')
                 .removeClass('md-align-right')
                 .removeClass('md-align-center')
                 .addClass('md-align-left')
         }
-        if($(this).hasClass('center')){
+        if ($(this).hasClass('center') || $(this).hasClass('mdb-centeralignsvg')) {
             e.preventDefault();
-            t.models.models[id].attr += ' align="center"' ;
+            t.models.models[id].attr += ' align="center"';
             element.find('[class *= "md-align-"]')
                 .removeClass('md-align-right')
                 .removeClass('md-align-left')
                 .addClass('md-align-center')
         }
-        if($(this).hasClass('right')){
+        if ($(this).hasClass('right') || $(this).hasClass('mdb-rightalignsvg')) {
             e.preventDefault();
-            t.models.models[id].attr += ' align="right"' ;
+            t.models.models[id].attr += ' align="right"';
             element.find('[class *= "md-align-"]')
                 .removeClass('md-align-center')
                 .removeClass('md-align-left')
@@ -1083,94 +1027,204 @@ mBuilder.prototype.addEvents = function(){
 
     // Hover on delete shortcode button
     $body.on({
-        mouseenter:function(){
+        mouseenter: function () {
             $(this).closest('.mBuilder_controls').addClass('delete_hover');
         },
-        mouseleave:function(){
+        mouseleave: function () {
             $(this).closest('.mBuilder_controls').removeClass('delete_hover');
-        }},'.mBuilder-element .sc-delete');
+        }
+    }, '.mBuilder-element .sc-delete');
 
     // open and close setting drop down menu
-    $body.on('click','.mBuilder_row_controls .mBuilder_setting_panel,.mBuilder_row_layout,.sc-option',function(e){
+    $body.off('click.mbuilder', '.mBuilder_row_controls .mBuilder_setting_panel,.mBuilder_row_layout,.mbuilder-column-options,.sc-option');
+    $body.on('click.mbuilder', '.mBuilder_row_controls .mBuilder_setting_panel,.mBuilder_row_layout,.mbuilder-column-options,.sc-option', function (e) {
         e.stopPropagation();
         var $this = $(this),
-            $innerRow = $this.closest('.mBuilder-vc_row_inner');
-
-        if (!$this.find('>.mBuilder_container, > .options-holder').hasClass('open') ){
+            $innerRow = $this.closest('.mBuilder-vc_row_inner'),
+            $container = $this.find('>.mBuilder_container, > .options-holder, > .extra-option'),
+            $active_gizmo = $this.closest('.active-gizmo');
+        if ( $active_gizmo.length < 1 ) {
             closeAll(this);
-
-            if ($this.closest('.gizmo-container').length){
+            if ($this.closest('.gizmo-container').length) {
                 $this.closest('.gizmo-container').addClass('active-gizmo');
-
-            }else if ($this.hasClass('sc-option')){
+            } else if ($this.hasClass('sc-option')) {
                 $this.closest('.mBuilder_controls').addClass('active-gizmo');
             }
 
-            TweenMax.set($this.find('>.mBuilder_container, > .options-holder'), {height:'auto',zIndex:333});
-            TweenMax.to($this.find('>.mBuilder_container, > .options-holder'),.2,
-                {scale:1,opacity:1});
+            $this.closest('.mBuilder-element').addClass('onTop');
+
+            TweenMax.set($container, {scale: .9,height: 'auto', zIndex: 333});
+            TweenMax.to($container, .2,
+                {scale: 1, opacity: 1});
 
             $this.closest('div[class*=mBuilder-vc_column]').addClass('upper_zIndex');
 
-            if ($this.hasClass('mBuilder_setting_panel')||$this.hasClass('mBuilder_row_layout')) {
+            if ($this.hasClass('mBuilder_setting_panel') || $this.hasClass('mBuilder_row_layout')) {
                 $this.closest('div[class*=vc_row]').addClass('upper_zIndex');
+                $this.closest('.mBuilder_setting_panel,.mBuilder_row_layout').addClass('active-gizmo');
             }
 
-            $this.find('>.mBuilder_container, > .options-holder').addClass('open');
+            $this.find('>.mBuilder_container, .options-holder').removeClass('open');
 
             /* inner Row */
-            if ($innerRow.length){
+            if ($innerRow.length) {
                 $innerRow.addClass('upper_inner_row_zIndex');
                 $innerRow.parents('.vc_row').addClass('upper_inner_row_zIndex');
                 $innerRow.siblings('.mBuilder-element').addClass('lower_inner_row_zIndex')
             }
 
-        }else{
+        } else {
+
             closeAll();
         }
 
-        if($this.hasClass('mBuilder_row_layout')){
+        if ($this.hasClass('mBuilder_row_layout')) {
             $this.find('input').focus();
         }
+
+        // set sc-option position for first row
+        var $thisScOptionPositionY = parseInt(e.clientY) - 100;
+        var $thisScOptionOpen = parseInt($("div.options-holder.open").height());
+
+        if ($thisScOptionPositionY <= $thisScOptionOpen) {
+            $(".vc_row .sc-option .options-holder").css({'top': '48px', 'z-index': '99999999'});
+        }
+        else {
+            $(".vc_row .sc-option .options-holder").css({'top': ($thisScOptionOpen * (-1)) - 7, 'z-index': '99999999'});
+        }
+        // END set sc-option position for first row
 
     });
+    $body.off('click.mbuilder', '.mBuilder_row_layout input');
+    $body.on('click.mbuilder', '.mBuilder_row_layout input', function (e) {
+        e.stopPropagation();
+    });
+    var time = [];
 
-    $body.on('mouseleave','.mBuilder_row_controls .mBuilder_setting_panel,.mBuilder_row_layout',function(e){
+     $body.on('mouseenter', '.mBuilder_row_controls .mBuilder_setting_panel,.mBuilder_row_layout, .mbuilder-column-options ', function (e) {
+        e.stopPropagation();
+         clearTimeout(time[$(this)]);
+     });
+
+
+    $body.on('mouseleave', '.mBuilder_row_controls .mBuilder_setting_panel,.mBuilder_row_layout, .mbuilder-column-options', function (e) {
+        e.stopPropagation();
         var $this = $(this),
-            $innerRow = $(this).closest('.mBuilder-vc_row_inner');
+            $innerRow = $this.closest('.mBuilder-vc_row_inner'),
+            $container =$this.find('>.mBuilder_container, > .options-holder, > .extra-option') ;
+        clearTimeout(time[$this]);
+        time[$this] = setTimeout(function () {
+            TweenMax.to($container, .3,
+                {
+                    scale: .9, opacity: 0, delay: .2, onComplete: function () {
+                    TweenMax.set($container, {height: 0, zIndex: -333});
+                }
+                });
+            $this.closest('div[class*=mBuilder-vc_column]').removeClass('upper_zIndex');
 
-        TweenMax.to($this.find('>.mBuilder_container, > .options-holder'),.2,
-            {scale:.9,opacity:0,delay:.4,onComplete:function(){
-                TweenMax.set($this.find('>.mBuilder_container, > .options-holder'), {height:0,zIndex:-333});
-            }});
-        $this.closest('div[class*=mBuilder-vc_column]').removeClass('upper_zIndex');
+            if ($this.hasClass('mBuilder_setting_panel') || $this.hasClass('mBuilder_row_layout')) {
+                $this.closest('div[class*=vc_row]').removeClass('upper_zIndex');
+            }
 
-        if ($this.hasClass('mBuilder_setting_panel')||$this.hasClass('mBuilder_row_layout')){
-            $this.closest('div[class*=vc_row]').removeClass('upper_zIndex');
-        }
+            $container.removeClass('open');
 
-        $this.find('>.mBuilder_container, > .options-holder').removeClass('open');
+            if ($innerRow.length) {
+                $innerRow.removeClass('upper_inner_row_zIndex');
+                $innerRow.parents('.vc_row').removeClass('upper_inner_row_zIndex');
+                $innerRow.siblings('.mBuilder-element').removeClass('lower_inner_row_zIndex')
+            }
 
-        if($this.hasClass('mBuilder_row_layout')){
-            $this.find('input').focus();
-        }
+            toggle = -1;
+            closeAll($this);
+        }, 500);
 
-        if ($innerRow.length){
-            $innerRow.removeClass('upper_inner_row_zIndex');
-            $innerRow.parents('.vc_row').removeClass('upper_inner_row_zIndex');
-            $innerRow.siblings('.mBuilder-element').removeClass('lower_inner_row_zIndex')
-        }
-
-        toggle = -1;
     });
 
     // open shortcode setting panel on double click
-    $body.on('dblclick','.sc-control',function(){
+    $body.on('dblclick', '.sc-control', function () {
         $(this).find('.sc-setting').click();
 
     });
+
+};
+
+mBuilder.prototype.bind_text_editor = function(new_el){
+    var content_defaults = {
+            text: 'Default Content',
+        },
+        content_controllers = 'content',
+        content_selector = (new_el) ? new_el : '.inline-md-editor' ,
+        that = this ;
+    this.set_editable(content_defaults,content_controllers,content_selector);
+    $('body').off('update_shortcode.bind_text_editor');
+    $('body').on('update_shortcode.bind_text_editor' , function(){
+        that.bind_text_editor();
+    });
 }
 
+mBuilder.prototype.update_meditor_models = function(){
+    var t = this;
+    $('.mBuilder-md_live_text').each(function(){
+        var model_id = $(this).attr('data-mbuilder-id');
+        t.update_meditor_shortcode_model(model_id);
+    });
+}
+
+mBuilder.prototype.set_editable = function(defaults,controllers,selector){
+    var editable_model = Backbone.Model.extend({
+        defaults: 'default'
+
+    });
+    var editable_view = Backbone.View.extend({
+        initialize: function() {
+            this.$el.attr('data-button-class',controllers);
+            meditor.editable_init(selector);
+        },
+        events: {
+            'click': 'editable_click'
+        },
+
+        editable_click: function(e){
+            if($('body').hasClass('gizmo-off')) return ;
+            var $el = $(e.target).closest('.meditor');
+            if($el.attr('id') == 'meditor_focus'){
+                return ;
+            }
+            $('.meditor').attr({
+                'contenteditable':'false' ,
+                'id': '' ,
+            }).addClass('unselectable');
+            $el.parents('.mBuilder-element').not('.vc_row, .mBuilder-vc_column').draggable({disabled:true});
+            $el.attr({
+                'contenteditable': true ,
+                'id': 'meditor_focus' ,
+            }).removeClass('unselectable').get(0).focus();
+            $('.meditor-panel').css({
+                display: 'flex'
+            });
+            $el.closest('.mBuilder-md_live_text').addClass('active-md-editor');
+
+        }
+    });
+
+    var $editables = $(selector);
+    if( typeof $editables[0] !== 'undefined' ){
+        var model = new editable_model();
+        var view = new editable_view({model: model, el: $editables, tagName: $editables[0].tagName});
+    }
+}
+
+mBuilder.prototype.update_meditor_shortcode_model = function( model_id ){
+    var t = this,
+        $model = $("[data-mbuilder-id="+model_id+"]"),
+        $shortcode = $model.find('.inline-md-editor');
+        var $new_content = $shortcode.html();
+        var line_height = $shortcode.attr('data-lineheight') ,
+            letter_spacing = $shortcode.attr('data-letterspace');
+        t.setModelattr(model_id , 'meditor_line_height' , line_height);
+        t.setModelattr(model_id , 'meditor_letter_spacing' , letter_spacing);
+        t.models.models[model_id].content = t.b64EncodeUnicode($new_content);
+}
 
 /**
  * @summary creates placeholders and droppable areas.
@@ -1178,51 +1232,41 @@ mBuilder.prototype.addEvents = function(){
  * @since 1.0.0
  */
 
-mBuilder.prototype.createPlaceholders = function() {
+mBuilder.prototype.createPlaceholders = function () {
     $('.insert-between-placeholder').remove();
     $('.insert-after-row-placeholder').remove();
     var containers = '';
-    for (i in this.shortcodes){
-        if(this.shortcodes[i].as_parent && this.shortcodes[i].as_parent.only)
-            containers += "[data-mbuilder-el='"+this.shortcodes[i].as_parent.only+"'],";
+    for (i in this.shortcodes) {
+        if (this.shortcodes[i].as_parent && this.shortcodes[i].as_parent.only)
+            containers += "[data-mbuilder-el='" + this.shortcodes[i].as_parent.only + "'],";
     }
-    containers = containers.slice(0,-1);
-    $('<div/>').addClass('insert-between-placeholder').insertAfter($('.mBuilder-element').not('.vc_row').not(containers));
-    $('.mBuilder-vc_column').each(function(){
-        $('<div/>').addClass('insert-between-placeholder').insertBefore($(this).find('.wpb_wrapper:first-of-type .mBuilder-element:first-of-type').not(containers));
+    containers = containers.slice(0, -1);
+    $('<div/>').addClass('insert-between-placeholder').insertAfter($('.mBuilder-element').not('.vc_row,.mBuilder-vc_column, .mBuilder-vc_column_inner').not(containers));
+    $('.mBuilder-vc_column, .mBuilder-vc_column_inner').each(function () {
+        $('<div/>').addClass('insert-between-placeholder').insertBefore($(this).find('.wpb_wrapper:first .mBuilder-element:first-of-type').not('.mBuilder-vc_column_inner').not(containers));
     });
 
-    $('.insert-between-placeholder').each(function(){
-        $(this).attr('data-index',$('div').index(this));
+    $('.insert-between-placeholder').each(function () {
+        $(this).attr('data-index', $('div').index(this));
     });
 
     var rows = $('.vc_row').not('.vc_inner');
     $('<div/>').addClass('insert-after-row-placeholder').insertAfter(rows);
     $('<div/>').addClass('insert-after-row-placeholder').prependTo('.content-container');
 
-    if(!$('.mBuilder-element').length){
+    if (!
+            $('.mBuilder-element').length) {
         var content = $('<div><p>This page is empty. Drag a shortcode here.</p></div>'),
             btn = $('<span id="p-btn-addshortcode">Add Shortcode</span>');
         $('.insert-after-row-placeholder').html(content);
         content.append(btn);
-        btn.click(function(){
-
-            if (pixflow_customizerObj().$('.shortcodes-panel').css('display') != 'block' && pixflow_customizerObj().$('.shortcodes-panel').css('opacity') == 1) {
-                pixflow_customizerObj().$('.shortcodes-panel-button').click();
-            }
-
-            if (pixflow_customizerObj().$('div.shortcodes-panel').css('display') != 'block') {
-                pixflow_customizerObj().$('.shortcodes-panel-button').click();
-            }else{
-                pixflow_customizerObj().$('div.shortcodes-panel').css({'background-color':'#f77705'});
-                pixflow_customizerObj().$('div.shortcodes-panel').stop().animate({'background-color':'#f1f1f1'},1000);
-
-            }
-
+        btn.click(function (e) {
+            e.stopPropagation();
+            $('.pixflow-add-element-button').click();
         });
 
         $('.insert-after-row-placeholder').first().addClass('blank-page');
-    }else{
+    } else {
         $('.insert-after-row-placeholder').first().removeClass('blank-page').off('click');
     }
 
@@ -1237,26 +1281,25 @@ mBuilder.prototype.createPlaceholders = function() {
  * @since 1.0.0
  */
 
-mBuilder.prototype.deleteModel = function(id) {
-
-    pixflow_footerPosition();
-
+mBuilder.prototype.deleteModel = function (id) {
     var t = this;
-    for(var index in t.models.models) {
-        var $el = $('div[data-mBuilder-id='+index+']'),
+    for (var index in t.models.models) {
+        var $el = $('div[data-mBuilder-id=' + index + ']'),
             $parent = $el.parent().closest('.mBuilder-element');
-        if($parent.length){
+        if ($parent.length) {
             var parentId = $parent.attr('data-mBuilder-id');
             t.models.models[index].parentId = parentId;
         }
     }
     delete t.models.models[id];
-    $.each(t.models.models, function(index, value) {
-        if(value['parentId'] == id ){
-            t.deleteModel(index);
+    for(var element_num in t.models.models ) {
+        var elements = t.models.models[element_num] ;
+        if (elements['parentId'] == id) {
+            t.deleteModel(element_num);
         }
-    });
+    }
     $('body').addClass('changed');
+
 };
 
 
@@ -1268,9 +1311,12 @@ mBuilder.prototype.deleteModel = function(id) {
  * @since 1.0.0
  */
 
-mBuilder.prototype.changeRowLayout = function(exp,row) {
+mBuilder.prototype.changeRowLayout = function (exp, row) {
     var t = this;
-    if(exp.match(/([0-9]+)\/12/g)) {
+    if(t.lock) {
+        return;
+    }
+    if (exp.match(/([0-9]+)\/12/g)) {
         var columns = exp.match(/([0-9]+)\/12/g);
         var sum = 0;
         for (i in columns) {
@@ -1280,7 +1326,7 @@ mBuilder.prototype.changeRowLayout = function(exp,row) {
         if (sum > 12) {
             alert('Sum of all columns is greater than 12 columns.');
             return;
-        }else if(sum < 12){
+        } else if (sum < 12) {
             alert('Sum of all columns is less than 12 columns.');
             return;
         }
@@ -1289,20 +1335,27 @@ mBuilder.prototype.changeRowLayout = function(exp,row) {
             .siblings('[data-mbuilder-el="vc_column"],[data-mbuilder-el="vc_column_inner"]').addBack().each(function () {
             if (columns[i]) {
                 var size = columns[i].replace('/12', '');
-                $(this).find('> .vc_column_container').removeClass (function (index, css) {
-                    return (css.match (/(^|\s)col-sm-[0-9]+/g) || []).join(' ');
+                $(this).find('> .vc_column_container').removeClass(function (index, css) {
+                    return (css.match(/(^|\s)col-sm-[0-9]+/g) || []).join(' ');
                 }).addClass('col-sm-' + size);
-                if(t.models.models[$(this).attr('data-mbuilder-id')].attr && t.models.models[$(this).attr('data-mbuilder-id')].attr !='') {
-                    t.models.models[$(this).attr('data-mbuilder-id')].attr = t.models.models[$(this).attr('data-mbuilder-id')].attr.replace(/width=["'].*?["']/g, 'width="' + columns[i] + '"');
-                }else{
-                    t.models.models[$(this).attr('data-mbuilder-id')].attr = ' width="' + columns[i] + '"';
+                $(this).removeClass(function (index, css) {
+                    return (css.match(/(^|\s)col-sm-[0-9]+/g) || []).join(' ');
+                }).addClass('col-sm-' + size);
+
+                if(t.models.models[$(this).attr('data-mbuilder-id')].attr == undefined){
+                    t.models.models[$(this).attr('data-mbuilder-id')].attr = '';
+                }
+                if (t.models.models[$(this).attr('data-mbuilder-id')].attr && t.models.models[$(this).attr('data-mbuilder-id')].attr != '' && builder.models.models[$(this).attr('data-mbuilder-id')].attr.match(/^(width=)|.*? width=/g)) {
+                    t.models.models[$(this).attr('data-mbuilder-id')].attr = t.models.models[$(this).attr('data-mbuilder-id')].attr.replace(/[^-_]width=["'].*?["']/g, ' width="' + columns[i] + '"');
+                } else {
+                    t.models.models[$(this).attr('data-mbuilder-id')].attr += ' width="' + columns[i] + '"';
                 }
                 i++;
             } else {
                 var el_id = $(this).attr('data-mbuilder-id'),
-                    $el = $('div[data-mBuilder-id='+el_id+']'),
-                    $lastCol = row.find('> .wrap > .mBuilder-vc_column, > .wrap > .mBuilder-vc_column_inner').eq(columns.length-1).find('.vc_column-inner > .wpb_wrapper');
-                $el.find('.vc_column-inner > .wpb_wrapper > .mBuilder-element').each(function(){
+                    $el = $('div[data-mBuilder-id=' + el_id + ']'),
+                    $lastCol = row.find('> .wrap > .mBuilder-vc_column, > .wrap > .mBuilder-vc_column_inner').eq(columns.length - 1).find('.vc_column-inner > .wpb_wrapper');
+                $el.find('.vc_column-inner > .wpb_wrapper > .mBuilder-element').each(function () {
                     var $obj = $(this).appendTo($lastCol);
                     $obj.after('<div class="insert-between-placeholder" data-index=""></div>');
                 });
@@ -1312,18 +1365,18 @@ mBuilder.prototype.changeRowLayout = function(exp,row) {
         });
 
         if (i < columns.length) {
-            if(!t.lock) {
+            if (!t.lock) {
                 var j = i;
                 t.lock = true;
                 for (i; i < columns.length; i++) {
-                    if(row.hasClass('vc_inner')){
+                    if (row.hasClass('vc_inner')) {
                         t.buildShortcode(row, 'vc_column_inner', {width: columns[i]}, function () {
                             j++;
                             if (j == columns.length) {
                                 t.lock = false;
                             }
                         });
-                    }else{
+                    } else {
                         t.buildShortcode(row, 'vc_column', {width: columns[i]}, function () {
                             j++;
                             if (j == columns.length) {
@@ -1335,10 +1388,11 @@ mBuilder.prototype.changeRowLayout = function(exp,row) {
             }
         }
 
-    }else{
+    } else {
         alert('You entered wrong pattern, try premade patterns instead.');
     }
 };
+
 
 /**
  * @summary open shortcode setting panel.
@@ -1353,20 +1407,22 @@ mBuilder.prototype.changeRowLayout = function(exp,row) {
  * @param {function} closeCallback - optional
  * @since 1.0.0
  */
-mBuilder.prototype.mBuilder_shortcodeSetting = function(title, customClass, text, btn1, callback1, btn2, callback2, closeCallback){
+mBuilder.prototype.mBuilder_shortcodeSetting = function (title, customClass, text, btn1, callback1, btn2, callback2, closeCallback) {
     "use strict";
     var t = this;
-    if($('.setting-panel-wrapper').length){
+    if ($('.setting-panel-wrapper').length) {
         $('.setting-panel-wrapper .setting-panel-title').html(title);
         $('.setting-panel-wrapper .setting-panel-text').html(text);
-        $('.setting-panel-wrapper .setting-panel-container').attr('class','').addClass('setting-panel-container '+customClass);
+        $('.setting-panel-wrapper .setting-panel-container').attr('class', '').addClass('setting-panel-container ' + customClass);
         $('.setting-panel-wrapper .setting-panel-btn1').html(btn1);
         $('.setting-panel-wrapper .setting-panel-btn2').html(btn2);
         var $messageBox = $('.setting-panel-wrapper'),
             $btn1;
-    }else {
+    } else {
+        var model_id = t.active_setting_panel_model_id,
+            model_type = t.models.models[model_id].type;
         var $messageBox = $('' +
-                '<div class="setting-panel-wrapper">' +
+                '<div data-model-id="'+model_id+'" data-model-type="'+model_type+'" class="setting-panel-wrapper">' +
                 '   <div class="setting-panel-container ' + customClass + '">' +
                 '       <div class="setting-panel-close"/>' +
                 '       <div class="setting-panel-title">' + title + '</div>' +
@@ -1376,27 +1432,29 @@ mBuilder.prototype.mBuilder_shortcodeSetting = function(title, customClass, text
                 '</div>').appendTo('body'),
             $btn1;
     }
-    $messageBox.animate({opacity:1},200);
+    $messageBox.animate({opacity: 1}, 200);
     $messageBox.find('.setting-panel-container').draggable();
     this.settingPanel = $messageBox;
     $btn1 = $messageBox.find('.setting-panel-btn1');
     $btn1.off('click');
-    $btn1.click(function(e){
+    $btn1.click(function (e) {
         e.preventDefault();
-        if(typeof callback1 == 'function') {
+        if (typeof callback1 == 'function') {
+            tinymce.triggerSave();
+            $('#md_text_title1_text').keyup();
             callback1();
         }
     });
-    if(btn2){
-        if($messageBox.find('.setting-panel-btn2').length){
+    if (btn2) {
+        if ($messageBox.find('.setting-panel-btn2').length) {
             var $btn2 = $messageBox.find('.setting-panel-btn2');
-        }else{
-            var $btn2 = $('<button class="setting-panel-btn2">'+ btn2 +'</button>').insertBefore($btn1);
+        } else {
+            var $btn2 = $('<button class="setting-panel-btn2">' + btn2 + '</button>').insertBefore($btn1);
         }
         $btn2.off('click');
-        $btn2.click(function(e){
+        $btn2.click(function (e) {
             e.preventDefault();
-            if(typeof callback2 == 'function'){
+            if (typeof callback2 == 'function') {
                 callback2();
             }
         });
@@ -1404,9 +1462,9 @@ mBuilder.prototype.mBuilder_shortcodeSetting = function(title, customClass, text
 
     var $close = $messageBox.find('.setting-panel-close');
     $close.off('click');
-    $close.click(function(e){
+    $close.click(function (e) {
         e.preventDefault();
-        if(typeof closeCallback == 'function'){
+        if (typeof closeCallback == 'function') {
             closeCallback();
         }
         t.mBuilder_closeShortcodeSetting();
@@ -1420,10 +1478,10 @@ mBuilder.prototype.mBuilder_shortcodeSetting = function(title, customClass, text
  * @since 1.0.0
  */
 
-mBuilder.prototype.mBuilder_closeShortcodeSetting = function(){
+mBuilder.prototype.mBuilder_closeShortcodeSetting = function () {
     "use strict";
     $('.sp-container').remove();
-    $('.setting-panel-wrapper').fadeOut(300,function(){
+    $('.setting-panel-wrapper').fadeOut(300, function () {
         $(this).remove();
     })
 };
@@ -1438,7 +1496,7 @@ mBuilder.prototype.mBuilder_closeShortcodeSetting = function(){
  * @since 1.0.0
  */
 
-mBuilder.prototype.getModelParams = function(id){
+mBuilder.prototype.getModelParams = function (id) {
     return this.models.models[id];
 };
 
@@ -1449,391 +1507,410 @@ mBuilder.prototype.getModelParams = function(id){
  * @since 1.0.0
  */
 
-mBuilder.prototype.renderShortcodePanel = function(){
+var clear_shortcodes_panel_animation_open;
+var clear_shortcodes_panel_animation_close;
+mBuilder.prototype.shortcode_panel_functionality = function () {
+    var t = this;
 
-    window.top.$("div.shortcodes-panel, .shortcode-button-holder").remove();
-    var shortcodesPanel = $('<div class="shortcodes-panel"></div>');
-    var shortcodesPanelButton =$('<div class="shortcode-button-holder"> <div class="shortcodes-panel-button">SHORTCODES</div></div>');
-    var shortcodeContainer = $('<div class="shortcodes-container"></div>');
-    var search = $('<input class="qsearch" name="qsearch" placeholder="search" value=""/>');
-    var searchResult =  $('<div class="search-result"></div>');
+    t.add_nicescroll();
+    t.search_shortcode();
 
-    shortcodesPanel.append(shortcodeContainer);
-    shortcodeContainer.append(search);
-    search.after(searchResult);
-
-    window.top.$('#customize-controls').append(shortcodesPanel);
-    window.top.$('#customize-controls').append(shortcodesPanelButton);
-
-    var typingTimer;                //timer identifier
-    var doneTypingInterval = 500,
-        firstVal = "";
-
-    search.keyup(function(e){
-
-        var searchVal = $(this).val().toLowerCase();
-
-        if (firstVal != searchVal ) {
-            window.top.$('.category-container .shortcodes').removeClass('active');
-            window.top.$('.shortcodes-panel .category-container').removeClass('show');
-
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(function () {
-                if (searchVal != "") {
-                    window.top.$('.category-container .shortcodes[data-name*="' + searchVal + '"]').addClass('active');
-                    window.top.$('.category-container .shortcodes[data-name*="' + searchVal + '"]').parents('.category-container').addClass('show')
-                } else {
-                    //searchResult;
-                    window.top.$('.shortcodes').addClass('active');
-                    window.top.$('.shortcodes-panel .category-container').addClass('show');
-                }
-            }, doneTypingInterval);
+    $('.pixflow-shortcodes-panel .pixflow-add-element-button').click(function () {
+        clearTimeout(clear_shortcodes_panel_animation_open);
+        clearTimeout(clear_shortcodes_panel_animation_close);
+        if( $('.active-preview').length ){
+            $('.builder-preview').click();
         }
-        firstVal = searchVal;
+        $(this).toggleClass('close-element-button');
+        t.shortcode_panel_animation();
     });
 
-    shortcodesPanel.niceScroll({
+    t.shortcode_panel_drop_shortcodes();
+
+};
+mBuilder.prototype.shortcode_panel_drop_shortcodes = function(){
+    var t = this;
+    var shortcode = null;
+    var placeholder = null;
+
+    var lastObj = null;
+
+    var d = $('<div class="mBuilder-drag-overlay"></div>').appendTo('body'),
+        direction = 'down',
+        overEmpty = false;
+    $('.pixflow-shortcodes-panel .shortcodes').draggable({
+        appendTo: "body",
+        helper: "clone",
+        zIndex: 9999999,
+        cursorAt: {top: 20, left: 50},
+        start: function (event, ui) {
+            t.createColumnSeparator('all');
+            t.shortcode_panel_animation();
+
+            clearInterval(fly);
+            shortcode = $(this).attr('id');
+            $(this).css('visibility', 'hidden')
+
+        },
+        drag: function (event, ui) {
+
+            shortcode_panel_drag_fly(event);
+
+            if(open_shortcode_panel_on_sides(event)){
+                return true;
+            }
+
+            var el = get_hovered_element(ui.helper,event.clientX, event.clientY);
+
+            if (el) {
+                if (el == d.get(0)) return true;
+
+                if(is_over_shortcode_panel(el)){
+                    return true;
+                }
+                close_shortcode_panel_on_drag();
+
+                overEmpty = false;
+
+                var obj = $(el).closest('.mBuilder-element,.vc_inner ,.content-container');
+                if (obj.hasClass('content-container') && $('.content-container').find('.blank-page').length) {
+                    obj = $(el).closest('.mBuilder-element,.vc_inner');
+                }
+                if(check_over_page(obj)){
+                    return true;
+                }
+                if(!check_over_shortcode(obj)){
+                    var is_over_row = check_over_rows(obj);
+                    if(is_over_row[0]){
+                        obj = is_over_row[1];
+                    }else{
+                        if(!check_over_empty_page(el)){
+                            if (lastObj) {
+                                lastObj.css({'transform': ''})
+                            }
+                            lastObj = null;
+                            d.css({width: '', border: ''});
+                            return true;
+                        }
+                    }
+                }
+                if(!obj.length){
+                    return true;
+
+                }
+                var objTop = obj.offset().top,
+                    objLeft = obj.offset().left,
+                    objHeight = obj.outerHeight(),
+                    objWidth = obj.outerWidth(),
+                    objHalf = objTop + objHeight / 2;
+                if (lastObj) {
+                    lastObj.css({'transform': ''})
+                }
+                if (!overEmpty) {
+                    if (event.clientY + $(window).scrollTop() < objHalf) {
+                        obj.not('.vc_row').css({'transform': 'translateY(5px)'});
+                        d.css({'top': objTop, 'left': objLeft, width: objWidth, height: 5, background: ''});
+                        direction = 'up';
+                    } else {
+                        obj.not('.vc_row').css({'transform': 'translateY(-5px)'});
+                        d.css({
+                            'top': objTop + objHeight,
+                            'left': objLeft,
+                            width: objWidth,
+                            height: 5,
+                            background: ''
+                        });
+                        direction = 'down';
+                    }
+                } else {
+                    d.css({
+                        'top': objTop,
+                        'left': objLeft,
+                        height: objHeight,
+                        width: objWidth,
+                        background: 'rgba(136,206,255,0.4)',
+                        border: 'solid 2px #8fcbff'
+                    });
+                }
+                lastObj = obj;
+            } else {
+                if (lastObj) {
+                    lastObj.css({'transform': ''})
+                }
+                lastObj = null;
+                d.css({width: '', border: ''});
+            }
+        },
+        stop: function (event, ui){
+            t.clear_shortcodes_panel_input();
+            t.removeColumnSeparator();
+            clearInterval(fly);
+            t.shortcode_panel_animation();
+            try {
+                $('.pixflow-shortcodes-panel').getNiceScroll().resize();
+            } catch (e) {}
+            $(this).css('visibility', 'visible');
+            if (!lastObj || !lastObj.length) {
+                return;
+            }
+            lastObj.css({'transform': ''})
+            if (direction == 'up') {
+                if (lastObj.hasClass('vc_row') && !lastObj.hasClass('vc_inner')) {
+                    if (lastObj.prev('.insert-after-row-placeholder').length) {
+                        var p = lastObj.prev('.insert-after-row-placeholder');
+                    } else {
+                        var p = lastObj.prev().prev('.insert-after-row-placeholder');
+                    }
+                } else if (lastObj.hasClass('blank-page')) {
+
+                    var p = lastObj;
+                } else if (lastObj.hasClass('vc_empty-element')) {
+                    var p = lastObj.closest('.vc_column_container');
+                } else if (t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty) {
+                    var p = lastObj.find(t.containers[lastObj.attr('data-mbuilder-el')]);
+                } else {
+                    var p = lastObj.prev('.insert-between-placeholder');
+                    if (!p.length) {
+                        var p = lastObj.parent().closest('.mBuilder-element').prev('.insert-between-placeholder');
+                    }
+                }
+            } else {
+
+                if (lastObj.hasClass('vc_row') && !lastObj.hasClass('vc_inner')) {
+                    var p = lastObj.next('.insert-after-row-placeholder');
+                } else if (lastObj.hasClass('blank-page')) {
+
+                    var p = lastObj;
+                } else if (lastObj.hasClass('vc_empty-element')) {
+                    var p = lastObj.closest('.vc_column_container');
+                } else if (t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty) {
+                    var p = lastObj.find(t.containers[lastObj.attr('data-mbuilder-el')]);
+                } else {
+                    var p = lastObj.next('.insert-between-placeholder');
+                    if (!p.length) {
+                        var p = lastObj.parent().closest('.mBuilder-element').next('.insert-between-placeholder');
+                    }
+                }
+            }
+            placeholder = p.get(0);
+            d.css({'width': '', border: ''});
+            if (lastObj.hasClass('content-container')) {
+                placeholder = $('.insert-after-row-placeholder').last();
+                t.buildShortcode(placeholder, 'vc_row', {}, function (response) {
+                    if($('body').hasClass('one_page_scroll')){
+                        pixflow_one_page_for_customizer();
+                    }
+                    if (shortcode == 'vc_row') {
+                        return;
+                    }
+                    t.buildShortcode(response.find('.vc_column_container'), shortcode);
+                });
+            } else {
+                if (placeholder != null) {
+                    if (p.hasClass('insert-after-row-placeholder')) {
+                        t.buildShortcode(placeholder, 'vc_row', {}, function (response) {
+                            if($('body').hasClass('one_page_scroll')){
+                                pixflow_one_page_for_customizer();
+                            }
+                            if (shortcode == 'vc_row') {
+                                return;
+                            }
+                            t.buildShortcode(response.find('.vc_column_container'), shortcode);
+                        });
+                    } else {
+                        if (shortcode == 'vc_row') {
+                            shortcode = 'vc_row_inner';
+                        }
+                        t.buildShortcode(placeholder, shortcode);
+                    }
+                }
+            }
+        }
+    });
+
+    function check_over_empty_page(el){
+        obj = $(el).closest('.blank-page');
+        if (obj.length) {
+            lastObj = obj;
+            var objTop = obj.offset().top + 100,
+                objLeft = obj.offset().left + 100,
+                objHeight = obj.outerHeight() - 200,
+                objWidth = obj.outerWidth() - 200;
+            d.css({
+                'top': objTop,
+                'left': objLeft,
+                height: objHeight,
+                width: objWidth,
+                background: 'rgba(136,206,255,0.4)',
+                border: 'solid 2px #8fcbff'
+            });
+            return true;
+        }
+        return false;
+    }
+
+    function check_over_rows(obj){
+        if (obj.hasClass('mBuilder-vc_column') || obj.hasClass('mBuilder-vc_column_inner')) {
+            if (obj.find('> .vc_empty-element').length) {
+                obj = obj.find('> .vc_empty-element');
+                overEmpty = true;
+            } else {
+                if (!obj.hasClass('mBuilder-vc_column_inner')) {
+                    d.css({border: '', borderTop: '4px solid #43dc9d'});
+                } else {
+                    d.css({border: '', borderTop: '4px solid #8fcbff'});
+                    obj = obj.closest('.vc_inner');
+                }
+            } 
+            return [true,obj];
+        } else if (obj.hasClass('vc_row')) {
+            if (!obj.hasClass('vc_inner')) {
+                d.css({border: '', borderTop: '4px solid #43dc9d'});
+            } else {
+                d.css({border: '', borderTop: '4px solid #8fcbff'});
+                obj = obj.closest('.vc_inner');
+            }
+            return [true,obj];
+        }
+        return [false,obj];
+    }
+
+    function check_over_shortcode(obj){
+        if (obj.length
+            && !obj.hasClass('vc_row') && !obj.hasClass('mBuilder-vc_column')
+            && !obj.hasClass('mBuilder-vc_column_inner')) {
+            if (t.containers[obj.attr('data-mbuilder-el')]) {
+                if (!obj.find('.mBuilder-element').length) {
+                    overEmpty = true;
+                } else {
+                    d.css({border: '', borderTop: '4px solid #8fcbff'});
+                }
+            } else {
+                d.css({border: '', borderTop: '4px solid #8fcbff'});
+            }
+            return true;
+        }
+        return false;
+    }
+
+    function check_over_page(obj){
+        if (obj.hasClass('content-container') && $('.vc_row').length) {
+            lastObj = obj;
+            d.css({
+                border: '',
+                height: '0px',
+                left: $('.vc_row').last().offset().left + 'px',
+                borderTop: '4px solid #43dc9d',
+                top: $('.vc_row').last().offset().top + $('.vc_row').last().outerHeight() + 'px',
+                width: obj.width()
+            });
+            return true;
+        }
+        return false;
+    }
+
+    function is_over_shortcode_panel(el){
+        if($(el).closest('.pixflow-shortcodes-panel').length){
+            overEmpty = true;
+            lastObj = null;
+            d.css({width: '', border: ''});
+            return true;
+        }
+    }
+
+    function close_shortcode_panel_on_drag(){
+        if(!$('.pixflow-shortcodes-panel').hasClass('close')){
+            $('.pixflow-shortcodes-panel').addClass('close');
+        }
+    }
+
+    function get_hovered_element(helper,x,y){
+        helper.css('display','none');
+        var el = document.elementFromPoint(x, y);
+        helper.css('display','');
+        return el;
+    }
+
+
+    ////////////////////////////////////
+    function open_shortcode_panel_on_sides(event){
+        if(event.clientX < 5){
+            $('.pixflow-shortcodes-panel').removeClass('close');
+            overEmpty = true;
+            if (lastObj) {
+                lastObj.css({'transform': ''})
+            }
+            lastObj = null;
+            d.css({width: '', border: ''});
+            return true;
+        }
+        return false;
+    }
+
+    ///////////////////////////////////
+    var fly = null;
+    function shortcode_panel_drag_fly(event){
+        clearInterval(fly);
+        if (event.clientY < 100) {
+            fly = setInterval(function () {
+                if($(window).scrollTop()==0){
+                    clearInterval(fly);
+                }
+                $(window).scrollTop($(window).scrollTop() - 50)
+            }, 50);
+        } else if (event.clientY > $(window).height() - 50) {
+            fly = setInterval(function () {
+                if($(window).scrollTop()>=$(document).height()-$(window).height()){
+                    clearInterval(fly);
+                }
+                $(window).scrollTop($(window).scrollTop() + 50)
+            }, 50);
+        }
+    }
+};
+
+mBuilder.prototype.add_nicescroll = function(){
+    $('.pixflow-shortcodes-container').niceScroll({
         horizrailenabled: false,
         cursorcolor: "rgba(204, 204, 204, 0.2)",
         cursorborder: "1px solid rgba(204, 204, 204, 0.2)",
         cursorwidth: "2px",
         enablescrollonselection: false
     });
-	
+};
 
-    if ($('body').is('.blog') || $('body').is('.woocommerce-page')){
-        shortcodesPanel.html('<div class="no-shortcode"><div class="tip-image"></div>' +
-            '<div class="heading">You Don\'t Need Shortcodes</div>There\'s no need to use shortcodes in blog and shop pages, because they have their own templates. To add contents to these pages, you should use post or product in WordPress dashboard.</div>');
-    }else{
+mBuilder.prototype.search_shortcode = function() {
+    var typing_in_search_box_time,
+        typing_interval_done = 500,
+        $shortcodes_category = $('.pixflow-shortcodes-panel .category-container'),
+        $shortcodes = $('.category-container .shortcodes'),
+        first_search_value = "";
+    $('.pixflow-search-shortcode').keyup(function (e) {
 
+        var search_value = $(this).val().toLowerCase();
 
-        var categoryList = new Array();
-        var allowed_shortcodes = ['vc_row','vc_empty_space'];
+        if (first_search_value != search_value) {
+            $shortcodes.removeClass('active');
+            $shortcodes_category.removeClass('show');
 
-        for(var i in this.shortcodes) {
-            var base =  this.shortcodes[i].base;
-            if(base != undefined){
-                if (base.substr(0, 3) != 'md_' && allowed_shortcodes.indexOf(base) == -1) {
-                    this.shortcodes[i].display = 'none';
+            clearTimeout(typing_in_search_box_time);
+            typing_in_search_box_time = setTimeout(function () {
+                if (search_value != "") {
+                    $('.category-container .shortcodes[data-name*="' + search_value + '"]').addClass('active');
+                    $('.category-container .shortcodes[data-name*="' + search_value + '"]').parents('.category-container').addClass('show')
+                } else {
+                    $shortcodes.addClass('active');
+                    $shortcodes_category.addClass('show');
                 }
-            }
-            if (this.shortcodes[i] && this.shortcodes[i].as_parent) {
-                if (this.shortcodes[this.shortcodes[i].as_parent['only']]) {
-                    this.shortcodes[this.shortcodes[i].as_parent['only']].display = 'none';
-                }
-            }
+            }, typing_interval_done);
         }
-
-        var num=0;
-        var regex = /(http.*)x=([0-9-center]+)[|]y=([0-9-center]+)/i;
-
-        //create shortcodes
-        for(var i in this.shortcodes) {
-            if(i == 'vc_column_text' || (this.shortcodes[i].display && this.shortcodes[i].display=='none')) {
-                continue;
-            }
-
-
-
-            var  category = this.shortcodes[i].category;
-            if ($.inArray(category,categoryList) < 0 &&  category !== undefined ){
-                categoryList.push(category);
-                var catTemp = category.split(' ').join('-').toLowerCase();
-                shortcodeContainer.append('<div class="'+catTemp+' show category-container"><h6>'+category+'</h6></div>');
-            }
-            if (category === undefined){
-                category = "undefined";
-            }
-            var shortcodeCat = category.split(' ').join('-').toLowerCase(),
-                name =this.shortcodes[i].name;
-            name = name.toLowerCase();
-            $tmpName = name.replace(new RegExp(' ', 'g') ,  '-');
-            shortcodeContainer.find('.category-container.'+shortcodeCat).append('<div class="shortcodes active ' + category + '" id="' + this.shortcodes[i].base + '" data-name="'+name+'"><div class="inner-container" ><span class="icon mdb-' + $tmpName +'"></span>' + this.shortcodes[i].name + '</div></div>');
-
-        }
-
-    }
-
-    //shortcode panel button click
-    var toggled = 1,
-        shortcodesPanelButtonAnim,
-        shortcodesPanelAnim,
-        windowTop = window.top;
-
-    windowTop.$('.shortcodes-panel-button').off('click')
-    windowTop.$('.shortcodes-panel-button').click(function (e) {
-        e.preventDefault();
-        if (toggled == 1) {
-
-            try {
-                shortcodesPanelAnim.pause();
-                shortcodesPanelButtonAnim.pause();
-
-            } catch (e) {
-
-            }
-
-            TweenMax.to(windowTop.$('#customize-controls .wp-full-overlay-sidebar-content,#customize-controls .customizer-header'), .5, {
-                scale: 0.7, opacity: 0, onComplete: function () {
-                }
-            });
-
-            windowTop.$('#customize-controls .divider').css('display', 'block');
-
-            shortcodesPanel.stop().css({
-                height: $(window).height() - 30,
-                'top': '0',
-                //'overflow': 'auto',
-                display: 'block',
-                transform: 'scale(1.2,1.2)'
-            });
-
-            shortcodesPanelAnim = TweenMax.to(shortcodesPanel, .3, {scale: 1, opacity: 1, delay: .2});
-            shortcodesPanel.animate({scrollTop: 0}, 600);
-            shortcodesPanel.find('input.qsearch').focus();
-            windowTop.$('.shortcode-button-holder .shortcodes-panel-button').text('SITE SETTINGS');
-
-            window.setTimeout(function(){
-                windowTop.$(".introjs-hint[data-step!='1']").fadeOut('fast');
-            },1000);
-        }
-        else {
-            try {
-                shortcodesPanelAnim.pause();
-                shortcodesPanelButtonAnim.pause();
-            } catch (e) {
-            }
-
-            shortcodesPanelAnim = TweenMax.to(shortcodesPanel, .4, {
-                scale: 1.1, opacity: 0, onComplete: function () {
-                    shortcodesPanel.css('display', 'none');
-                    windowTop.$('#customize-controls .divider').css('display', 'none');
-
-                }
-            });
-
-            TweenMax.to(windowTop.$('#customize-controls .wp-full-overlay-sidebar-content,#customize-controls .customizer-header'), .5, {
-                scale: 1, opacity: 1, onComplete: function () {
-
-                }
-            });
-
-            shortcodesPanel.find('input.qsearch').val('').keyup().focus();
-
-            windowTop.$('.shortcode-button-holder .shortcodes-panel-button').text('SHORTCODES');
-
-            window.setTimeout(function(){
-                windowTop.$(".introjs-hint[data-step!='1']").fadeOut('fast');
-            },1000);
-        }
-        toggled *= -1;
+        first_search_value = search_value;
     });
 
-    var windowHeight = $(window).height();
-    $(window).resize(function (e) {
+};
 
-        setTimeout(function(){
-            // check if event  doesn't call from jquery
-            if (e.originalEvent && windowHeight != $(window).height() ){
-                toggled = -1;
-                windowTop.$('.shortcodes-panel-button').click();
-            }
-        },500);
-
-    });
-
-    var shortcode = null;
-    var placeholder = null;
-    var t = this;
-    var lastObj = null;
-    var fly = null;
-
-    var d = $('<div style="position: absolute; height: 5px; z-index: 999999;"></div>').appendTo('body'),
-        direction = 'down',
-        overEmpty = false;
-    windowTop.$('.shortcodes').draggable({
-        iframeFix:true,
-        appendTo: "body",
-        helper: "clone",
-        zIndex:999999,
-        cursorAt: { top: 20,left:50},
-
-        start: function( event, ui ) {
-            clearInterval(fly);
-            shortcode =$(this).attr('id');
-            $(this).css('visibility','hidden')
-
-        },
-        drag: function( event, ui ) {
-            clearInterval(fly);
-            if(event.clientY < 100){
-                fly = setInterval(function(){
-                    $(window).scrollTop($(window).scrollTop()-50)
-                },50);
-            }else if(event.clientY > $(window).height()-50){
-                fly = setInterval(function() {
-                    $(window).scrollTop($(window).scrollTop() + 50)
-                },50);
-            }
-
-            var el = document.elementFromPoint(event.clientX-300,event.clientY-50);
-            if(el){
-                if(el == d.get(0)) return;
-                overEmpty = false;
-                var obj = $(el).closest('.mBuilder-element,.vc_inner');
-                if(obj.length
-                    && !obj.hasClass('vc_row') && !obj.hasClass('mBuilder-vc_column')
-                    && !obj.hasClass('mBuilder-vc_column_inner')){
-                    if(t.containers[obj.attr('data-mbuilder-el')]){
-                        if(!obj.find('.mBuilder-element').length) {
-                            overEmpty = true;
-                        }else{
-                            d.css({border: '', borderTop: '4px solid #8fcbff'});
-                        }
-                    }else {
-                        d.css({border: '', borderTop: '4px solid #8fcbff'});
-                    }
-
-                }else{
-                    if(obj.hasClass('mBuilder-vc_column') || obj.hasClass('mBuilder-vc_column_inner')) {
-                        if (obj.find('> .vc_empty-element').length) {
-                            var obj = obj.find('> .vc_empty-element');
-                            overEmpty = true;
-                        } else {
-                            if(!obj.hasClass('mBuilder-vc_column_inner')) {
-                                d.css({border: '', borderTop: '4px solid #43dc9d'});
-                            }else{
-                                d.css({border: '', borderTop: '4px solid #8fcbff'});
-                                obj = obj.closest('.vc_inner');
-                            }
-                        }
-                    }else if(obj.hasClass('vc_row')) {
-                        if(!obj.hasClass('vc_inner')) {
-                            d.css({border: '', borderTop: '4px solid #43dc9d'});
-                        }else{
-                            d.css({border: '', borderTop: '4px solid #8fcbff'});
-                            obj = obj.closest('.vc_inner');
-                        }
-                    }else {
-                        var obj = $(el).closest('.blank-page');
-                        if (obj.length) {
-                            lastObj = obj;
-                            var objTop = obj.offset().top + 100,
-                                objLeft = obj.offset().left + 100,
-                                objHeight = obj.outerHeight() - 200,
-                                objWidth = obj.outerWidth() - 200,
-                                objHalf = objTop + objHeight/2;
-                            d.css({'top': objTop, 'left': objLeft,height:objHeight,width:objWidth,background:'rgba(136,206,255,0.4)',border:'solid 2px #8fcbff'});
-                            return;
-                        }
-                        if (lastObj) {
-                            lastObj.css({'transform': ''})
-                        }
-                        lastObj = null;
-                        d.css({width: '', border:''});
-                        return;
-                    }
-
-                }
-
-                var objTop = obj.offset().top,
-                    objLeft = obj.offset().left,
-                    objHeight = obj.outerHeight(),
-                    objWidth = obj.outerWidth(),
-                    objHalf = objTop + objHeight/2;
-                if(lastObj){
-                    lastObj.css({'transform': ''})
-                }
-                if(!overEmpty) {
-                    if (event.clientY + $(window).scrollTop() - 50 < objHalf) {
-                        obj.not('.vc_row').css({'transform': 'translateY(5px)'});
-                        d.css({'top': objTop, 'left': objLeft, width: objWidth,height:5,background:''});
-                        direction = 'up';
-                    } else {
-                        obj.not('.vc_row').css({'transform': 'translateY(-5px)'});
-                        d.css({'top': objTop + objHeight, 'left': objLeft, width: objWidth,height:5,background:''});
-                        direction = 'down';
-                    }
-                }else{
-                    d.css({'top': objTop, 'left': objLeft,height:objHeight,width:objWidth,background:'rgba(136,206,255,0.4)',border:'solid 2px #8fcbff'});
-                }
-                lastObj = obj;
-            }else{
-                if(lastObj){
-                    lastObj.css({'transform': ''})
-                }
-                lastObj = null;
-                d.css({width:'',border:''});
-            }
-        },
-        stop:function(event,ui){
-            clearInterval(fly);
-            try {
-                windowTop.$('.shortcodes-panel').getNiceScroll().resize();
-            }catch(e){}
-            $(this).css('visibility','visible')
-            if(!lastObj || !lastObj.length){
-                return;
-            }
-            if(direction=='up') {
-                if(lastObj.hasClass('vc_row') && !lastObj.hasClass('vc_inner')) {
-                    if(lastObj.prev('.insert-after-row-placeholder').length){
-                        var p = lastObj.prev('.insert-after-row-placeholder');
-                    }else{
-                        var p = lastObj.prev().prev('.insert-after-row-placeholder');
-                    }
-                }else if(lastObj.hasClass('blank-page')){
-
-                    var p = lastObj;
-                }else if(lastObj.hasClass('vc_empty-element')) {
-                    var p = lastObj.closest('.vc_column_container');
-                }else if(t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty){
-                    var p = lastObj.find(t.containers[lastObj.attr('data-mbuilder-el')]);
-                }else{
-                    var p = lastObj.prev('.insert-between-placeholder');
-                    if(!p.length){
-                        var p = lastObj.parent().closest('.mBuilder-element').prev('.insert-between-placeholder');
-                    }
-                }
-            }else{
-
-                if(lastObj.hasClass('vc_row') && !lastObj.hasClass('vc_inner')) {
-                    var p = lastObj.next('.insert-after-row-placeholder');
-                }else if(lastObj.hasClass('blank-page')){
-			
-                    var p = lastObj;
-                }else if(lastObj.hasClass('vc_empty-element')) {
-                    var p = lastObj.closest('.vc_column_container');
-                }else if(t.containers[lastObj.attr('data-mbuilder-el')] && overEmpty){
-                    var p = lastObj.find(t.containers[lastObj.attr('data-mbuilder-el')]);
-                }else{
-                    var p = lastObj.next('.insert-between-placeholder');
-                    if(!p.length){
-                        var p = lastObj.parent().closest('.mBuilder-element').next('.insert-between-placeholder');
-                    }
-                }
-            }
-            placeholder =  p.get(0);
-            d.css({'width':'',border:''});
-
-            if(placeholder != null) {
-                if(p.hasClass('insert-after-row-placeholder')){
-                    t.buildShortcode(placeholder, 'vc_row',{},function(response){
-                        if(shortcode=='vc_row'){
-                            return;
-                        }
-                        t.buildShortcode(response.find('.vc_column_container'),shortcode );
-                    });
-                }else {
-                    if (shortcode == 'vc_row') {
-                        shortcode = 'vc_row_inner';
-                    }
-                    t.buildShortcode(placeholder, shortcode);
-                }
-            }
-        }
-    });
-
+mBuilder.prototype.shortcode_panel_animation = function() {
+    $('.pixflow-shortcodes-panel').toggleClass('close');
 };
 
 
@@ -1847,10 +1924,29 @@ mBuilder.prototype.renderShortcodePanel = function(){
  * @since 1.0.0
  */
 
-mBuilder.prototype.buildShortcode = function(placeholder,shortcode,atts,callback) {
-    if(placeholder && shortcode) {
+mBuilder.prototype.buildShortcode = function (placeholder, shortcode, atts, callback) {
+    if (placeholder && shortcode) {
         var t = this,
             atts = atts;
+        var loaderHtml = $('<div class="showbox-shotcode">' +
+            '<div class="loader-shotcode">' +
+            '<svg class="circular-shotcode" viewBox="25 25 50 50">' +
+            '<circle class="path-shotcode" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>' +
+            '</svg>' +
+            '</div></div>');
+        if (placeholder.prevObject) {
+            var shortcodeloader = $(placeholder.prevObject).find('.vc_column-inner');
+            $(loaderHtml).prependTo($(shortcodeloader));
+        }
+        else if ($(placeholder).hasClass('insert-between-placeholder')) {
+            $(placeholder).css({
+                'display': 'block',
+                'height': '35px'
+            }).append(loaderHtml);
+        }
+        else {
+            $(loaderHtml).prependTo($(placeholder));
+        }
         $.ajax({
             type: 'post',
             url: mBuilderValues.ajax_url,
@@ -1863,52 +1959,56 @@ mBuilder.prototype.buildShortcode = function(placeholder,shortcode,atts,callback
                 mbuilder_editor: true
             },
             success: function (response) {
-                var attrs='';
-                $.each(atts, function(index, value) {
-                    attrs = attrs + ' ' + index + '="' +value+'"';
+                if ($(placeholder).hasClass('insert-between-placeholder')) {
+                    $(placeholder).css({
+                        'display': 'none',
+                        'height': '0px'
+                    });
+                }
+                $('.showbox-shotcode').remove();
+                var attrs = '';
+                $.each(atts, function (index, value) {
+                    attrs = attrs + ' ' + index + '="' + value + '"';
                 });
                 attrs = attrs.trim();
-                response = t.setSettings(response,shortcode,placeholder,attrs);
+                response = t.setSettings(response, shortcode, placeholder, attrs);
                 var id = response['id'];
                 response = $(response['shortcode']);
-                if($(placeholder).hasClass('vc_column_container') || $(placeholder).hasClass('vc_row') || $(placeholder).hasClass('vc_row_inner') || $(t.droppables).filter($(placeholder)).length) {
-                    if($(placeholder).hasClass('vc_row') || $(placeholder).hasClass('vc_row_inner')) {
+                if ($(placeholder).hasClass('vc_column_container') || $(placeholder).hasClass('vc_row') || $(placeholder).hasClass('vc_row_inner') || $(t.droppables).filter($(placeholder)).length) {
+                    if ($(placeholder).hasClass('vc_row') || $(placeholder).hasClass('vc_row_inner')) {
                         $(placeholder).find('>.wrap').append(response);
-                    }else if($(placeholder).find('>.vc_column-inner>.wpb_wrapper').length){
+                    } else if ($(placeholder).find('>.vc_column-inner>.wpb_wrapper').length) {
                         $(placeholder).find('>.vc_column-inner>.wpb_wrapper').append(response);
-                    }else{
-                        if(!$(placeholder).find('.mBuilder-element').length){
+                    } else {
+                        if (!$(placeholder).find('.mBuilder-element').length) {
                             $(placeholder).html('');
                         }
                         $(placeholder).append(response);
                     }
 
                     $(placeholder).removeClass('vc_empty-element');
-                }else if($(placeholder).hasClass('vc_btn-content')) {
-                    if(t.tabs[$(placeholder).closest('.mBuilder-element').attr('data-mbuilder-el')]){
+                } else if ($(placeholder).hasClass('vc_btn-content')) {
+                    if (t.tabs[$(placeholder).closest('.mBuilder-element').attr('data-mbuilder-el')]) {
                         var tab = $(t.tabs[$(placeholder).closest('.mBuilder-element').attr('data-mbuilder-el')][1]);
                         $(placeholder).closest('.mBuilder-element').find('ul').first().append(tab);
-                        var unique = Math.floor(Math.random()* 1000000);
-                        tab.find('a').attr('href','#tab-'+unique);
-                        response.find('.wpb_tab').first().attr('id','tab-'+unique);
+                        var unique = Math.floor(Math.random() * 1000000);
+                        tab.find('a').attr('href', '#tab-' + unique);
+                        response.find('.wpb_tab').first().attr('id', 'tab-' + unique);
                     }
-                    if($(placeholder).closest('.mBuilder-element').find('ul.px_tabs_nav').parent().length) {
+                    if ($(placeholder).closest('.mBuilder-element').find('ul.px_tabs_nav').parent().length) {
                         $(placeholder).closest('.mBuilder-element').find('ul.px_tabs_nav').first().parent().append(response);
-                    }else{
+                    } else {
                         $(placeholder).closest('.mBuilder-element').find('.wpb_wrapper').first().append(response);
                     }
-                    t.updateShortcode($(placeholder).closest('.mBuilder-element').attr('data-mbuilder-id'),$(placeholder).closest('.mBuilder-element').attr('data-mbuilder-el'), t.models.models[$(placeholder).closest('.mBuilder-element').attr('data-mbuilder-id')].attr,undefined,true);
-                }else{
+                    t.updateShortcode($(placeholder).closest('.mBuilder-element').attr('data-mbuilder-id'), $(placeholder).closest('.mBuilder-element').attr('data-mbuilder-el'), t.models.models[$(placeholder).closest('.mBuilder-element').attr('data-mbuilder-id')].attr, undefined, true);
+                } else {
                     $(placeholder).before(response);
-                    $(placeholder).siblings('.mBuilder-element').not('.vc_row, .vc_row_inner').each(function () {
-                    });
                 }
-                t.createPlaceholders();
-                t.specialShortcodes(shortcode,response);
+                t.specialShortcodes(shortcode, response);
                 t.renderControls();
                 t.setSortable();
                 $(window).resize();
-                if(typeof callback == 'function'){
+                if (typeof callback == 'function') {
                     callback(response);
                 }
                 $('body').addClass('changed');
@@ -1931,33 +2031,33 @@ mBuilder.prototype.buildShortcode = function(placeholder,shortcode,atts,callback
  * @since 1.0.0
  */
 
-mBuilder.prototype.setSettings = function(response,type,parent,atts,content){
+mBuilder.prototype.setSettings = function (response, type, parent, atts, content) {
     var rand,
         inModels = true,
-        t=this;
+        t = this;
     parent = $(parent);
-    if(parent.hasClass && parent.hasClass('insert-between-placeholder')){
+    if (parent.hasClass && parent.hasClass('insert-between-placeholder')) {
         parent = parent.closest('.mBuilder-element').attr('data-mbuilder-id');
-    }else{
+    } else {
         parent = parent.attr('data-mbuilder-id');
     }
     var istab = false;
-    for(var i in t.tabs){
-        if(t.tabs[i][0] == type){
+    for (var i in t.tabs) {
+        if (t.tabs[i][0] == type) {
             istab = true;
         }
     }
-    if(istab){
-        var unique = Math.floor(Math.random()* 1000000);
-        atts +=' tab_id=\''+unique+'\'';
+    if (istab) {
+        var unique = Math.floor(Math.random() * 1000000);
+        atts += ' tab_id=\'' + unique + '\'';
     }
 
-    if(type== 'md_text' && !content){
+    if (type == 'md_text' && !content) {
         content = $(response).find('.md-text-content').html();
     }
-    while(inModels){
+    while (inModels) {
         rand = parseInt(Math.random() * 10000);
-        if(typeof this.models.models[rand] == 'undefined'){
+        if (typeof this.models.models[rand] == 'undefined') {
             t.models.models[rand] = {
                 attr: atts,
                 content: content,
@@ -1968,14 +2068,20 @@ mBuilder.prototype.setSettings = function(response,type,parent,atts,content){
         }
     }
 
-    var o = $(response).clone().attr('data-mbuilder-id', rand);
-    o.find('.mBuilder-element').each(function(){
-        var r = t.setSettings($(this)[0].outerHTML,$(this).attr('data-mBuilder-el'),$(this).parent().closest('.mBuilder-element'));
+    var o = $(response).clone();
+    o.find('.mBuilder-element').each(function () {
+        var r = t.setSettings($(this)[0].outerHTML, $(this).attr('data-mBuilder-el'), $(this).parent().closest('.mBuilder-element'));
         $(r['shortcode']).insertAfter($(this));
         $(this).remove();
     });
     var result = [];
-    result['shortcode'] = o[0].outerHTML;
+    var m_builder_element = o.filter('div').first().attr('data-mbuilder-id', rand);
+
+    o.each(function(){
+        if($(this)[0] == m_builder_element[0]) return;
+        $(this).removeAttr('data-mbuilder-id').prependTo(m_builder_element);
+    });
+    result['shortcode'] = m_builder_element[0].outerHTML;
     result['id'] = rand;
 
     o.remove();
@@ -1993,22 +2099,22 @@ mBuilder.prototype.setSettings = function(response,type,parent,atts,content){
  * @since 1.0.0
  */
 
-mBuilder.prototype.updateShortcode = function(id,shortcode,attr,content,asParent){
+mBuilder.prototype.updateShortcode = function (id, shortcode, attr, content, asParent) {
     // Update elems object
     var t = this,
-        attrs = '';
-    if(typeof attr == 'object') {
+        attrs = oldClasses = '';
+    if (typeof attr == 'object') {
         $.each(attr, function (index, value) {
             if (index == 'content') {
                 return true;
             }
-            value =  value.replace(new RegExp('"', 'g') ,  "'");
+            value = value.replace(new RegExp('"', 'g'), "'");
             attrs = attrs + index + '=' + '"' + value + '" ';
         });
-    }else{
+    } else {
         attrs = attr;
     }
-    if(!content) {
+    if (!content) {
         var content = '';
         if (shortcode == 'vc_row') {
             content = $('[data-mbuilder-id="' + id + '"]').find('> .wrap').html();
@@ -2021,13 +2127,13 @@ mBuilder.prototype.updateShortcode = function(id,shortcode,attr,content,asParent
         }
 
         t.models.models[id]['content'] = attr['content'];
-    }else{
+    } else {
         t.models.models[id]['content'] = content;
     }
     t.models.models[id]['attr'] = attrs;
+    oldClasses = $('[data-mbuilder-id="' + id + '"]').attr('class');
 
-
-    attrs = typeof attr == 'object'?JSON.stringify(attr):attr;
+    attrs = typeof attr == 'object' ? JSON.stringify(attr) : attr;
     // Build shortcode
     $.ajax({
         type: 'post',
@@ -2038,22 +2144,25 @@ mBuilder.prototype.updateShortcode = function(id,shortcode,attr,content,asParent
             shortcode: shortcode,
             act: 'rebuild',
             id: id,
-            content:content,
+            content: content,
             attrs: attrs,
             mbuilder_editor: true
         },
         success: function (response) {
-            var container = $('.mBuilder-element[data-mbuilder-id='+id+']');
-            var html = $(response);
-            html.attr('data-mbuilder-id',id);
+            var container = $('.mBuilder-element[data-mbuilder-id=' + id + ']');
+            html = document.createElement('div');
+            html.innerHTML = response ;
+            for(var i = 0 ; i < html.children.length ; i ++){
+                html.children[i].setAttribute('data-mbuilder-id', id);
+            }
             var parent = container.parent().closest('.mBuilder-element');
-            if(asParent || (
+            if (asParent || (
                     parent.length &&
                     t.shortcodes[parent.attr('data-mbuilder-el')] &&
                     t.shortcodes[parent.attr('data-mbuilder-el')].as_parent &&
                     t.shortcodes[parent.attr('data-mbuilder-el')].as_parent.only == container.attr('data-mbuilder-el')
                 )
-            ){
+            ) {
                 var parentId = parent.attr('data-mbuilder-id');
                 var type = parent.attr('data-mbuilder-el');
                 $.ajax({
@@ -2069,42 +2178,44 @@ mBuilder.prototype.updateShortcode = function(id,shortcode,attr,content,asParent
                         try {
                             parent.replaceWith(response);
                             var id = $(response).find('[data-mbuilder-el="' + shortcode + '"]').first().attr('data-mbuilder-id');
-                            t.specialShortcodes(shortcode, $('[data-mbuilder-id="'+ id +'"]'));
-
-                            for(var i in t.shortcodes){
-                                if(t.shortcodes[i].as_parent && t.shortcodes[i].as_parent.only == shortcode){
-                                    t.specialShortcodes(i, $('[data-mbuilder-id="'+ id +'"]').closest('[data-mbuilder-el="'+ i +'"]'));
+                            t.specialShortcodes(shortcode, $('[data-mbuilder-id="' + id + '"]'));
+                            for (var i in t.shortcodes) {
+                                if (t.shortcodes[i].as_parent && t.shortcodes[i].as_parent.only == shortcode) {
+                                    t.specialShortcodes(i, $('[data-mbuilder-id="' + id + '"]').closest('[data-mbuilder-el="' + i + '"]'));
                                 }
                             }
-
                             t.renderControls();
                             t.setSortable();
                             $(window).resize();
-                        }catch(e){
+                        } catch (e) {
                             console.log(e);
                         }
+                        $('body').trigger('update_shortcode');
                     }
                 })
-            }else{
+            } else {
                 try {
-                    container.replaceWith(html);
-                    t.specialShortcodes(shortcode,html);
+                    container.replaceWith(html.innerHTML);
+                    html = '' ;
+                    html = $(response);
+                    t.specialShortcodes(shortcode, html);
                     t.renderControls();
                     $(window).resize();
-                }catch(e){
+                } catch (e) {
                     console.log(e);
                 }
+                $('body').trigger('update_shortcode');
+            }
+            var $mbuilderId = $('[data-mbuilder-id="' + id + '"]');
+            if ($mbuilderId.data('mbuilder-el') == 'md_text') {
+                $mbuilderId.attr('class', oldClasses);
+            }
+            if($mbuilderId.hasClass('vc_row') && $('body').hasClass('one_page_scroll')){
+                pixflow_one_page_for_customizer();
             }
             t.setSortable();
             $('body').addClass('changed');
-//		setTimeout(function(){ 
-//		$basecon =	t.models.models[id].content  ;
-//		console.log($basecon);
-//		$basecon = $basecon.replace(new RegExp('<p>&nbsp;<br></p>', 'g') ,  '');
-//					$("div[data-mbuilder-id="+ id +"]").find('.inline-editor').eq(0).html($basecon);	
-//					t.models.models[id].content = $basecon;
-//						} , 100 ) ;
-			
+            var $mbuilderId = $('[data-mbuilder-id="' + id + '"]');
         }
     })
 
@@ -2120,38 +2231,38 @@ mBuilder.prototype.updateShortcode = function(id,shortcode,attr,content,asParent
  * @return {string} - shortcodeTag
  * @since 1.0.0
  */
-mBuilder.prototype.shortcodeTag = function(obj,onlyChildren,depth){
+mBuilder.prototype.shortcodeTag = function (obj, onlyChildren, depth) {
     var t = this,
         el = $(obj),
         id = el.attr('data-mbuilder-id');
 
-    if(!el.length){
+    if (!el.length) {
         return '';
     }
-    if(!depth){
+    if (!depth) {
         depth = 0;
     }
     var model = t.models.models[id];
-    model.attr = model.attr!=undefined?model.attr:'';
-    model.content = model.content!=undefined?model.content:'';
-    if(!onlyChildren) {
-        var tag = '[' + model.type + ' ' + model.attr + ' mbuilder-id="'+id+'"]' + model.content;
+    model.attr = model.attr != undefined ? model.attr : '';
+    model.content = model.content != undefined ? model.content : '';
+    if (!onlyChildren) {
+        var tag = '[' + model.type + ' ' + model.attr + ' mbuilder-id="' + id + '"]' + model.content;
     }
     depth++;
 
-    el.find('.mBuilder-element').each(function(){
-        for(var i in t.compiledTags){
-            if(t.compiledTags[i] == this) return;
+    el.find('.mBuilder-element').each(function () {
+        for (var i in t.compiledTags) {
+            if (t.compiledTags[i] == this) return;
         }
-        tag += t.shortcodeTag(this,false,depth);
+        tag += t.shortcodeTag(this, false, depth);
     });
     t.compiledTags.push(el.get(0));
     depth--;
 
-    if(!onlyChildren) {
+    if (!onlyChildren) {
         tag += '[/' + model.type + ']';
     }
-    if(depth == 0){
+    if (depth == 0) {
         t.compiledTags = [];
     }
     return tag;
@@ -2163,43 +2274,46 @@ mBuilder.prototype.shortcodeTag = function(obj,onlyChildren,depth){
  * @since 1.0.0
  */
 
-mBuilder.prototype.saveContent = function(){
+mBuilder.prototype.saveContent = function () {
     var t = this;
     $('body').addClass('content-saving');
-    for(var index in t.models.models) {
-        var $el = $('div[data-mBuilder-id='+index+']'),
-            $parent = $el.parent().closest('.mBuilder-element');
-        if(!$el.length){
-            delete(t.models.models[index]);
-        }
-        if($parent.length){
-            var parentId = $parent.attr('data-mBuilder-id');
-            t.models.models[index].parentId = parentId;
-        }
-    }
+    // Set Parents
+    this.set_parents();
     // Calculate orders
-    $('.mBuilder-element').each(function(){
+    $('.mBuilder-element').each(function () {
         var $el = $(this),
             id = $el.attr('data-mBuilder-id');
 
         var order = 1;
-        $el.siblings( ".mBuilder-element" ).addBack().each(function(){
-            t.models.models[$(this).attr('data-mbuilder-id')]['order']=order++;
+        $el.siblings(".mBuilder-element").addBack().each(function () {
+            t.models.models[$(this).attr('data-mbuilder-id')]['order'] = order++;
         });
     });
+    // upadte meditor shortcodes models
+    t.update_meditor_models();
+    var models = {};
+    for(i in t.models.models){
+        if(t.models.models[i]!=null){
+            models[i] = t.models.models[i];
+        }
+    }
+    this.save_button_animation_start();
     $.ajax({
         type: 'post',
         url: mBuilderValues.ajax_url,
         data: {
             action: 'mBuilder_saveContent',
             nonce: mBuilderValues.ajax_nonce,
-            models:  JSON.stringify( t.models['models'] ),
-            id:  $('meta[name="post-id"]').attr('content'),
+            models: JSON.stringify(models),
+            id: $('meta[name="post-id"]').attr('content'),
             mbuilder_editor: true
         },
         success: function (response) {
-            //console.log(response);
             $('body').removeClass('content-saving changed');
+            t.save_button_animation_end();
+            if(typeof t.save_callback_function == 'function') {
+                t.save_callback_function();
+            }
         }
     });
 };
@@ -2210,16 +2324,47 @@ mBuilder.prototype.saveContent = function(){
  *
  * @since 1.0.0
  */
-
-mBuilder.prototype.dependencyInjection = function(){
+var dependChange = [] ;
+mBuilder.prototype.dependencyInjection = function () {
     var tabs = this.settingPanel.find('#mBuilderTabs > ul li');
-    this.settingPanel.find('[data-mBuilder-dependency]').each(function(){
+    this.settingPanel.find('[data-mBuilder-dependency]').each(function () {
         var json = JSON.parse($(this).attr('data-mBuilder-dependency'));
         var el = $(this);
-        var depend = $('[name='+json.element+']');
-        if(depend.attr('type') != 'hidden') {
+        if(typeof json.element == 'undefined')
+            return ;
+        var depend = $('[name=' + json.element + ']');
+        dependChange.push(depend);
+        if (depend.attr('type') != 'hidden') {
+
+            //
+            if (typeof json.value != 'object') {
+                json.value = [json.value];
+            }
+            if ($.inArray($(depend).val(), json.value) != -1 && $(depend).closest('.vc_column').css('display') == 'block') {
+                el.css('display', 'block');
+            } else {
+                el.css('display', 'none');
+            }
+            el.find('select,input').trigger('change');
+            tabs.each(function () {
+                var id = $(this).attr('aria-controls');
+                var result = false;
+                var element = document.getElementById(id);
+                $(element).find('>.vc_column').each(function () {
+                    if ($(this).css('display') == 'block') {
+                        result = true;
+                        return false;
+                    }
+                });
+                if (!result) {
+                    $(this).css('display', 'none')
+                } else {
+                    $(this).css('display', 'block')
+                }
+            });
+            //
             depend.change(function () {
-                if(typeof json.value != 'object'){
+                if (typeof json.value != 'object') {
                     json.value = [json.value];
                 }
                 if ($.inArray($(this).val(), json.value) != -1 && $(this).closest('.vc_column').css('display') == 'block') {
@@ -2228,54 +2373,90 @@ mBuilder.prototype.dependencyInjection = function(){
                     el.css('display', 'none');
                 }
                 el.find('select,input').trigger('change');
-                tabs.each(function(){
+                tabs.each(function () {
                     var id = $(this).attr('aria-controls');
                     var result = false;
                     var element = document.getElementById(id);
-                    $(element).find('>.vc_column').each(function(){
-                        if($(this).css('display')=='block'){
-                            result=true;
+                    $(element).find('>.vc_column').each(function () {
+                        if ($(this).css('display') == 'block') {
+                            result = true;
                             return false;
                         }
                     });
-                    if(!result){
-                        $(this).css('display','none')
-                    }else{
-                        $(this).css('display','block')
+                    if (!result) {
+                        $(this).css('display', 'none')
+                    } else {
+                        $(this).css('display', 'block')
                     }
                 });
-            }).trigger('change');
-        }else{
-            depend.siblings('[data-name='+depend.attr('name')+']').change(function(){
-                if(typeof json.value != 'object'){
-                    json.value = [json.value];
-                }
-                if ($.inArray(depend.val(), json.value) != -1 && depend.closest('.vc_column').css('display') == 'block') {
-                    el.css('display', 'block');
+            });
+
+        } else {
+
+            if (typeof json.value != 'object') {
+                json.value = [json.value];
+            }
+            if ($.inArray(depend.val(), json.value) != -1 && depend.closest('.vc_column').css('display') == 'block') {
+                el.css('display', 'block');
+            } else {
+                el.css('display', 'none');
+            }
+            el.find('select,input').trigger('change');
+            tabs.each(function () {
+                var id = $(this).attr('aria-controls');
+                var result = false;
+                var element = document.getElementById(id);
+                $(element).find('>.vc_column').each(function () {
+                    if ($(this).css('display') == 'block') {
+                        result = true;
+                        return false;
+                    }
+                });
+                if (!result) {
+                    $(this).css('display', 'none')
                 } else {
-                    el.css('display', 'none');
+                    $(this).css('display', 'block')
                 }
-                el.find('select,input').trigger('change');
-                tabs.each(function(){
-                    var id = $(this).attr('aria-controls');
-                    var result = false;
-                    var element = document.getElementById(id);
-                    $(element).find('>.vc_column').each(function(){
-                        if($(this).css('display')=='block'){
-                            result=true;
-                            return false;
+            });
+
+            depend.siblings('[data-name=' + depend.attr('name') + ']').change(function () {
+                setTimeout(function(){
+                    if (typeof json.value != 'object') {
+                        json.value = [json.value];
+                    }
+                    if ($.inArray(depend.val(), json.value) != -1 && depend.closest('.vc_column').css('display') == 'block') {
+                        el.css('display', 'block');
+                    } else {
+                        el.css('display', 'none');
+                    }
+                    el.find('select,input').trigger('change');
+                    tabs.each(function () {
+                        var id = $(this).attr('aria-controls');
+                        var result = false;
+                        var element = document.getElementById(id);
+                        $(element).find('>.vc_column').each(function () {
+                            if ($(this).css('display') == 'block') {
+                                result = true;
+                                return false;
+                            }
+                        });
+                        if (!result) {
+                            $(this).css('display', 'none')
+                        } else {
+                            $(this).css('display', 'block')
                         }
                     });
-                    if(!result){
-                        $(this).css('display','none')
-                    }else{
-                        $(this).css('display','block')
-                    }
-                });
-            }).trigger('change');
+                },1);
+
+            });
         }
-    })
+    });
+    setTimeout(function(){
+        $('.mbuilder-spinner').remove();
+        $('.waitforload').css('display' , 'block');
+    } , 50 );
 };
+
 
 
 /**
@@ -2284,7 +2465,7 @@ mBuilder.prototype.dependencyInjection = function(){
  * @since 1.0.0
  */
 
-mBuilder.prototype.mediaPanel = function() {
+mBuilder.prototype.mediaPanel = function () {
     // Set all variables to be used in scope
     var frame;
 
@@ -2337,7 +2518,7 @@ mBuilder.prototype.mediaPanel = function() {
         event.stopPropagation();
         // Clear out the preview image
 
-        $(this).closest('.mBuilder-upload-img').css({'background-image':'','background-size':''});
+        $(this).closest('.mBuilder-upload-img').css({'background-image': '', 'background-size': ''});
 
         $(this).parent().removeClass('has-img');
         $(this).addClass('mBuilder-hidden');
@@ -2348,6 +2529,25 @@ mBuilder.prototype.mediaPanel = function() {
     });
 };
 
+/**
+ * @summary set parents for models and delete extra models
+ *
+ * @since 1.0.0
+ */
+mBuilder.prototype.set_parents = function () {
+    var t = this;
+    for (var index in t.models.models) {
+        var $el = $('div[data-mBuilder-id=' + index + ']'),
+            $parent = $el.parent().closest('.mBuilder-element');
+        if (!$el.length) {
+            delete(t.models.models[index]);
+        }
+        if ($parent.length) {
+            var parentId = $parent.attr('data-mBuilder-id');
+            t.models.models[index].parentId = parentId;
+        }
+    }
+};
 
 /**
  * @summary multi media panel for the multi image controller in the shortcode setting panel
@@ -2355,7 +2555,7 @@ mBuilder.prototype.mediaPanel = function() {
  * @since 1.0.0
  */
 
-mBuilder.prototype.multiMediaPanel = function() {
+mBuilder.prototype.multiMediaPanel = function () {
     // Set all variables to be used in scope
     var frame;
 
@@ -2376,7 +2576,7 @@ mBuilder.prototype.multiMediaPanel = function() {
             button: {
                 text: 'Use this media'
             },
-            multiple: true  // Set to true to allow multiple files to be selected
+            multiple: 'add'  // Set to true to allow multiple files to be selected
         });
 
         var t = this,
@@ -2385,13 +2585,16 @@ mBuilder.prototype.multiMediaPanel = function() {
         frame.on('select', function () {
 
             // Get media attachment details from the frame state
-            //var attachment = frame.state().get('selection').first().toJSON();
             var attachment = frame.state().get('selection').toJSON();
             var attachments = '';
             $container.find('.mBuilder-upload-img').remove();
-            for(var i=0;i<attachment.length;i++){
-                attachments = attachments  + attachment[i]['id'] + ',';
-                $container.append('<div data-id="'+attachment[i]['id']+'" class="mBuilder-upload-img has-img" style="background-image: url('+ attachment[i].url +')"><span class="remove-img">X</span></div>');
+            for (var i = 0; i < attachment.length; i++) {
+                if(attachment[i]['id'] == ''){
+                    continue;
+                }
+                attachments = attachments + attachment[i]['id'] + ',';
+                if (attachment[i]['id'] != "" )
+                    $container.append('<div data-id="' + attachment[i]['id'] + '" class="mBuilder-upload-img has-img" style="background-image: url(' + attachment[i].url + ')"><span class="remove-img">X</span></div>');
             }
             $container.append('<div class="mBuilder-upload-img"><span class="remove-img mBuilder-hidden">X</span></div>');
             attachments = attachments.slice(0, -1);
@@ -2400,8 +2603,20 @@ mBuilder.prototype.multiMediaPanel = function() {
         });
 
         // Finally, open the modal on click
+        frame.on('open',function() {
+            var selection = frame.state().get('selection');
+            var ids = $container.find('input').val().split(',');
+            ids.forEach(function(id) {
+               var attachment = wp.media.attachment(id);
+                attachment.fetch();
+                selection.add( attachment ? [ attachment ] : [] );
+            });
+        });
+
         frame.open();
     });
+
+
 
 
     // DELETE IMAGE LINK
@@ -2431,22 +2646,23 @@ mBuilder.prototype.multiMediaPanel = function() {
  * @since 1.0.0
  */
 
-mBuilder.prototype.googleFontPanel = function() {
-    function generateInputVal(paramName){
-        var $fontFamily = $('.google-fonts-families[data-input="'+paramName+'"]'),
-            $fontStyle = $('.google-fonts-styles[data-input="'+paramName+'"]'),
-            $input = $('input[name="'+paramName+'"]'),
-            fontFamily = 'font_family:'+encodeURIComponent($fontFamily.val()),
-            fontStyle = 'font_style:'+encodeURIComponent($fontStyle.val());
-        $input.val(fontFamily+'|'+fontStyle);
+mBuilder.prototype.googleFontPanel = function () {
+    function generateInputVal(paramName) {
+        var $fontFamily = $('.google-fonts-families[data-input="' + paramName + '"]'),
+            $fontStyle = $('.google-fonts-styles[data-input="' + paramName + '"]'),
+            $input = $('input[name="' + paramName + '"]'),
+            fontFamily = 'font_family:' + encodeURIComponent($fontFamily.val()),
+            fontStyle = 'font_style:' + encodeURIComponent($fontStyle.val());
+        $input.val(fontFamily + '|' + fontStyle);
     }
+
     $('body').on('change', '.google-fonts-families', function (event) {
         // check if event  doesn't call from jquery
-        if (!event.originalEvent){
+        if (!event.originalEvent) {
             return;
         }
         var $this = $(this);
-        $('.google-fonts-styles[data-input="'+$this.attr("data-input")+'"]').html('<option>Loading...</option>');
+        $('.google-fonts-styles[data-input="' + $this.attr("data-input") + '"]').html('<option>Loading...</option>');
         $.ajax({
             type: 'post',
             url: mBuilderValues.ajax_url,
@@ -2458,7 +2674,7 @@ mBuilder.prototype.googleFontPanel = function() {
                 mbuilder_editor: true
             },
             success: function (response) {
-                $('.google-fonts-styles[data-input="'+$this.attr("data-input")+'"]').html(response);
+                $('.google-fonts-styles[data-input="' + $this.attr("data-input") + '"]').html(response);
                 generateInputVal($this.attr('data-input'));
             }
         });
@@ -2477,21 +2693,130 @@ mBuilder.prototype.googleFontPanel = function() {
  * @since 1.0.0
  */
 
-mBuilder.prototype.specialShortcodes = function(type,obj) {
-    if(typeof this[type+"Shortcode"] == 'function') {
-        this[type+"Shortcode"](obj);
+mBuilder.prototype.specialShortcodes = function (type, obj) {
+    if (typeof this[type + "Shortcode"] == 'function') {
+        this[type + "Shortcode"](obj);
     }
-    obj.parents('.mBuilder-element[data-mbuilder-el="md_accordion_tab"]').find('h3.ui-state-active').siblings('.wpb_accordion_content').css('height','');
-    obj.parents('.mBuilder-element[data-mbuilder-el="md_toggle_tab"]').find('h3.ui-state-active').siblings('.wpb_toggle_content').css('height','');
-    obj.parents('.mBuilder-element[data-mbuilder-el="md_toggle_tab2"]').find('h3.ui-state-active').siblings('.wpb_toggle_content').css('height','');
+    obj.parents('.mBuilder-element[data-mbuilder-el="md_accordion_tab"]').find('h3.ui-state-active').siblings('.wpb_accordion_content').css('height', '');
+    obj.parents('.mBuilder-element[data-mbuilder-el="md_toggle_tab"]').find('h3.ui-state-active').siblings('.wpb_toggle_content').css('height', '');
+    obj.parents('.mBuilder-element[data-mbuilder-el="md_toggle_tab2"]').find('h3.ui-state-active').siblings('.wpb_toggle_content').css('height', '');
 };
 
-mBuilder.prototype.md_tabsShortcode = function(obj){
+mBuilder.prototype.md_portfolio_multisizeShortcode = function (obj) {
+    'use strict';
+    var $portfolioItem = $(obj).find('.isotope .item'),
+        panelSetting = '<div class="portfolio-panel-setting">' +
+            '                   <div class="tooltip">SET IMAGE SIZE</div>'+
+            '                   <div class="setting-holder">' +
+            '                       <div class="state"></div>'+
+            '                       <span data-size="thumbnail-small" class="small-size portfolio-size"></span>' +
+            '                       <span data-size="thumbnail-medium" class="average-size portfolio-size"></span>' +
+            '                       <span data-size="thumbnail-large" class="large-size portfolio-size"></span>' +
+            '                   </div>' +
+            '               </div>';
 
-    obj.find('.px_tabs_nav > li').click(function(){
+    $portfolioItem.append(panelSetting);
+    $portfolioItem.find('.portfolio-size').each(function (index, value) {
+        $(this).attr('data-item_id', $(this).parent().parent().attr('data-item_id'));
+    });
+    $portfolioItem.hover(function () {
+        var $this =$(this),
+            position = parseInt($this.css('padding-top'))+10;
+        $this.find('.portfolio-panel-setting').css({top: position,right:position, opacity: '1'});
+    }, function () {
+        var $this =$(this),
+            position = parseInt($this.css('padding-top'));
+
+        $(this).find('.portfolio-panel-setting').css({top: position,right:position+10, opacity: '0'});
+
+    });
+
+
+    $portfolioItem.find('.portfolio-panel-setting').hover(function(){
+        $(this).addClass('hovering');
+        TweenMax.fromTo($(this).find('.tooltip'),.3, {top:-60,opacity:0}, {top:-33,opacity:1});
+    },function(){
+        $(this).removeClass('hovering');
+        TweenMax.fromTo($(this).find('.tooltip'),.3, {top:-33,opacity:1}, {top:-70,opacity:0});
+    });
+
+    $portfolioItem.find('.portfolio-panel-setting span').click(function () {
+        if ($(this).hasClass('small-size')) {
+            $(this).parents('.item').removeClass('thumbnail-medium thumbnail-large').addClass('thumbnail-small');
+            $(this).siblings('.state').removeClass('active-average active-large').addClass('active-small');
+            $(this).siblings().removeClass('current');
+            $(this).addClass('current');
+            pixflow_portfolioMultisize();
+        } else if ($(this).hasClass('average-size')) {
+            $(this).parents('.item').removeClass('thumbnail-small thumbnail-large').addClass('thumbnail-medium');
+            $(this).siblings().removeClass('current');
+            $(this).siblings('.state').removeClass('active-large active-small').addClass('active-average');
+            $(this).addClass('current');
+            pixflow_portfolioMultisize();
+        } else if ($(this).hasClass('large-size')) {
+            $(this).parents('.item').removeClass('thumbnail-medium thumbnail-small').addClass('thumbnail-large');
+            $(this).siblings().removeClass('current');
+            $(this).addClass('current');
+            $(this).siblings('.state').removeClass('active-average active-small').addClass('active-large');
+            pixflow_portfolioMultisize();
+        } else if ($(this).hasClass('setting')) {
+            $(this).closest('.vc_md_portfolio_multisize').find('a[title="Edit Portfolio Multi-Size"]')[0].click();
+        }
+        var item = $(this).parents('.portfolio-item'),
+            post_id = item.data("item_id"),
+            size = $(this).attr('data-size');
+        jQuery.ajax({
+            type: "post",
+            url: mBuilderValues.ajax_url,
+            data: "action=pixflow_portfolio_size&nonce=" + mBuilderValues.ajax_nonce + "&portfolio_size=" + size + "&post_id=" + post_id,
+            success: function (res) {
+                return res;
+            }
+        })
+    });
+
+    $portfolioItem.find('.portfolio-panel-setting span').hover(function(){
+        var $item = $(this);
+
+        if($item.hasClass('small-size')){
+            $item.siblings('.state').removeClass('average large').addClass('small');
+
+        }else if($item.hasClass('average-size')){
+            $item.siblings('.state').removeClass('large small').addClass('average');
+
+        }else{
+            $item.siblings('.state').removeClass('average small').addClass('large');
+
+        }
+    },function(){
+        var $item = $(this);
+        if($item.hasClass('small-size')){
+            $item.siblings('.state').removeClass('average large').addClass('small');
+
+        }else if($item.hasClass('average-size')){
+            $item.siblings('.state').removeClass('large small').addClass('average');
+
+        }else{
+            $item.siblings('.state').removeClass('average small').addClass('large');
+
+        }
+
+        $('.state').removeClass('average small large');
+
+    });
+
+    $('.portfolio .shortcode-btn a').click(function(e){
+        e.preventDefault();
+        return;
+    })
+};
+
+mBuilder.prototype.md_tabsShortcode = function (obj) {
+
+    obj.find('.px_tabs_nav > li').click(function () {
         var id = $(this).find('> a').attr('href'),
             num = $(this).position().left;
-        $(id).next().css({left:num});
+        $(id).next().css({left: num});
     });
 
     obj.find('ul.ui-tabs-nav').sortable({
@@ -2501,30 +2826,37 @@ mBuilder.prototype.md_tabsShortcode = function(obj){
         axis: "x",
         zIndex: 10000,
         tolerance: "intersect",
-        update: function( event, ui ) {
+        update: function (event, ui) {
             $('body').addClass('changed');
             var prev = ui.item.prev();
             var prevId = prev.find('a').attr('href');
             var id = ui.item.find('a').attr('href');
-            if(prevId) {
+            if (prevId) {
                 $(id).parent().insertAfter($(prevId).parent());
-            }else{
+            } else {
                 $(id).parent().insertAfter($(id).parent().parent().find('ul').first());
             }
         }
     });
+};
+
+mBuilder.prototype.md_live_textShortcode = function(obj){
+    var t = this;
+    $(function(){
+        t.bind_text_editor(obj.find('.meditor'));
+    });
 }
 
-mBuilder.prototype.md_modernTabsShortcode = function(obj){
-    obj.find('.px_tabs_nav > li').click(function(){
+mBuilder.prototype.md_modernTabsShortcode = function (obj) {
+    obj.find('.px_tabs_nav > li').click(function () {
         var id = $(this).find('> a').attr('href'),
             num = $(this).position().left;
-        $(id).next().css({left:num});
+        $(id).next().css({left: num});
     });
 
-    setTimeout(function(){
+    setTimeout(function () {
         obj.find('.px_tabs_nav > li').first().click();
-    },500);
+    }, 500);
 
     obj.find('ul.ui-tabs-nav').sortable({
         cursor: "move",
@@ -2533,25 +2865,25 @@ mBuilder.prototype.md_modernTabsShortcode = function(obj){
         axis: "x",
         zIndex: 10000,
         tolerance: "intersect",
-        update: function( event, ui ) {
+        update: function (event, ui) {
             $('body').addClass('changed');
             var prev = ui.item.prev();
             var prevId = prev.find('a').attr('href');
             var id = ui.item.find('a').attr('href');
-            if(prevId) {
+            if (prevId) {
                 $(id).parent().insertAfter($(prevId).parent());
-            }else{
+            } else {
                 $(id).parent().insertAfter($(id).parent().parent().find('ul').first());
             }
         }
     })
-}
+};
 
-mBuilder.prototype.md_hor_tabsShortcode = function(obj){
-    obj.find('.px_tabs_nav > li').click(function(){
+mBuilder.prototype.md_hor_tabsShortcode = function (obj) {
+    obj.find('.px_tabs_nav > li').click(function () {
         var id = $(this).find('> a').attr('href'),
-            num = $(this).position().top+15;
-        $(id).next().css({top:num});
+            num = $(this).position().top + 15;
+        $(id).next().css({top: num});
     });
     obj.find('ul.ui-tabs-nav').sortable({
         cursor: "move",
@@ -2560,25 +2892,25 @@ mBuilder.prototype.md_hor_tabsShortcode = function(obj){
         axis: "y",
         zIndex: 10000,
         tolerance: "intersect",
-        update: function( event, ui ) {
+        update: function (event, ui) {
             $('body').addClass('changed');
             var prev = ui.item.prev();
             var prevId = prev.find('a').attr('href');
             var id = ui.item.find('a').attr('href');
-            if(prevId) {
+            if (prevId) {
                 $(id).parent().insertAfter($(prevId).parent());
-            }else{
+            } else {
                 $(id).parent().insertAfter($(id).parent().parent().find('ul').first());
             }
         }
     })
-}
+};
 
-mBuilder.prototype.md_hor_tabs2Shortcode = function(obj){
-    obj.find('.px_tabs_nav > li').click(function(){
+mBuilder.prototype.md_hor_tabs2Shortcode = function (obj) {
+    obj.find('.px_tabs_nav > li').click(function () {
         var id = $(this).find('> a').attr('href'),
-            num = $(this).position().top+20;
-        $(id).next().css({top:num});
+            num = $(this).position().top + 20;
+        $(id).next().css({top: num});
     });
 
     obj.find('ul.ui-tabs-nav').sortable({
@@ -2588,19 +2920,19 @@ mBuilder.prototype.md_hor_tabs2Shortcode = function(obj){
         axis: "y",
         zIndex: 10000,
         tolerance: "intersect",
-        update: function( event, ui ) {
+        update: function (event, ui) {
             $('body').addClass('changed');
             var prev = ui.item.prev();
             var prevId = prev.find('a').attr('href');
             var id = ui.item.find('a').attr('href');
-            if(prevId) {
+            if (prevId) {
                 $(id).parent().insertAfter($(prevId).parent());
-            }else{
+            } else {
                 $(id).parent().insertAfter($(id).parent().parent().find('ul').first());
             }
         }
     })
-}
+};
 
 /**
  * @summary get value attribite from model attributes
@@ -2608,133 +2940,522 @@ mBuilder.prototype.md_hor_tabs2Shortcode = function(obj){
  * @since 1.0.0
  */
 
-mBuilder.prototype.getModelattr = function(modelID,attr) {
+mBuilder.prototype.getModelattr = function (modelID, attr) {
     var t = this,
-        attrs = t.models.models[modelID].attr ;
-    var re = new RegExp(attr + '="([.\\s\\S]*?)[^\\\\]"','gm');
+        attrs = t.models.models[modelID].attr;
+    var re = new RegExp(attr + '="([.\\s\\S]*?[^\\\\])"', 'gm');
     var str = attrs;
     var m;
     if ((m = re.exec(str)) !== null) {
         return m[1];
-    }else{
+    } else {
         return false;
     }
 };
+
+mBuilder.prototype.removeColumnSeparator = function () {
+    var $coulmnMode = $('.column-hover-mode');
+    if ($coulmnMode.length) {
+        $coulmnMode.remove();
+    }
+};
+
+/**
+ * Show separator for column when user drag shortcode
+ *
+ * @return boolean
+ * @since 3.8
+ */
+mBuilder.prototype.create_full_column_separator = function (){
+    $('.vc_row').each(function (  ) {
+
+        if ( !$(this).hasClass('mBuilder-element')) return;
+
+        var top =  $(this).find('> .wrap').position().top,
+            left =  $(this).find('> .wrap').offset().left,
+            currentColTop = 0,
+            selector = $(this).find('.vc_column-inner');
+
+        $coulmnCount = selector.length;
+        if (!($(this).find('.vc_row').hasClass('vc_inner'))) {
+            $height = parseInt($(this).height()) + parseInt($(this).css('padding-top')) + parseInt($(this).css('padding-bottom'));
+            selector.first().prepend('<div class="left column-hover-mode" style="left:0px;height: ' + $height + 'px;top:-' + top + 'px"></div>');
+            selector.prepend('<div class="right column-hover-mode" style="height: ' + $height + 'px;top:-' + top + 'px"></div>');
+        }
+
+        if( $coulmnCount == 1  ){
+            var column_width = selector.width() + 15 ;
+            selector.prepend(
+                '<div class="top column-hover-mode" style="height:1px;width: ' + column_width + 'px;top:-5px"></div>' +
+                '<div class="bottom column-hover-mode" style="height:1px;width: ' + column_width + 'px;bottom:-5px"></div>'
+            );
+        }
+
+        if ($(this).hasClass('row-content-middle')||$(this).hasClass('row-content-bottom')){
+            $('.column-hover-mode').each(function () {
+                currentColTop = parseInt(top) + $(this).closest('.mBuilder-element').position().top;
+                $(this).css({top:-currentColTop});
+            });
+        }
+    });
+    return false;
+}
+
+mBuilder.prototype.create_specefic_column_separator = function(selector) {
+    var $selRow = $('#' + selector);
+    selector = $('#' + selector).find('.vc_column-inner');
+    $coulmnCount = selector.length;
+    var top =  $selRow.find('> .wrap').position().top,
+        left =  $selRow.find('> .wrap').offset().left,
+        currentColTop = 0;
+
+    if (!($selRow.find('.vc_row').hasClass('vc_inner')) ) {
+        $height = parseInt($selRow.height()) + parseInt($selRow.css('padding-top')) + parseInt($selRow.css('padding-bottom'));
+        selector.prepend('<div class="column-hover-mode" style="height: ' + $height + 'px;top:-' + top + 'px"></div>');
+        selector.first().prepend('<div class="column-hover-mode" style="left:0px;height: ' + $height + 'px;top:-' + top + 'px"></div>');
+    }
+
+    if( $coulmnCount == 1 && $selRow.index() == 1){
+        var column_width = selector.width() + 15 ;
+        selector.prepend(
+            '<div class="top column-hover-mode" style="height:1px;width: ' + column_width + 'px;top:-5px"></div>' +
+            '<div class="bottom column-hover-mode" style="height:1px;width: ' + column_width + 'px;bottom:-5px"></div>'
+        );
+    }
+
+    if ($selRow.hasClass('row-content-middle')||$selRow.hasClass('row-content-bottom')){
+        $('.column-hover-mode').each(function () {
+            currentColTop = parseInt(top) + $(this).closest('.mBuilder-element').position().top;
+            $(this).css({top:-currentColTop});
+        })
+    }
+}
+
+mBuilder.prototype.createColumnSeparator = function (selector) {
+    var t = this;
+    t.removeColumnSeparator();
+    if (selector == 'all') {
+        t.create_full_column_separator();
+    }
+    else {
+        if (typeof selector != "undefined") {
+            t.create_specefic_column_separator(selector);
+        }
+    }
+};
+
+
+// Create A list Of Fonts with Their Varients
+var font_name_list = [],
+    font_name_list_len = '' ;
+    font_var_list = [];
+mBuilder.prototype.getEditorFonts = function () {
+    var $fontList ,
+        count = 0 ,
+        google_font_url = mBuilderValues.google_font;
+    $.get( google_font_url ,  function (data) {
+        $fontList =  JSON.parse(data) ;
+        for( count  in $fontList.items ){
+            $fontVarMenu = [];
+            for(var i=0 ; i < $fontList.items[count].variants.length ; i++){
+                var e = {
+                    text:$fontList.items[count].variants[i],
+                    classes:'pixflow-editor-font'
+                }
+                $fontVarMenu.push(e);
+            }
+            font_name_list.push($fontList.items[count].family.toString());
+            font_var_list.push($fontVarMenu);
+        }
+        font_name_list_len = font_name_list.length;
+        return ;
+    });
+};
+
+
+// Convert String to base64
+mBuilder.prototype.b64EncodeUnicode = function (str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+        return String.fromCharCode('0x' + p1);
+    }));
+};
+
 
 /**
  * @summary set value to model attribute
  *
  * @since 1.0.0
  */
-mBuilder.prototype.setModelattr = function(modelID,attr,value) {
+
+mBuilder.prototype.setModelattr = function (modelID, attr, value) {
     var t = this,
-        attrs = t.models.models[modelID].attr ;
-    var re = new RegExp(attr + '="([.\\s\\S]*?)[^\\\\]"','gm');
+        attrs = t.models.models[modelID].attr;
+    var re = new RegExp(attr + '="([.\\s\\S]*?)[^\\\\]"', 'gm');
     var str = attrs;
     var m;
     if ((m = re.exec(str)) !== null) {
-        var find = new RegExp(attr + '="([.\\s\\S]*?)[^\\\\]"','gm');
-        var replace = attr + '="'+value+'" ';
+        var find = new RegExp(attr + '="([.\\s\\S]*?)[^\\\\]"', 'gm');
+        var replace = attr + '="' + value + '" ';
         attrs = str.replace(find, replace);
-    }else{
-		attrs = attrs + ' ' + attr + '="' + value + '" ';
+    } else {
+        attrs = attrs + ' ' + attr + '="' + value + '" ';
     }
 
     t.models.models[modelID].attr = attrs;
 };
 
-mBuilder.prototype.makeLinksTargetSelf = function(){
-    var $links = $('.layout-container header nav a,' +
-        '.layout-container header a.logo,' +
-        '.layout-container footer a,' +
-        '.layout-container .sidebar a,' +
-        '.layout-container .portfolio a.button,' +
-        'header .icons-pack .elem-container, header .logo a, header a.logo' +
-        '.gather-overlay .menu a');
-    $links.on('click', function (e) {
-        $(this).attr('target', '_self');
-        if ($(this).not('.layout-container .portfolio a.button, header .icons-pack .elem-container').length) {
-            e.preventDefault();
-            if ($(this).attr('href') == '#' || $(this).attr('href') == '' || $(this).attr('href') == undefined){
-                return;}
+mBuilder.prototype.make_links_target_blank = function () {
 
-            var href = $(this).attr('href');
-            if ($('body').hasClass('changed') || pixflow_customizerObj().$('#customize-header-actions #save').val() == 'Save & Publish') {
-                var text = mBuilderValues.leaveMsg;
-                pixflow_customizerObj().pixflow_messageBox(mBuilderValues.unsaved, 'caution unsaved-caution', text, mBuilderValues.save_leave, function () {
-                    pixflow_customizerObj().saveCallbackFunction = function () {
-                        setTimeout(function () {
-                            pixflow_customizerObj().saveCallbackFunction = null;
-                        }, 10);
-                        if (pixflow_customizerObj().wp.customize.previewer.previewUrl() != href) {
-                            pixflow_customizerObj().pixflow_customizerLoading();
-                            pixflow_customizerObj().wp.customize.previewer.previewUrl(href);
-                            if (pixflow_customizerObj().wp.customize.previewer.previewUrl() != href) {
-                                window.open(href);
-                                pixflow_customizerObj().$('.customizer-loading').css({'display': 'none'});
-                            }
-                        } else {
-                            $('html').animate({opacity: 0.7}).animate({opacity: 1})
-                        }
-                    };
-                    pixflow_customizerObj().$('#save-btn').click();
-                    pixflow_customizerObj().pixflow_closeMessageBox();
-                }, 'Just Leave', function () {
-                    pixflow_customizerObj().pixflow_closeMessageBox();
-                    setTimeout(function () {
-                        if (pixflow_customizerObj().wp.customize.previewer.previewUrl() != href) {
-                            pixflow_customizerObj().pixflow_customizerLoading();
-                            pixflow_customizerObj().wp.customize.previewer.previewUrl(href);
-                            if (pixflow_customizerObj().wp.customize.previewer.previewUrl() != href) {
-                                window.open(href);
-                                pixflow_customizerObj().$('.customizer-loading').css({'display': 'none'});
-                            }
-                        } else {
-                            $('html').animate({opacity: 0.7}).animate({opacity: 1})
-                        }
-                    }, 500);
-                }, function () {
-                });
-                return false;
-            } else {
-                var siteUrl =   pixflow_customizerObj().wp.customize.previewer.previewUrl();
-                var linkUrl =  $(this).attr('href');
+    $('body').on('click','a:not(.pixflow-builder-toolbar a)',function(e){
+        $(this).attr('target','_blank');
+    });
+};
 
-                if (pixflow_customizerObj().wp.customize.previewer.previewUrl() != $(this).attr('href') && (linkUrl[siteUrl.length] != "#")) {
-                    pixflow_customizerObj().pixflow_customizerLoading();
-                    pixflow_customizerObj().wp.customize.previewer.previewUrl($(this).attr('href'));
-                    if (pixflow_customizerObj().wp.customize.previewer.previewUrl() != href) {
-                        window.open(href);
-                        pixflow_customizerObj().$('.customizer-loading').css({'display': 'none'});
-                    }
-                } else {
-                    $('html').animate({opacity: 0.7}).animate({opacity: 1})
-                }
-                return false;
-            }
+/*
+* Preview button functionality in pixflow builder toolbar
+* */
+mBuilder.prototype.preview_mode = function () {
+    "use strict";
+    var $preview_button = $('.builder-preview');
+    if (!$preview_button.length)
+        return;
+
+    function preview_off($this,$body){
+        if($body.length){
+            //$('.mBuilder_row_controls').css('display','flex');
+            $( ".mBuilder-vc_column .vc_column-inner > .wpb_wrapper" ).removeClass("disable-sort");
+            $( ".content-container" ).removeClass("disable-sort");
+            $('.meditor').attr('contenteditable' , 'true' );
+        }
+        try {
+            $(".px_tabs_nav").sortable("enable");
+            $('.mBuilder-element:not(.vc_row,.mBuilder-vc_column)').draggable("enable");
+        }catch(e){}
+
+        $body.removeClass('gizmo-off');
+        $('.pixflow-shortcodes-panel').css({left:''});
+
+        try{
+            $this.removeClass('hold-collapse');
+            $('.wpb_content_element .px_tabs_nav.md-custom-tab > li:last-child').css('display','inline-block');
+            $('.sortable-handle').css('border','1px dashed rgba(92,92,92,.9)');
+        }catch (e){}
+    }
+    function preview_on($this,$body){
+        if($body.length){
+            $( ".mBuilder-vc_column .vc_column-inner > .wpb_wrapper" ).addClass("disable-sort");
+            $( ".content-container" ).addClass("disable-sort");
+            $body.addClass('gizmo-off');
+            $('.meditor').attr({
+                contentEditable: 'false'
+            });
+            $('.pixflow-shortcodes-panel').css({left:'-310px'});
+            try {
+                $(".px_tabs_nav").sortable("disable");
+                $('.mBuilder-element:not(.vc_row,.mBuilder-vc_column)').draggable("disable");
+            }catch(e){}
+            $(this).addClass('hold-collapse');
+        }
+
+
+        try {
+            $this.addClass('hold-collapse');
+            $body.off('click','.vc_empty-element,.vc_templates-blank, .vc_add-element-action, .vc_control-btn-append, .vc_element-container');
+            $('.vc_row .vc_vc_column,.sortable-handle').css('border','none');
+            $('.wpb_content_element .px_tabs_nav.md-custom-tab > li:last-child').css('display','none');
+        } catch (e) {}
+    }
+    $preview_button.unbind('click');
+    $preview_button.click(function () {
+        var $this = $(this),
+            $body = $('body.pixflow-builder');
+        $this.toggleClass('active-preview');
+        $('.pixflow-add-element-button').removeClass('close-element-button');
+        if($this.hasClass('hold-collapse')){
+            preview_off($this,$body);
+        }else {
+            preview_on($this,$body);
         }
     });
-    window.onbeforeunload = null;
 };
+
+mBuilder.prototype.save_button_animation_start = function(){
+    $('.builder-controls .builder-save').addClass('saving');
+    $('.builder-controls .builder-save .save-loading').animate({width: '90%'}, 7000);
+    $('.builder-controls .builder-save .save').html(mBuilderValues.saving);
+
+};
+
+mBuilder.prototype.save_button_animation_end = function(){
+    $('.builder-controls .builder-save .save-loading').stop().animate({'width': '100%'}, 200, 'swing', function () {
+        $('.builder-controls .builder-save .save').html(mBuilderValues.saved);
+        $('.builder-controls .builder-save .save-loading').css('width', '0%');
+        $('.builder-controls .builder-save').removeClass('active-dropdown-view');
+
+        setTimeout(function () {
+            $('.builder-controls .builder-save').removeClass('saving');
+            $('.builder-controls .builder-save .save').html(mBuilderValues.save);
+        }, 2000);
+    });
+};
+
+mBuilder.prototype.mBuilder_message_box = function(title, customClass, text, btn1, callback1, btn2, callback2, closeCallback){
+    "use strict";
+    var t = this;
+    $('.message-box-wrapper').remove();
+    var $messageBox = $('' +
+            '<div class="message-box-wrapper">' +
+            '   <div class="message-box-container '+ customClass +'">' +
+            '       <div class="message-box-close"/>' +
+            '       <div class="message-box-title">' + title + '</div>' +
+            '       <div class="message-box-text">' + text + '</div>' +
+            '       <button class="message-box-btn1">'+ btn1 +'</button>' +
+            '   </div>' +
+            '</div>').appendTo('body'),
+        $btn1;
+
+    $messageBox.animate({opacity:1},200);
+    $btn1 = $messageBox.find('.message-box-btn1');
+
+    $btn1.click(function(){
+        if(typeof callback1 == 'function') {
+            callback1();
+        }
+    });
+    if(btn2){
+        var $btn2 = $('<button class="message-box-btn2">'+ btn2 +'</button>').insertAfter($btn1);
+        $btn2.click(function(){
+            if(typeof callback2 == 'function'){
+                callback2();
+            }
+        });
+    }
+    if(!btn2){
+        $btn1.css("width","100%");
+    }
+
+    var $close = $messageBox;
+    $close.on('click', function(e) {
+        if (e.target !== this)
+            return;
+        if(typeof closeCallback == 'function'){
+            closeCallback();
+        }
+        t.mBuilder_close_message_box();
+    });
+};
+
+mBuilder.prototype.mBuilder_close_message_box = function(){
+    "use strict";
+
+    $('.message-box-wrapper').fadeOut(300,function(){
+        $(this).remove();
+    })
+};
+
+mBuilder.prototype.on_before_unload = function(){
+    var t = this;
+    var leave_builder_msg = "You're about to leave Massive Builder",
+        edit_setting_msg = "You're about to edit setting",
+        import_demo_msg = "You're about to import demo";
+        $('.builder-dashboard a, .builder-sitesetting a, .builder-customizer a, .builder-close a').click(function(){
+        var $that = $(this);
+        if($('body').hasClass('changed')) {
+            if($that.parent().hasClass('builder-sitesetting')){
+                var leave_msg = edit_setting_msg;
+            }else if($that.parent().hasClass('builder-customizer')){
+                var leave_msg = import_demo_msg;
+            }else{
+                var leave_msg = leave_builder_msg;
+            }
+            t.mBuilder_message_box(leave_msg, '', 'Would you mind save your changes before leaving?', 'Update First', function () {
+                t.save_callback_function = function () {
+                    window.location = $that.attr('href');
+                }
+                t.saveContent();
+            }, 'Just Leave', function () {
+                window.location = $that.attr('href');
+            }, function () {
+                return false;
+            });
+            return false;
+        }
+    })
+};
+
+var open_shortcode_time = open_shortcode_time_duration =  '' ;
+mBuilder.prototype.remove_time_out = function (){
+    clearTimeout(open_shortcode_time_duration);
+}
+
+mBuilder.prototype.calc_time_out = function(){
+    var t = this ;
+    open_shortcode_time_duration = setTimeout(function(){
+        t.close_pixflow_shortcode_panel();
+    } , 5000 );
+    return true ;
+}
+
+mBuilder.prototype.open_pixflow_shortcode_panel  = function(){
+    "use strict";
+    clearTimeout(open_shortcode_time);
+    clearTimeout(open_shortcode_time_duration);
+    var $shortcodes_panel = $(".pixflow-shortcodes-panel");
+
+    $shortcodes_panel.removeClass('hide-panel');
+    $(".pixflow-add-element-button").addClass('clicked');
+    $shortcodes_panel.addClass("opened");
+    $shortcodes_panel.find('.pixflow-search-shortcode').focus();
+
+};
+
+mBuilder.prototype.close_pixflow_shortcode_panel = function(){
+    var $shortcodes_panel = $(".pixflow-shortcodes-panel");
+    clearTimeout(open_shortcode_time_duration);
+    if ($shortcodes_panel.hasClass("opened")) {
+        $(".pixflow-add-element-button").removeClass('clicked');
+        $shortcodes_panel.removeClass("opened");
+        open_shortcode_time = setTimeout(function () {
+            $shortcodes_panel.addClass('hide-panel')
+        },800);
+        this.clear_shortcodes_panel_input();
+
+    }
+};
+
+mBuilder.prototype.clear_shortcodes_panel_input = function(){
+    $('.pixflow-search-shortcode').val('');
+    $('.pixflow-shortcodes-container .category-container').addClass('show').find('.shortcodes').addClass('active');
+};
+
+/*
+ * Section Builder function
+ * */
+mBuilder.prototype.section_builder = function(){
+    placeholder = $('.insert-after-row-placeholder').last();
+    this.buildShortcode(
+        placeholder
+        , 'vc_row'
+        , {
+            'row_type':"image"
+            , 'background_color_image':"rgba(0, 0, 0, 0)"
+            , 'row_image':"http://demo.massivedynamic.co/general/wp-content/uploads/2017/04/section2.jpg"
+            , 'row_padding_top':"255"
+            , 'row_padding_bottom':"175"
+            , 'row_padding_right':"0"
+            , 'row_padding_left':"0"
+            , 'row_margin_top':"0"
+            , 'row_margin_bottom':"0"
+            ,'content':'[vc_column width="1/2"][/vc_column][vc_column width="1/2" el_class="responsive-full-width"][md_text md_text_title_line_height="66" md_text_desc_line_height="27" md_text_title_bottom_space="36" md_text_description_bottom_space="43" md_text_title_separator="no" md_text_solid_color="rgb(255, 255, 255)" md_text_title_size="70" md_text_use_title_custom_font="yes" md_text_title1="pixflow_base64PGRpdj48c3BhbiBzdHlsZT0iZm9udC1zaXplOiA2MHB4OyIgZGF0YS1tY2Utc3R5bGU9ImZvbnQtc2l6ZTogNjBweDsiPkEgcHJpbnQgJmFtcDsgZGlnaXRhbDwvc3Bhbj48YnI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTogNjBweDsiIGRhdGEtbWNlLXN0eWxlPSJmb250LXNpemU6IDYwcHg7Ij5jcmVhdGl2ZSBzdHVkaW8uPC9zcGFuPjwvZGl2Pg==" md_text_content_size="16" md_text_content_color="rgb(255, 255, 255)" md_text_animation_speed="800" md_text_animation_position="right" md_text_animation_easing="Power4.easeOut" md_text_desc_google_fonts="font_family:Poppins%3A300%2Cregular%2C500%2C600%2C700|font_style:400%20regular%3A400%3Anormal" md_text_title_google_fonts="font_family:Poppins%3A300%2Cregular%2C500%2C600%2C700|font_style:600%20bold%20regular%3A600%3Anormal" md_text_animation="yes" md_text_animation_delay="0.6" align="right"]Massive Dynamic has over 10 years of experience in Design, Technology and Marketing. We take prVideo in delivering Intelligent Designs and Engaging Experiences for clients all over the World.[/md_text][/vc_column]'
+        }
+    );
+}
 
 // builder instance
 var builder = null;
-$(function(){
+var $ = jQuery;
+$(function () {
     builder = new mBuilder();
-    builder.makeLinksTargetSelf();
-    // Alert if changes not saved before leave/reload page
-    window.onbeforeunload = function(event) {
-        if($('body').hasClass('changed')){
-            event.returnValue = true;
-        }
-    };
 
-
-    $('[data-mbuilder-el]').each(function(){
+    $('[data-mbuilder-el]').each(function () {
         var type = $(this).attr('data-mbuilder-el');
-        if(typeof builder[type+"Shortcode"] == 'function') {
-            builder[ type + 'Shortcode']($(this));
+        if (typeof builder[type + "Shortcode"] == 'function') {
+            builder[type + 'Shortcode']($(this));
         }
     });
-
 });
+
+$(document).on('mouseenter', '.vc_row', function () {
+    var mainPadding = parseInt($('main').css('padding-top')),
+        top = mainPadding,
+        num = 0,
+        firstRow = $('main .vc_row').first(),
+        $firstRowControls = firstRow.find('> .wrap + .mBuilder_row_controls'),
+        $headerTop = $('header[class *= "top"]'),
+        headerHeight = $headerTop.height()+3;//50 is header gizmo height
+
+    firstRow.addClass('first-row');
+
+    if (!$(this).closest('.first-row').length ){
+        return;
+    }
+
+    if($('header').is('.left') || $('header').is('.right')){
+        $firstRowControls.css('top', '0');
+    }else {
+
+        if (!$(this).hasClass('vc_inner')) {
+
+            if (mainPadding >= headerHeight + 45) {
+                //content is not under header now check if row has space to view its settings or not
+                if (!$firstRowControls.hasClass('flag')) {
+                    var number =  ($(this).hasClass('sloped_row') || $(this).hasClass('row_video')) ? '2px':'-45px';
+                    $firstRowControls.css('top', number);
+                    $firstRowControls.addClass('flag')
+                }
+            } else {
+                //row has enough space to view its setting
+                // check if it is under header or not
+                var headerTop = parseInt($headerTop.css('top'));
+                headerHeight += headerTop;
+                num = (headerHeight + 45 <= mainPadding ) ? - 45 : headerHeight - mainPadding;
+
+                if(num < 0)
+                    num = 2;
+
+                if (!$firstRowControls.hasClass('flag')) {
+                    $firstRowControls.css({'top': num,'left':'50px'});
+                    $firstRowControls.addClass('flag')
+                }
+            }
+        } else {
+            var $innerRow = $(this),
+                $innerRowControls = $innerRow.find('.mBuilder_row_controls'),
+                rowTop = $innerRowControls.closest('.first-row').find('> .mBuilder_row_controls').position().top;
+
+            if ($innerRowControls.offset().top <= rowTop){
+                $innerRowControls.css({'top':rowTop});
+
+            }
+        }
+    }
+});
+
+$(document).on('mouseleave', '.vc_row ', function () {
+
+    var firstRow = $('main .vc_row').first(),
+        firstRowControls = firstRow.find('> .wrap + .mBuilder_row_controls');
+
+    if($(this).hasClass('vc_inner')){
+        if (! $(this).closest('.first-row').length){
+            return;
+        }
+    }else if (! $(this).hasClass('first-row')){
+        return;
+    }
+    firstRow.removeClass('first-row');
+
+    if (firstRowControls.hasClass('flag')) {
+        firstRowControls.removeClass('flag')
+    }
+});
+
+$(document).on('click','.pixflow-add-element-button',function(e){
+    e.stopPropagation();
+    builder.open_pixflow_shortcode_panel();
+});
+
+$('.pixflow-shortcodes-panel').on('click' , '.pixflow_close_shortcodes_panel' ,function () {
+    builder.close_pixflow_shortcode_panel();
+});
+
+window.onbeforeunload = function (e) {
+    e = e || window.event;
+    if($('body').hasClass('changed')){
+        if (e) {
+            e.returnValue = 'Sure?';
+        }
+        // For Safari
+        return 'Sure?';
+    }
+};
