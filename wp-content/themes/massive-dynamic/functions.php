@@ -1,19 +1,6 @@
 <?php
 remove_filter('the_content','wpautop');
-//Check if session is available or not , if not it will start it
-if ('' == session_id()) {
-    //Check if Session Save Path Set or not , if Not we will create tmp directory in wordpress root folder and set it as session save path
-    $session_path = ini_get('session.save_path');
-    if ('' == $session_path) {
-        if (!is_dir(ABSPATH . "/tmp")) {
-            wp_mkdir_p(ABSPATH . "/tmp");
-        }
-        @session_save_path(ABSPATH . "/tmp");
-    }
-    if (function_exists("session_start")) {
-        session_start();
-    }
-}
+
 $pixflow_wordpress_upload_dir = wp_upload_dir();
 $pixflow_wordpress_upload_dir['baseurl'] = set_url_scheme($pixflow_wordpress_upload_dir['baseurl']);
 define('PIXFLOW_THEME_SLUG', 'massive-dynamic');
@@ -31,12 +18,14 @@ define('PIXFLOW_THEME_DEMOS', PIXFLOW_THEME_INCLUDES . '/demo-importer/demos');
 define('PIXFLOW_THEME_CUSTOMIZER', PIXFLOW_THEME_LIB . '/customizer');
 define('PIXFLOW_THEME_LANGUAGES', PIXFLOW_THEME_LIB . '/languages');
 define('PIXFLOW_THEME_CACHE', $pixflow_wordpress_upload_dir['basedir'] . '/md_cache');
+define('PIXFLOW_THEME_SESSION', $pixflow_wordpress_upload_dir['basedir'] . '/session');
 define('PIXFLOW_THEME_ASSETS', PIXFLOW_THEME_DIR . '/assets');
 define('PIXFLOW_THEME_PLUGINS', PIXFLOW_THEME_DIR . '/plugins');
 define('PIXFLOW_THEME_JS', PIXFLOW_THEME_ASSETS . '/js');
 define('PIXFLOW_THEME_CSS', PIXFLOW_THEME_ASSETS . '/css');
 define('PIXFLOW_THEME_IMAGES', PIXFLOW_THEME_ASSETS . '/img');
 define('PIXFLOW_THEME_SHORTCODES', PIXFLOW_THEME_LIB . '/shortcodes');
+define('PIXFLOW_THEME_SECTIONS', PIXFLOW_THEME_LIB . '/sections');
 define('PIXFLOW_THEME_WIDGETS', PIXFLOW_THEME_LIB . '/widgets');
 define('PIXFLOW_THEME_FUNCTONS', PIXFLOW_THEME_LIB . '/functions');
 // Defining The List Of Font Requstes
@@ -62,6 +51,39 @@ define('PIXFLOW_PLACEHOLDER1', PIXFLOW_THEME_IMAGES_URI . '/placeholders/placeho
 define('PIXFLOW_PLACEHOLDER_BG', PIXFLOW_THEME_IMAGES_URI . '/placeholders/blank.png');
 define('PIXFLOW_THEME_SHORTCODES_URI', PIXFLOW_THEME_LIB_URI . '/shortcodes');
 define('PIXFLOW_THEME_WIDGETS_URI', PIXFLOW_THEME_LIB_URI . '/widgets');
+
+/**************************************************
+ * Check if session is available or not , if not it will start it
+ *************************************************/
+if ('' == session_id()) {
+	if( is_multisite() ){
+		require_once ( PIXFLOW_THEME_FUNCTONS . '/session_handler_functions.php' );
+		$handler = new File_Session_Handler();
+		session_set_save_handler(
+			array($handler, 'open'),
+			array($handler, 'close'),
+			array($handler, 'read'),
+			array($handler, 'write'),
+			array($handler, 'destroy'),
+			array($handler, 'gc')
+		);
+		register_shutdown_function('session_write_close');
+		session_start();
+	}else{
+		//Check if Session Save Path Set or not , if Not we will create tmp directory in wordpress root folder and set it as session save path
+		$session_path = ini_get('session.save_path');
+		if ('' == $session_path) {
+			if (!is_dir(ABSPATH . "/tmp")) {
+				wp_mkdir_p(ABSPATH . "/tmp");
+			}
+			@session_save_path(ABSPATH . "/tmp");
+		}
+		if (function_exists("session_start")) {
+			session_start();
+		}
+	}
+}
+
 /**************************************************
  * Content view
  *************************************************/

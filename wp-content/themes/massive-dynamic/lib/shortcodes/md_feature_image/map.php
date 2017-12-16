@@ -15,7 +15,12 @@ function pixflow_feature_image()
     $separatorCounter = 0;
 
     $param = array(
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "param_name" => "content_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "attach_image",
             "edit_field_class" => $filedClass . "glue first",
@@ -74,7 +79,12 @@ function pixflow_feature_image()
             "param_name" => "feature_image_description_separator" . ++$separatorCounter,
             "admin_label" => false,
         ),
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue",

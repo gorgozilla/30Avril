@@ -32,6 +32,13 @@ function pixflow_team_member2_param()
     $param = array(
 
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "param_name" => "content_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first last",
             "group" => esc_attr__("General", 'massive-dynamic'),
@@ -41,8 +48,14 @@ function pixflow_team_member2_param()
             "value" => $dropDown
         ),
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             "type" => "md_vc_colorpicker",
-
             "edit_field_class" => $filedClass . "glue first",
             "heading" => esc_attr__("Text Color", 'massive-dynamic'),
             "param_name" => "team_member_style2_texts_color",
@@ -74,9 +87,20 @@ function pixflow_team_member2_param()
         }
 
         $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Information", 'massive-dynamic'),
+            "param_name" => "information_group".$i,
+            "group" => esc_attr__("Member ", 'massive-dynamic') . $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            'dependency' => array(
+                'element' => $members_param,
+                'value' => $value
+            )
+        );
+
+        $param[] = array(
             "type" => "textfield",
             "edit_field_class" => $filedClass . "first glue",
-
             "group" => esc_attr__("Member ", 'massive-dynamic') . $i,
             "heading" => esc_attr__("Name", 'massive-dynamic'),
             "param_name" => "team_member_style2_name_" . $i,
@@ -144,6 +168,18 @@ function pixflow_team_member2_param()
                 'element' => $members_param,
                 'value' => $value
             ),
+        );
+
+        $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Socials", 'massive-dynamic'),
+            "param_name" => "socials_group".$i,
+            "group" => esc_attr__("Member ", 'massive-dynamic') . $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            'dependency' => array(
+                'element' => $members_param,
+                'value' => $value
+            )
         );
 
         $param[] = array(

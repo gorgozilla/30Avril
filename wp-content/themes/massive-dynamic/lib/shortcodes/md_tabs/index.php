@@ -156,7 +156,7 @@ function pixflow_sc_tabs( $atts, $content = null ){
                 },150)
             });
             if (!$('.<?php echo esc_attr($id); ?>').data("ui-tabs")) {
-                $('.<?php echo esc_attr($id); ?>').on('click.tab','li a',function(e){$(this).closest('li').click();return false;});
+                $('.<?php echo esc_attr($id); ?>').on('click.tab','.px_tabs_nav li > a',function(e){$(this).closest('li').click();return false;});
                 $('.<?php echo esc_attr($id); ?>').on('click','.ui-tabs-nav li',function(e){
                     e.preventDefault();
 

@@ -22,6 +22,13 @@ function pixflow_processStep_param()
     );
     $param = array(
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Steps", 'massive-dynamic'),
+            "param_name" => "steps_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last",
+        ),
+        array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first last",
             "group" => esc_attr__("General", 'massive-dynamic'),
@@ -29,6 +36,13 @@ function pixflow_processStep_param()
             "param_name" => $step_num_param,
             "admin_label" => false,
             "value" => $dropDown
+        ),
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Style", 'massive-dynamic'),
+            "param_name" => "style_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last"
         ),
         array(
             'type' => 'dropdown',
@@ -96,35 +110,23 @@ function pixflow_processStep_param()
         for ($k = $i; $k <= $step_num; $k++) {
             $value[] = (string)$k;
         }
+
+
+
         $param[] = array(
-            "type" => "attach_image",
-            "edit_field_class" => $filedClass . "first glue last",
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "param_name" => "process_content_group",
             "group" => esc_attr__("Step ", 'massive-dynamic') . $i,
-            "heading" => esc_attr__("Image", 'massive-dynamic'),
-            "param_name" => "pstep_image_" . $i,
-            "admin_label" => false,
+            "edit_field_class" => $filedClass . "glue first last",
             'dependency' => array(
                 'element' => $step_num_param,
                 'value' => $value
-            ),
+            )
         );
-        $param[] = array(
-            "type" => "dropdown",
-            "edit_field_class" => $filedClass . "first glue last",
-            "group" => esc_attr__("Step ", 'massive-dynamic') . $i,
-            "heading" => esc_attr__("Size", 'massive-dynamic'),
-            "param_name" => "pstep_size_" . $i,
-            "admin_label" => false,
-            'value' => array(
-                esc_attr__("Small", 'massive-dynamic') => "small",
-                esc_attr__("Medium", 'massive-dynamic') => "medium",
-                esc_attr__("Large", 'massive-dynamic') => "large",
-            ),
-            'dependency' => array(
-                'element' => $step_num_param,
-                'value' => $value
-            ),
-        );
+
+
+
         $param[] = array(
             "type" => "textfield",
             "edit_field_class" => $filedClass . "first glue",
@@ -179,6 +181,49 @@ function pixflow_processStep_param()
             "param_name" => "pstep_desc_" . $i,
             "value" => "Description of step" . $i,
             "admin_label" => false,
+            'dependency' => array(
+                'element' => $step_num_param,
+                'value' => $value
+            ),
+        );
+
+        $param[] = array(
+            "type" => "attach_image",
+            "edit_field_class" => $filedClass . "first glue last",
+            "group" => esc_attr__("Step ", 'massive-dynamic') . $i,
+            "heading" => esc_attr__("Image", 'massive-dynamic'),
+            "param_name" => "pstep_image_" . $i,
+            "admin_label" => false,
+            'dependency' => array(
+                'element' => $step_num_param,
+                'value' => $value
+            ),
+        );
+
+        $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Sizing", 'massive-dynamic'),
+            "param_name" => "process_sizing_group",
+            "group" => esc_attr__("Step ", 'massive-dynamic') . $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            'dependency' => array(
+                'element' => $step_num_param,
+                'value' => $value
+            )
+        );
+
+        $param[] = array(
+            "type" => "dropdown",
+            "edit_field_class" => $filedClass . "first glue last",
+            "group" => esc_attr__("Step ", 'massive-dynamic') . $i,
+            "heading" => esc_attr__("Size", 'massive-dynamic'),
+            "param_name" => "pstep_size_" . $i,
+            "admin_label" => false,
+            'value' => array(
+                esc_attr__("Small", 'massive-dynamic') => "small",
+                esc_attr__("Medium", 'massive-dynamic') => "medium",
+                esc_attr__("Large", 'massive-dynamic') => "large",
+            ),
             'dependency' => array(
                 'element' => $step_num_param,
                 'value' => $value

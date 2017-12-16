@@ -158,7 +158,7 @@ function pixflow_cache_file_permission_notice() {
     }
     ?>
     <div class="notice notice-error is-dismissible">
-        <p><?php _e('Massive Dynamic can not load JavaScript cache files from upload directory. If there is a .htaccess file in upload directory, please either edit/delete it or <a target="_blank" href="http://help.massivedynamic.co">contact our support team</a>  and we will help you.', 'massive-dynamic'); ?></p>
+        <p><?php _e('Massive Dynamic can not load JavaScript cache files from upload directory. If there is a .htaccess file in upload directory, please either edit/delete it or <a target="_blank" href="http://help.pixflow.net">contact our support team</a>  and we will help you.', 'massive-dynamic'); ?></p>
     </div>
     <?php
 }

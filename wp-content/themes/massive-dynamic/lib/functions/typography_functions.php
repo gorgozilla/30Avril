@@ -60,7 +60,7 @@ function pixflow_extract_font_families( $string ){
 function pixflow_merge_fonts( $font_name ) {
     global $pixflow_merge_font_list;
     if( array_search( $font_name , $pixflow_merge_font_list ) === false ){
-        $pixflow_merge_font_list[] =  $font_name ;
+            $pixflow_merge_font_list[] =  $font_name ;
     }
     return true ;
 }
@@ -74,15 +74,21 @@ function pixflow_merge_fonts( $font_name ) {
  * @since 2.0.0
  */
 function pixflow_load_fonts(){
-    global $pixflow_merge_font_list;
+
+	global $pixflow_merge_font_list, $in_mbuilder;
     $font_list = implode($pixflow_merge_font_list) ;
     $font_list = substr(trim($font_list), -1) != '|' ? $font_list  : substr($font_list, 0, -1)  ;
     $font_list = explode('|' , $font_list);
     $font_list  = array_unique($font_list);
     wp_enqueue_style('vc_google_text_fonts' , '//fonts.googleapis.com/css?family=' . implode('|' , $font_list) , array()  );
-    return false;
+    $font_list = implode('|', $font_list);
+    if( $in_mbuilder && '' != $font_list  ) {
+        echo("<link rel='stylesheet' href='//fonts.googleapis.com/css?family=" . $font_list . "' type='text/css' media='all'/>");
+	}
+	
 }
 add_action( 'wp_footer', 'pixflow_load_fonts');
+
 
 /**
  * Convert all the font tags to span tags
@@ -97,4 +103,35 @@ function pixflow_convert_font_to_span($content){
     $content = str_replace('<font' , '<span' , $content);
     $content = str_replace('</font>' , '</span>' , $content);
     return $content;
+}
+
+/**
+ * Return The Font Family Of String In Style and font weight in md live text shortcode
+ * @param String It Is String Variable
+ *
+ * @return Array The List Of Font Family That Used And Return False If Nothing Found
+ * @since 2.0.0
+ */
+
+function pixflow_extract_live_text_fonts($content){
+	
+	$fonts = array();
+	preg_match_all('/<span(.*?)>(.*?)<\/span>/', $content , $span);
+	foreach ($span[0] as $tag){
+		preg_match("/font-family(.*?):(.*?)(;|$)/",  htmlspecialchars_decode( $tag ) , $matches);
+		preg_match('/data-font-weight="(.*?)"/', $tag, $result);
+		if (!empty($matches[2])) {
+			$font_name = trim( str_replace(array('"' , '\'') , '' , $matches[2]));
+			if($font_name != '') {
+				$font_name .= !empty($result[1]) ? ':' . trim($result[1]) : '' ;
+				$fonts[] = $font_name;
+			}
+		}
+	}
+
+	if( count($fonts) > 0 ) {
+		return $fonts ;
+	}else{
+		return false ;
+	}
 }

@@ -60,7 +60,8 @@
             'keyup .link-input' : 'insert_link_url',
             'keydown .meditor-input': 'validate_input',
             'click .active-item' : 'input_focus',
-            'click .mdb-insert-link' : 'link_input_focus'
+            'click .mdb-insert-link' : 'link_input_focus',
+            'click .meditor-animation' :'open_animation_setting'
 
 
 
@@ -91,9 +92,7 @@
                     that.toggle_color(color);
                 }
             });
-         /*   $('#color-picker-input').on('click' , function(e){
 
-            });*/
             $('#color-picker-input').on('keyup',function(e){
                 if(e.keyCode == 13 ) {
                     that.toggle_color($(this).val());
@@ -194,6 +193,16 @@
 
         close_color_picker:function($color_picker){
             $color_picker.removeClass('open');
+        },
+
+        create_animation_controller:function () {
+            var source = '<div class="live-text-animation" >'+
+                '<button class=" meditor-animation">'+
+                '<span class="text-animation-controller mdb-animation"><i class="path1"></i><i class="path2"></i><i class="path3"></i></span>'+
+                '</button>'+
+                '</div>';
+            return source;
+
         },
 
         create_text_alignment:function (item) {
@@ -384,7 +393,6 @@
         },
 
         create_line_height:function (item) {
-
             var options = {
                 toolbar_icon:"mdb-line-height",
                 value:[1,1.2,1.5,1.7,2],
@@ -636,7 +644,7 @@
         },
 
         create_redo:function(item){
-            var source = '<div class="redo">' +
+            var source = '<div class="redo with-border">' +
                 '<button class="meditor-redo">' +
                     '<span class="mdb-redo"></span>' +
                     '</button>'+
@@ -687,9 +695,12 @@
                 '</div>';
             return source;
         },
+        open_animation_setting:function (e) {
+            e.stopPropagation();
+            $('#meditor_focus').closest('.mBuilder-md_live_text').find(".sc-control").click();
+            $('.meditor-panel').css('display' , 'none');
+        },
 
-
-        
         close_url_panel: function(){
             $('.link-input').val("") ;
             $('.link').click();
@@ -717,9 +728,9 @@
             this.update_font_size_controller([true , size]);
             var html_object = this.get_selection_html();
             var $selection_html = $('<div>').html(html_object.html);
-            var spans = $selection_html.find('span');
-            if(spans.length) {
-                spans.css({'font-size': size + 'px'});
+            var html_child = $selection_html.find( '*' );
+            if( html_child.length ) {
+				html_child.css({'font-size': size + 'px'});
             }else{
                 $selection_html.html('<span style="font-size: ' + size + 'px' + '">' + $selection_html.html() + "</span>");
             }
@@ -793,11 +804,13 @@
         set_font_variant : function(name,variant){
             var html_object = this.get_selection_html();
             var $selection_html = $('<div>').html(html_object.html);
-            var spans = $selection_html.find('span');
-            if(spans.length) {
-                spans.css({'font-weight': variant,'font-family':name});
+            var html_child = $selection_html.find( '*' );
+            var font_style = ( typeof variant != "undefined" ) ? variant.replace(/[0-9]/g, '') : '';
+            font_style = ( font_style != '' ) ? font_style : 'normal';
+            if( html_child.length) {
+				html_child.css({'font-weight': parseInt(variant) ,'font-family':name , 'font-style':font_style}).attr('data-font-weight' , variant);
             }else{
-                $selection_html.html("<span style='font-family: " + name + "; font-weight: " + variant + "'>" + $selection_html.html() + "</span>");
+                $selection_html.html('<span data-font-weight="' + variant + '" style="font-style:' + font_style + ';font-family: ' + name + '; font-weight: ' + parseInt(variant) + '">' + $selection_html.html() + '</span>');
             }
             var html = $selection_html.html();
             this.replace_selection_with_html(html);
@@ -945,12 +958,14 @@
             var html_object = this.get_selection_html();
             var $selection_html = $('<div>').html(html_object.html);
             color = this.rgb2hex(color);
-            var spans = $selection_html.find('span');
-            if(spans.length) {
-                spans.css({'color': color});
+            var html_child = $selection_html.find( '*' );
+
+            if( html_child.length ){
+				html_child.css({'color': color});
             }else{
                 $selection_html.html("<span style='color: " + color + ";'>" + $selection_html.html() + "</span>");
             }
+
             var html = $selection_html.html();
             this.replace_selection_with_html(html);
             this.remove_extra_li();
@@ -1245,6 +1260,11 @@
         update_controller: function (event,elem) {
             if(!elem){
                 var select_part = document.elementFromPoint(event.clientX, event.clientY);
+                var focus_element = document.getElementById('meditor_focus');
+                if( null != focus_element
+                    && false == $.contains( focus_element , select_part ) ){
+                    return ;
+                }
             }else{
                 var select_part = elem;
             }
@@ -1322,7 +1342,7 @@
         config : {
             // selector to specify editable elements
             selector: '.meditor',
-            default_html: '<span style="font-size:20px">Click here to edit.</span>',
+            default_html: '<span style="font-size:20px;">Click here to edit.</span>',
             default_text: 'Click here to edit.',
             // Named sets of buttons to be specified on the editable element
             // in the markup as "data-button-class"
@@ -1483,6 +1503,15 @@
                             "have_input" : true
                         }
                     ,
+                    'animation':
+                        {
+                            "name" : "Animation" ,
+                            "type" : "text",
+                            "style" : "text" ,
+                            "placeholder": "Animation" ,
+                            "class" : "animation-controller"
+
+                        },
                     'fontfamily':
                         {
                             "name" : "Font Family" ,
@@ -1579,7 +1608,6 @@
 
         } ,
 
-
         create_editor_panel: function(){
             // if the editor isn't already built, build it
             this.$editor = $('.meditor-panel');
@@ -1591,14 +1619,12 @@
             }
         },
 
-
         add_events: function(){
             this.editor_panel_events();
             this.editor_content_events();
             this.body_events();
             $(document).paste_as_plain_text();
         },
-
 
         editor_content_events:function(){
             var that = this;
@@ -1648,7 +1674,6 @@
             });
         },
 
-
         editor_panel_events:function(){
             var that = this;
             // close all open drop down when click on
@@ -1670,13 +1695,12 @@
             });
         },
 
-
         body_events:function(){
             var that = this;
             // listen for mousedowns that are not coming from the editor
             // and close the editor
             // unbind first to make sure we aren't doubling up on listeners
-            $('body').bind('mousedown.meditor', function(e) {
+            $('body').unbind('mousedown.meditor').bind('mousedown.meditor', function(e) {
                 // check to see if the click was in an etch tool
                 var target = e.target || e.srcElement;
                 if ($(target).not('.meditor-panel, .meditor-panel *, .meditor-image-tools, .meditor-image-tools *').length) {
@@ -1701,22 +1725,18 @@
 
         show_panel:function(){
             if($('#meditor_focus').length) {
-                var top = this.$editable.filter('#meditor_focus').offset().top - 50,
+                var top = this.$editable.filter('#meditor_focus').offset().top - 35,
                     left = this.$editable.filter('#meditor_focus').offset().left  ,
-                    right = $(window).width() - ( left + this.$editable.filter('#meditor_focus').width() ) ,
-                    left_shortcode = (this.$editable.filter('#meditor_focus').width() / 2);
-                if(left < 250){
-                    $('.meditor-panel').css({'top': top, 'left': left + 154 , 'right': ''});
-                }else if(right < 250){
-                    $('.meditor-panel').css({'top': top, 'left': '' , 'right': right - 154});
+                    shortcode_width = this.$editable.filter('#meditor_focus').width() ,
+                    right = $(window).width() - ( left + shortcode_width ) ,
+                    extra_space = shortcode_width + right;
+                if( 670 > extra_space ){
+                    $('.meditor-panel').css({'top': top, 'left': '' , 'right': right});
                 }else{
-                    $('.meditor-panel').css({'top': top, 'left': left + left_shortcode - 154,'right': '' });
+                    $('.meditor-panel').css({'top': top, 'left':left , 'right': ''});
                 }
-
             }
         },
-
-
 
     };
 

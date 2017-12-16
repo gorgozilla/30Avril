@@ -85,24 +85,7 @@ class WDIViewGalleryBox {
     $enable_share_buttons = (isset($current_feed['popup_enable_share_buttons']) ? esc_html($current_feed['popup_enable_share_buttons']) : 1);
     $image_right_click = (isset($current_feed['popup_image_right_click']) ? esc_html($current_feed['popup_image_right_click']) : 1);
 
-
-    $watermark_type = (isset($_GET['watermark_type']) ? esc_html($_GET['watermark_type']) : 'none');/*watch later*//*deprecated*/
-    $watermark_text = (isset($_GET['watermark_text']) ? esc_html($_GET['watermark_text']) : '');/*watch later*//*deprecated*/
-    $watermark_font_size = (isset($_GET['watermark_font_size']) ? esc_html($_GET['watermark_font_size']) : 12);/*watch later*//*deprecated*/
-    $watermark_font = (isset($_GET['watermark_font']) ? esc_html($_GET['watermark_font']) : 'Arial');/*watch later*//*deprecated*/
-    $watermark_color = (isset($_GET['watermark_color']) ? esc_html($_GET['watermark_color']) : 'FFFFFF');/*watch later*//*deprecated*/
-    $watermark_opacity = (isset($_GET['watermark_opacity']) ? esc_html($_GET['watermark_opacity']) : 30);/*watch later*//*deprecated*/
-    $watermark_position = explode('-', (isset($_GET['watermark_position']) ? esc_html($_GET['watermark_position']) : 'bottom-right'));/*watch later*//*deprecated*/
-    $watermark_link = (isset($_GET['watermark_link']) ? esc_html($_GET['watermark_link']) : '');/*watch later*//*deprecated*/
-    $watermark_url = (isset($_GET['watermark_url']) ? esc_html($_GET['watermark_url']) : '');/*watch later*//*deprecated*/
-    $watermark_width = (isset($_GET['watermark_width']) ? esc_html($_GET['watermark_width']) : 90);/*watch later*//*deprecated*/
-    $watermark_height = (isset($_GET['watermark_height']) ? esc_html($_GET['watermark_height']) : 90);/*watch later*//*deprecated*/
-
-
-
-
     //$option_row = $this->model->get_option_row_data();
-
 
     // $image_right_click = 0; //$option_row->image_right_click;/*watch later havent this options*/
     $comment_moderation = 0;//$option_row->comment_moderation;/*watch later havent this options*/
@@ -180,25 +163,9 @@ class WDIViewGalleryBox {
       'enable_image_google' => $enable_image_google,
       'enable_image_pinterest' => $enable_image_pinterest,
       'enable_image_tumblr' => $enable_image_tumblr,
-      'watermark_type' => $watermark_type,
       'current_url' => $current_url
     );
-    if ($watermark_type != 'none') {
-      $params_array['watermark_link'] = $watermark_link;
-      $params_array['watermark_opacity'] = $watermark_opacity;
-      $params_array['watermark_position'] = $watermark_position;
-    }
-    if ($watermark_type == 'text') {
-      $params_array['watermark_text'] = $watermark_text;
-      $params_array['watermark_font_size'] = $watermark_font_size;
-      $params_array['watermark_font'] = $watermark_font;
-      $params_array['watermark_color'] = $watermark_color;
-    }
-    elseif ($watermark_type == 'image') {
-      $params_array['watermark_url'] = $watermark_url;
-      $params_array['watermark_width'] = $watermark_width;
-      $params_array['watermark_height'] = $watermark_height;
-    }
+
     $popup_url = add_query_arg(array($params_array), admin_url('admin-ajax.php'));
     $filmstrip_thumb_margin = $theme_row->lightbox_filmstrip_thumb_margin;
     $margins_split = explode(" ", $filmstrip_thumb_margin);
@@ -713,41 +680,6 @@ class WDIViewGalleryBox {
         -ms-user-select: none;
         user-select: none;
       }
-      .wdi_watermark_container {
-        display: table-cell;
-        margin: 0 auto;
-        position: relative;
-        vertical-align: middle;
-      }
-      .wdi_watermark_spun {
-        display: table-cell;
-        overflow: hidden;
-        position: relative;
-        text-align: <?php echo $watermark_position[1]; ?>;
-        vertical-align: <?php echo $watermark_position[0]; ?>;
-        /*z-index: 10140;*/
-      }
-      .wdi_watermark_image {
-        margin: 4px;
-        max-height: <?php echo $watermark_height; ?>px;
-        max-width: <?php echo $watermark_width; ?>px;
-        opacity: <?php echo number_format($watermark_opacity / 100, 2, ".", ""); ?>;
-        filter: Alpha(opacity=<?php echo $watermark_opacity; ?>);
-        position: relative;
-        z-index: 10141;
-      }
-      .wdi_watermark_text,
-      .wdi_watermark_text:hover {
-        text-decoration: none;
-        margin: 4px;
-        font-size: <?php echo $watermark_font_size; ?>px;
-        font-family: <?php echo $watermark_font; ?>;
-        color: <?php echo $watermark_color; ?> !important;
-        opacity: <?php echo number_format($watermark_opacity / 100, 2, ".", ""); ?>;
-        filter: Alpha(opacity=<?php echo $watermark_opacity; ?>);
-        position: relative;
-        z-index: 10141;
-      }
       .wdi_slide_container {
         display: table-cell;
         position: absolute;
@@ -1204,32 +1136,6 @@ class WDIViewGalleryBox {
         </div>
         <?php
       }
-      if ($watermark_type != 'none') {
-        ?>
-        <div class="wdi_image_container">
-          <div class="wdi_watermark_container">
-            <div style="display:table; margin:0 auto;">
-            <span class="wdi_watermark_spun" id="wdi_watermark_container">
-              <?php
-              if ($watermark_type == 'image') {
-                ?>
-                <a href="<?php echo urldecode($watermark_link); ?>" target="_blank">
-                <img class="wdi_watermark_image wdi_watermark" src="<?php echo $watermark_url; ?>" />
-              </a>
-                <?php
-              }
-              elseif ($watermark_type == 'text') {
-                ?>
-                <a class="wdi_none_selectable wdi_watermark_text wdi_watermark" target="_blank" href="<?php echo $watermark_link; ?>"><?php echo $watermark_text; ?></a>
-                <?php
-              }
-              ?>
-            </span>
-            </div>
-          </div>
-        </div>
-        <?php
-      }
       ?>
       <div id="wdi_image_container" class="wdi_image_container">
         <div class="wdi_image_info_container1">
@@ -1446,22 +1352,9 @@ class WDIViewGalleryBox {
               var width = wdi_current_image_span.width();
               var height = wdi_current_image_span.height();
 
-
-              jQuery(".wdi_watermark_spun").width(width);
-              jQuery(".wdi_watermark_spun").height(height);
-              jQuery(".wdi_watermark").css({display: ''});
-              /* Set watermark image size.*/
               var comment_container_width = 0;
               if (jQuery(".wdi_comment_container").hasClass("wdi_open")) {
                 comment_container_width = <?php echo $theme_row->lightbox_comment_width; ?>;
-              }
-              if (width <= (jQuery(window).width() - comment_container_width)) {
-                jQuery(".wdi_watermark_image").css({
-                  width: ((jQuery(".wdi_spider_popup_wrap").width() - comment_container_width) * <?php echo $watermark_width / $image_width; ?>)
-                });
-                jQuery(".wdi_watermark_text, .wdi_watermark_text:hover").css({
-                  fontSize: ((jQuery(".wdi_spider_popup_wrap").width() - comment_container_width) * <?php echo $watermark_font_size / $image_width; ?>)
-                });
               }
             }, 800);
           }
@@ -1906,8 +1799,6 @@ class WDIViewGalleryBox {
             /*jQuery("#wdi_spider_popup_left").hover().css({"display": "inline"});
              jQuery("#wdi_spider_popup_right").hover().css({"display": "inline"});*/
             jQuery(".wdi_image_count").html(wdi_data[key]["number"]);
-            /* Set filmstrip initial position.*/
-            jQuery(".wdi_watermark").css({display: 'none'});
             /* Set active thumbnail position.*/
             wdi_current_filmstrip_pos = key * (jQuery(".wdi_filmstrip_thumbnail").<?php echo $width_or_height; ?>() + 2 + 2 * <?php echo $theme_row->lightbox_filmstrip_thumb_border_width; ?>);
             wdi_current_key = key;
@@ -2296,7 +2187,6 @@ class WDIViewGalleryBox {
       /* Open/close comments.*/
       function wdi_comment() {
 
-        jQuery(".wdi_watermark").css({display: 'none'});
         if (jQuery(".wdi_comment_container").hasClass("wdi_open")) {
 
           /* Close comment.*/
@@ -2469,7 +2359,6 @@ class WDIViewGalleryBox {
         else {
           wdi_popup_resize();
         }
-        jQuery(".wdi_watermark").css({display: 'none'});
         setTimeout(function () {
           wdi_change_watermark_container();
         }, 500);
@@ -2656,7 +2545,6 @@ class WDIViewGalleryBox {
         });
         /* Maximize/minimize.*/
         jQuery(".wdi_resize-full").on(wdi_click, function () {
-          jQuery(".wdi_watermark").css({display: 'none'});
           var comment_container_width = 0;
           if (jQuery(".wdi_comment_container").hasClass("wdi_open")) {
             comment_container_width = jQuery(".wdi_comment_container").width();
@@ -2758,7 +2646,6 @@ class WDIViewGalleryBox {
         /* Fullscreen.*/
         /*Toggle with mouse click*/
         jQuery(".wdi_fullscreen").on(wdi_click, function () {
-          jQuery(".wdi_watermark").css({display: 'none'});
           var comment_container_width = 0;
           if (jQuery(".wdi_comment_container").hasClass("wdi_open")) {
             comment_container_width = jQuery(".wdi_comment_container").width();
@@ -2928,7 +2815,6 @@ class WDIViewGalleryBox {
       });
       /* Open with fullscreen.*/
       function wdi_open_with_fullscreen() {
-        jQuery(".wdi_watermark").css({display: 'none'});
         var comment_container_width = 0;
         if (jQuery(".wdi_comment_container").hasClass("wdi_open")) {
           comment_container_width = jQuery(".wdi_comment_container").width();

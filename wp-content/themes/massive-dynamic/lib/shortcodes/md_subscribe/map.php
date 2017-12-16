@@ -16,30 +16,10 @@ pixflow_map(
         "category" => esc_attr__('Business', 'massive-dynamic'),
         "params" => array(
             array(
-                "type" => "md_vc_colorpicker",
-                "edit_field_class" => $filedClass . "first glue",
-                "heading" => esc_attr__("Background Color", 'massive-dynamic'),
-                "param_name" => "subscribe_bgcolor",
-                "value" => '#ebebeb',
-                "admin_label" => false,
-                "opacity" => true,
-            ),
-            array(
-                "type" => 'md_vc_separator',
-                "param_name" => "subscribe_sep" . ++$separatorCounter,
-            ),
-            array(
-                'type' => 'md_vc_slider',
-                "edit_field_class" => $filedClass . " glue last",
-                'heading' => esc_attr__('Inputs Radius', 'massive-dynamic'),
-                'param_name' => 'subscribe_input_radius',
-                'value' => '35',
-                'defaultSetting' => array(
-                    "min" => "0",
-                    "max" => "35",
-                    "prefix" => " px",
-                    "step" => "1",
-                )
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 "type" => "textfield",
@@ -55,11 +35,26 @@ pixflow_map(
             ),
             array(
                 "type" => "textfield",
-                "edit_field_class" => $filedClass . " glue",
+                "edit_field_class" => $filedClass . " glue last",
                 "heading" => esc_attr__("Subtitle", 'massive-dynamic'),
                 "param_name" => "subscribe_sub_title",
                 "value" => 'Sign up to receive news and updates',
                 "admin_label" => false,
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
+                "type" => "md_vc_colorpicker",
+                "edit_field_class" => $filedClass . "first glue",
+                "heading" => esc_attr__("Background Color", 'massive-dynamic'),
+                "param_name" => "subscribe_bgcolor",
+                "value" => '#ebebeb',
+                "admin_label" => false,
+                "opacity" => true,
             ),
             array(
                 "type" => 'md_vc_separator',
@@ -75,8 +70,14 @@ pixflow_map(
                 "opacity" => true,
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Input", 'massive-dynamic'),
+                "param_name" => "input_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "dropdown",
-                "heading" => esc_attr__("Email Input Style", 'massive-dynamic'),
+                "heading" => esc_attr__("Style", 'massive-dynamic'),
                 "param_name" => "subscribe_input_style",
                 "edit_field_class" => $filedClass . "first glue",
                 "value" => array(
@@ -90,7 +91,7 @@ pixflow_map(
             ),
             array(
                 "type" => "dropdown",
-                "heading" => esc_attr__("Email Input Skin", 'massive-dynamic'),
+                "heading" => esc_attr__("Skin", 'massive-dynamic'),
                 "param_name" => "subscribe_input_skin",
                 "edit_field_class" => $filedClass . " glue",
                 "value" => array(
@@ -104,8 +105,25 @@ pixflow_map(
             ),
             array(
                 'type' => 'md_vc_slider',
+                "edit_field_class" => $filedClass . " glue",
+                'heading' => esc_attr__('Radius', 'massive-dynamic'),
+                'param_name' => 'subscribe_input_radius',
+                'value' => '35',
+                'defaultSetting' => array(
+                    "min" => "0",
+                    "max" => "35",
+                    "prefix" => " px",
+                    "step" => "1",
+                )
+            ),
+            array(
+                "type" => 'md_vc_separator',
+                "param_name" => "subscribe_sep" . ++$separatorCounter,
+            ),
+            array(
+                'type' => 'md_vc_slider',
                 "edit_field_class" => $filedClass . "glue last",
-                'heading' => esc_attr__('Email Input Opacity', 'massive-dynamic'),
+                'heading' => esc_attr__('Opacity', 'massive-dynamic'),
                 'param_name' => 'subscribe_input_opacity',
                 'value' => '100',
                 'defaultSetting' => array(
@@ -115,11 +133,16 @@ pixflow_map(
                     "step" => "1",
                 )
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Button", 'massive-dynamic'),
+                "param_name" => "btn_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . " first glue",
-                "heading" => esc_attr__("Button Background Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Background Color", 'massive-dynamic'),
                 "param_name" => "subscribe_button_bgcolor",
                 "value" => '#c7b299',
                 "admin_label" => false,
@@ -132,7 +155,7 @@ pixflow_map(
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . " last glue",
-                "heading" => esc_attr__("Button Text Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Text Color", 'massive-dynamic'),
                 "param_name" => "subscribe_button_textcolor",
                 "value" => '#FFF',
                 "admin_label" => false,
@@ -142,7 +165,7 @@ pixflow_map(
                 "type" => "md_vc_description",
                 "param_name" => "pstep_description",
                 "admin_label" => false,
-                "value" => '<ul><li>' . esc_attr__('You must install and configure "MailChimp for WordPress Lite" plugin before using this shortcode.', 'massive-dynamic') . '</li></ul>',
+                "value" => '<ul><li>' . __('You must install and configure "MailChimp for WordPress Lite" plugin before using this shortcode.', 'massive-dynamic') . '</li></ul>',
             ),
         )
     )

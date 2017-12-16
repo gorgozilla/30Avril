@@ -451,7 +451,7 @@ function pixflow_businessBar()
                         $icon = $social['icon'];
                         $link = $social['link'];
                         ?>
-                        <span data-social="<?php echo esc_attr($title) ?>"><a href="<?php echo esc_url($link) ?>"><?php echo esc_attr($businessBarSocialType == 'icon') ? '<span class="' . $icon . '"></span>' : $title; ?></a></span>
+                        <span data-social="<?php echo esc_attr($title) ?>"><a href="<?php echo esc_url($link) ?>" target="_blank"><?php echo esc_attr($businessBarSocialType == 'icon') ? '<span class="' . $icon . '"></span>' : $title; ?></a></span>
                     <?php }
                 } ?>
             </div>
@@ -521,7 +521,7 @@ $headerClass .= ' top header-'.pixflow_get_theme_mod('header_responsive_skin',PI
 
         <?php if((in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) )) || class_exists( 'WooCommerce' )){
               global $woocommerce;
-            $cart_url = $woocommerce->cart->get_cart_url(); ?>
+            $cart_url = wc_get_cart_url(); ?>
             <?php if(pixflow_get_theme_mod('shop_cart_enable',PIXFLOW_SHOP_CART_ENABLE)){
                 ?>
                 <a class="mobile-shopcart hidden-desktop visible-tablet" href="<?php echo esc_url($cart_url); ?>"><span class="icon-shopcart"></span></a>

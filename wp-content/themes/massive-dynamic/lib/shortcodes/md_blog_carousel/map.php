@@ -21,6 +21,13 @@ pixflow_map(
         "category" => esc_attr__('Media','massive-dynamic'),
         'params' => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Categories", 'massive-dynamic'),
+                "param_name" => "category_group",
+                'group' => esc_attr__('General', 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first ",
+            ),
+            array(
                 'type' => 'md_vc_multiselect',
                 "edit_field_class" => $filedClass . "glue first",
                 'heading' => esc_attr__('Category', 'massive-dynamic'),
@@ -36,26 +43,11 @@ pixflow_map(
                 'group' => esc_attr__('General', 'massive-dynamic')
             ),
             array(
-                'type' => 'md_vc_checkbox',
-                "edit_field_class" => $filedClass . "glue",
-                'heading' => esc_attr__('Auto Play', 'massive-dynamic'),
-                'param_name' => 'carousel_autoplay',
-                'value' => array(esc_attr__('No', 'massive-dynamic') => 'no'),
-                'checked' => false,
-                "group" => esc_attr__("General", 'massive-dynamic'),
-            ),
-            array(
-                "type" => 'md_vc_separator',
-                "param_name" => "blog_category_separator" . ++$separatorCounter,
-                "admin_label" => false,
-                'group' => esc_attr__('General', 'massive-dynamic')
-            ),
-            array(
                 "type" => 'md_vc_slider',
                 "heading" => esc_attr__("Post Number", 'massive-dynamic'),
                 "param_name" => "blog_post_number",
                 "value" => "5",
-                "edit_field_class" => $filedClass . "glue last",
+                "edit_field_class" => $filedClass . "glue ",
                 'defaultSetting' => array(
                     "min" => "0",
                     "max" => "30",
@@ -64,6 +56,29 @@ pixflow_map(
                 ),
 
                 'group' => esc_attr__('General', 'massive-dynamic')
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Autoplay", 'massive-dynamic'),
+                "param_name" => "category_group",
+                'group' => esc_attr__('General', 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first ",
+            ),
+
+            array(
+                "type" => 'md_vc_separator',
+                "param_name" => "blog_category_separator" . ++$separatorCounter,
+                "admin_label" => false,
+                'group' => esc_attr__('General', 'massive-dynamic')
+            ),
+            array(
+                'type' => 'md_vc_checkbox',
+                "edit_field_class" => $filedClass . "glue last",
+                'heading' => esc_attr__('Activate', 'massive-dynamic'),
+                'param_name' => 'carousel_autoplay',
+                'value' => array(esc_attr__('No', 'massive-dynamic') => 'no'),
+                'checked' => false,
+                "group" => esc_attr__("General", 'massive-dynamic'),
             ),
             array(
                 "type" => "md_vc_colorpicker",

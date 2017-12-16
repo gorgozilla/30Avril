@@ -113,7 +113,7 @@ function wdi_install()
     thumb_user varchar(30) NOT NULL,
     published varchar(1) NOT NULL,
     theme_id varchar(10) NOT NULL,
-    feed_users varchar(1000) NOT NULL,
+    feed_users varchar(2000) NOT NULL,
     feed_display_view varchar(30) NOT NULL,
     sort_images_by varchar(30) NOT NULL,
     display_order varchar(30) NOT NULL,

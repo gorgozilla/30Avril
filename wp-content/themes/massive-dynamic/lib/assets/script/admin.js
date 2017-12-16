@@ -25,7 +25,6 @@
                 $(this).addClass('selected');
             });
 
-
         });
     }
 
@@ -1527,22 +1526,21 @@
 
         if( ! $welcomePanel.length )
             return;
-        var rand_num = Math.floor((Math.random() * 3) + 1);
-        var rand_class = 'massive-panel-bg' + rand_num ;
+        var rand_class = 'massive-panel-bg3' ;
         $welcomePanel.before('' +
              '<div class="massive-panel ' + rand_class + '">' +
                 '<img src="' + admin_var.loading_gif +'" style="display:none !important" />' +
                 '<div class="massive-pannel-menu" >' +
                 '<nav class="pannel-menu" ><ul class="flex-rtl">' +
                 '<li><a href="https://themeforest.net/downloads" target="_blank">Update Theme </a> </li>' +
-                '<li><a href="http://themeforest.net/cart/add_items?ref=pixflow&item_ids=13739153" target="_blank" >Buy  new lisence</a> </li>' +
-                '<li><a href="http://massivedynamic.co/pages/changelog.php" target="_blank" >Changelog</a> </li>' +
+                '<li><a href="http://themeforest.net/cart/add_items?ref=pixflow&item_ids=13739153" target="_blank" >Buy  new license</a> </li>' +
+                '<li><a href="http://pixflow.net/products/massive-dynamic/pages/changelog.php" target="_blank" >Changelog</a> </li>' +
                 '<li class="md-last-list" style=" display: flex;"><a href="#" >get help</a>' +
                 '<span class="md-icon-img"></span>' +
                 '<div class="dropdown" > '+
                 '<nav class="dropdow-pannel-menu" ><ul>' +
-                '<li><a target="_blank" href="https://help.massivedynamic.co/hc/en-us/requests/new" >Open Ticket </a> </li>' +
-                '<li><a target="_blank" href="http://massivedynamic.co/documentation/" >Documentation</a> </li>' +
+                '<li><a target="_blank" href="https://help.pixflow.net" >Open Ticket </a> </li>' +
+                '<li><a target="_blank" href="http://pixflow.net/products/massive-dynamic/documentation/" >Documentation</a> </li>' +
                 '<li><a target="_blank" href="https://www.youtube.com/watch?v=DiMk1rA4MpY&list=PLyCm9JEF2J5eyRHCcOH_2VzU79gOrp7GU" >Video TutS</a> </li>' +
                 '<li><a target="_blank" href="https://themeforest.net/downloads" >Rate us</a> </li>' +
                 '</ul></nav>' +
@@ -1557,10 +1555,10 @@
                 '</div>' +
                 '<div class="right-side" >' +
                 '<a href="' + admin_var.start_link + '" class="customizer-start-link customizer-link" > Start Now </a>' +
-                '<a href="' +  admin_var.customizer_link  + '" class="customizer-setting-link customizer-link" > setting & layout </a>' +
+                '<a href="' +  admin_var.customizer_link  + '" class="customizer-setting-link customizer-link" > Site Setting </a>' +
                 '</div>' +
                 '</div>' +
-                '<div class="bottom-part"> <div class="version"> <span>curent version '+ admin_var.theme_version +'</span></div> <div class="massive-licenes" title="Theme Unlocked" >' + '<img src="'+ admin_var.license_icon +'" />' +'</div></div>' +
+                '<div class="bottom-part"> <div class="version"> <span>current version '+ admin_var.theme_version +'</span></div> <div class="massive-licenes" title="Theme Unlocked" >' + '<img src="'+ admin_var.license_icon +'" />' +'</div></div>' +
              '</div>');
     }
     function pixflow_metabox(){

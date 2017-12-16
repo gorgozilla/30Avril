@@ -7,7 +7,8 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Video
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
+$separatorCounter = 1;
 pixflow_map(
     array(
         "name" => esc_attr__('Video', 'massive-dynamic'),
@@ -16,6 +17,12 @@ pixflow_map(
         'show_settings_on_create' => false,
         "allowed_container_element" => 'vc_row',
         "params" => array(
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Source", 'massive-dynamic'),
+                "param_name" => "source_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "dropdown",
                 "heading" => esc_attr__("Host", 'massive-dynamic'),
@@ -41,7 +48,7 @@ pixflow_map(
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "md_video_url_mp4_separator" . ++$separatorCounter,
+                "param_name" => "md_video_url_mp4_separator". ++$separatorCounter,
                 "dependency" => array(
                     'element' => "md_video_host",
                     'value' => array('self')
@@ -59,7 +66,7 @@ pixflow_map(
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "md_video_url_webm_separator" . ++$separatorCounter,
+                "param_name" => "md_video_url_webm_separator". ++$separatorCounter,
                 "dependency" => array(
                     'element' => "md_video_host",
                     'value' => array('self')
@@ -95,6 +102,12 @@ pixflow_map(
                     'element' => "md_video_host",
                     'value' => array('vimeo')
                 )
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 "type" => "dropdown",

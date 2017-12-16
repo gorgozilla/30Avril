@@ -41,7 +41,7 @@ class Pixflow_Social_Widget extends WP_Widget {
             ?>
             <div data-social="<?php echo esc_attr($title) ?>" class="item clearfix">
             <span>
-                <a href="<?php echo esc_url($link) ?>">
+                <a href="<?php echo esc_url($link) ?>" target="_blank">
                     <i class="icon <?php echo esc_attr($icon); ?>"></i>
                     <i class="text"> <?php echo esc_attr($title); ?> </i>
                 </a>

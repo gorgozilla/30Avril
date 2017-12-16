@@ -192,16 +192,16 @@ padding: 5px;
     padding: 2px;
 }
 
-.notice {
-    display: inline-block;
-    line-height: 19px;
-    font-size: 14px;
-    text-align: left;
-    background-color: #fff;
-    border-left: 4px solid #ffba00;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-}
+/*.notice {*/
+    /*display: inline-block;*/
+    /*line-height: 19px;*/
+    /*font-size: 14px;*/
+    /*text-align: left;*/
+    /*background-color: #fff;*/
+    /*border-left: 4px solid #ffba00;*/
+    /*-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);*/
+    /*box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);*/
+/*}*/
 
 
 .small_input{

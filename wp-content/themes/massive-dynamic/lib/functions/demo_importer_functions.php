@@ -166,8 +166,8 @@ function pixflow_ImportDummyData()
 
 
 
-    $demo_url = 'http://massivedynamic.co/dummydata/demo'.$demo;
-    wp_remote_get( $demo_url.'/content.xml', array(
+    $demo_url = 'http://pixflow.co/import-demo.php?demo='.$demo;
+    wp_remote_get( $demo_url, array(
             'timeout' => 45,
         )
     );

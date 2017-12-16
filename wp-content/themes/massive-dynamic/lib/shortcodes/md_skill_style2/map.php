@@ -30,6 +30,13 @@ function pixflow_skill_style2_param()
     $param = array(
 
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "param_name" => "line_height_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first last",
             "group" => esc_attr__("General", 'massive-dynamic'),
@@ -55,6 +62,18 @@ function pixflow_skill_style2_param()
         for ($k = $i; $k <= $bar_num; $k++) {
             $value[] = (string)$k;
         }
+
+        $param[] =  array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "group" => esc_attr__("Bar ", 'massive-dynamic') . $i,
+            "param_name" => "line_height_group",
+            "edit_field_class" => $filedClass . "glue first last" ,
+            'dependency' => array(
+                'element' => $bar_num_param,
+                'value' => $value
+            ),
+        );
 
         $param[] = array(
             "type" => "textfield",
@@ -112,7 +131,17 @@ function pixflow_skill_style2_param()
                 'value' => $value
             ),
         );
-
+        $param[] =  array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "group" => esc_attr__("Bar ", 'massive-dynamic') . $i,
+            "param_name" => "line_height_group",
+            "edit_field_class" => $filedClass . "glue first last" ,
+            'dependency' => array(
+                'element' => $bar_num_param,
+                'value' => $value
+            ),
+        );
         $param[] = array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue last",

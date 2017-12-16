@@ -15,12 +15,19 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         'show_settings_on_create' => false,
         "params" => array(
+             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("title", 'massive-dynamic'),
+                "param_name" => "title_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
             array(
                 'type' => 'textfield',
                 "edit_field_class" => $filedClass . "first glue",
                 'heading' => esc_attr__('Title', 'massive-dynamic'),
                 'param_name' => 'fancy_text_title',
                 'value' => 'Fancy Text',
+                "color_picker" => "fancy_text_title_color",
             ),
             array(
                 "type" => 'md_vc_separator',
@@ -43,6 +50,12 @@ pixflow_map(
                     "H6" => "h6"
                 ),
             ),
+             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Description", 'massive-dynamic'),
+                "param_name" => "desc_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
             array(
                 "type" => 'md_vc_separator',
                 "param_name" => "fancy_text_separator" . ++$separatorCounter,
@@ -54,13 +67,18 @@ pixflow_map(
                 'heading' => esc_attr__('Text', 'massive-dynamic'),
                 'param_name' => 'fancy_text_text',
                 'value' => 'Massive Dynamic has over 10 years of experience in Design. We take pride in delivering Intelligent Designs and Engaging Experiences for clients all over the World.',
+                "color_picker" => "fancy_text_text_color",
             ),
-
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Bacground", 'massive-dynamic'),
+                "param_name" => "title_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
             array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "first glue",
-                "heading" => esc_attr__("Background Type", 'massive-dynamic'),
+                "heading" => esc_attr__("Type", 'massive-dynamic'),
                 "param_name" => "fancy_text_bg_type",
                 "admin_label" => false,
                 "value" => array(
@@ -106,6 +124,7 @@ pixflow_map(
                 "opacity" => true,
                 "value" => "rgba(55,55,55,1)",
                 "admin_label" => false,
+                "inline_color_picker" => true
             ),
             array(
                 "type" => 'md_vc_separator',
@@ -120,6 +139,7 @@ pixflow_map(
                 "opacity" => true,
                 "value" => "rgba(55,55,55,1)",
                 "admin_label" => false,
+                "inline_color_picker" => true
             ),
             array(
                 "type" => 'md_vc_separator',
@@ -129,7 +149,7 @@ pixflow_map(
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "last glue",
-                "heading" => esc_attr__("Background Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Color", 'massive-dynamic'),
                 "param_name" => "fancy_text_bg_color",
                 "opacity" => true,
                 "value" => "rgba(7, 0, 255, 0.15)",

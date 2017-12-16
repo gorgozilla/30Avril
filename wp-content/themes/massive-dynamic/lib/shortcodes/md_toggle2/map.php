@@ -18,6 +18,12 @@ pixflow_map(
         "as_parent" => array('only' => 'md_toggle_tab2'),
         'params' => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Colors", 'massive-dynamic'),
+                "param_name" => "color_group",
+                "edit_field_class" => $filedClass . "glue first ",
+            ),
+            array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "first glue",
                 "heading" => esc_attr__("Main Color", 'massive-dynamic'),
@@ -37,6 +43,12 @@ pixflow_map(
                 "value" => "rgb(255,255,255)",
                 "opacity" => false,
                 "admin_label" => false,
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Extra Options", 'massive-dynamic'),
+                "param_name" => "category_group",
+                "edit_field_class" => $filedClass . "glue first ",
             ),
             array(
                 "type" => 'md_vc_separator',

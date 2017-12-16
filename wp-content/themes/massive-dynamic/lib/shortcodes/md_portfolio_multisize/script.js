@@ -116,7 +116,7 @@ function pixflow_itemSize($this, $items, padding) {
     if (portfolioWidth >= 1024 && portfolioWidth <= 1920) {
         col = 6;
     } else if (portfolioWidth > 1920) {
-        col = $portfolio.find('.portfolio-item').length;
+        col = 6;
     } else if (portfolioWidth < 1024 && portfolioWidth > 770) {
         col = 4;
     } else {

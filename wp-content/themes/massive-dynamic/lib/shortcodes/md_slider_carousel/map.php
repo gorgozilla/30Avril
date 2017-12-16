@@ -19,12 +19,23 @@ pixflow_map(
         "params" => array(
 
             /* Background image tab */
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Slides", 'massive-dynamic'),
+                "param_name" => "slides_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
             array(
                 'type' => 'attach_images',
                 'edit_field_class' => $filedClass . "first glue last",
                 'heading' => esc_attr__('Choose Image(s)', 'massive-dynamic'),
                 'param_name' => 'slider_images',
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last",
             ),
             array(
                 'type' => 'md_vc_slider',
@@ -76,9 +87,15 @@ pixflow_map(
             ),
 
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Autoplay", 'massive-dynamic'),
+                "param_name" => "auto_group",
+                "edit_field_class" => $filedClass . "glue first",
+            ),
+            array(
                 'type' => 'md_vc_checkbox',
                 "edit_field_class" => $filedClass . "glue first last",
-                'heading' => esc_attr__('Auto Play', 'massive-dynamic'),
+                'heading' => esc_attr__('Activate', 'massive-dynamic'),
                 'param_name' => 'slider_auto_play',
                 'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
                 'checked' => true,
@@ -95,7 +112,7 @@ pixflow_map(
             array(
                 'type' => 'md_vc_slider',
                 "edit_field_class" => $filedClass . "last glue",
-                'heading' => esc_attr__('Auto Play Duration', 'massive-dynamic'),
+                'heading' => esc_attr__('Duration', 'massive-dynamic'),
                 'param_name' => 'slider_slider_speed',
                 'value' => '5',
                 'defaultSetting' => array(

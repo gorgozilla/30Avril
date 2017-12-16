@@ -39,7 +39,7 @@ function pixflow_sc_text( $atts, $content = null ){
         'md_text_letter_space'         => '0',
         'md_text_hover_letter_space'   => '0',
         'md_text_use_title_custom_font'=> 'no',
-        'md_text_title_google_fonts'   => 'font_family:Roboto%3A100%2C200%2C300%2Cregular%2C500%2C600%2C700%2C800%2C900|font_style:200%20light%20regular%3A200%3Anormal',
+        'md_text_title_google_fonts'   => 'font_family:Roboto%3A100%2C200%2C300%2Cregular%2C500%2C600%2C700%2C800%2C900|font_style:300%20light%20regular%3A300%3Anormal',
         'md_text_content_size'         => '14',
         'md_text_content_color'        => 'rgba(20,20,20,1)',
         'md_text_use_desc_custom_font' => 'yes',
@@ -156,8 +156,8 @@ function pixflow_sc_text( $atts, $content = null ){
         $md_text_style = 'solid';
     }
 
-    $noTitleClass =  ($md_text_number == '1' && ($md_text_title1 == '' ||  $titles[1] == '<div><br data-mce-bogus="1"></div>'   ||  $titles[1] == '<div></div>'  ) ) ? ' without-title':'';
-    $noDescription = ($content == '' || strip_tags($content) == '&nbsp;' || $content=='<p>&nbsp;<br /></p>' || $content=='<p>&nbsp;</p>' )? ' without-content' : '';
+    $noTitleClass =  ($md_text_number == '1' && ( trim($titles[1]) == '' ||  $titles[1] == '<div><br data-mce-bogus="1"></div>'   ||  $titles[1] == '<div></div>'  ) ) ? ' without-title':'';
+    $noDescription = ($content == '' || strip_tags($content) == '&nbsp;' || $content=='<p>&nbsp;<br /></p>' || $content=='<p>&nbsp;<br></p>' || $content=='<p>&nbsp;</p>' )? ' without-content' : '';
 
     ob_start();
     ?>
@@ -244,13 +244,25 @@ function pixflow_sc_text( $atts, $content = null ){
         .<?php echo esc_attr($id); ?> .md-text-content p{
             color:          <?php echo esc_attr($md_text_content_color);?>;
             font-size:      <?php echo esc_attr($md_text_content_size); ?>px;
+        }
+
+        .<?php echo esc_attr($id); ?> .md-text-content *{
             line-height:    <?php echo esc_attr($md_text_desc_line_height); ?>px;
         <?php if($md_text_use_desc_custom_font=='yes') {?>
             font-family:    <?php echo esc_attr($desc_font_family); ?>;
             font-style:     <?php echo esc_attr($desc_font_style); ?>;
-            font-weight:    <?php echo esc_attr($desc_font_weigth); ?>;
         <?php }?>
         }
+
+        <?php if($md_text_use_desc_custom_font=='yes') {?>
+        .<?php echo esc_attr($id); ?> .md-text-content div,
+        .<?php echo esc_attr($id); ?> .md-text-content span,
+        .<?php echo esc_attr($id); ?> .md-text-content a,
+        .<?php echo esc_attr($id); ?> .md-text-content p,
+        .<?php echo esc_attr($id); ?> .md-text-content i{
+            font-weight: <?php echo esc_attr($desc_font_weigth); ?>;
+        }
+        <?php }?>
 
         <?php if($md_text_alignment == 'center'){?>
         .<?php echo esc_attr($id); ?> .md-text-content p{
@@ -275,10 +287,7 @@ function pixflow_sc_text( $atts, $content = null ){
 
             <?php } else {
                 ?>
-                <?php
-                $titles[1] = strip_tags($titles[1] , '<a><h1><h2><h3><h4><h5><h6><div><b><i><span><strong><i><em><b><br>');
-                ?>
-                <div class="md-text-title inline-editor-title <?php echo esc_attr($noTitleClass) ?>"><?php echo pixflow_detectNewLines($titles[1]) ; ?></div>
+                <div class="md-text-title inline-editor-title <?php echo esc_attr($noTitleClass) ?>"><?php echo pixflow_detect_new_lines($titles[1]) ; ?></div>
                 <?php
             } ?>
 
@@ -289,7 +298,7 @@ function pixflow_sc_text( $atts, $content = null ){
             <?php if($content != '') {
                 $content = str_replace('<p></p>', '', $content);
                 $content = pixflow_detectBasetext($content);
-                $content = pixflow_detectNewLines($content);
+                $content = pixflow_detect_new_lines($content);
             }?>
             <div class="md-text-content inline-editor <?php echo esc_attr($noDescription) ?>" ><?php
                 echo pixflow_detectPTags(pixflow_js_remove_wpautop($content . false ));

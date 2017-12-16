@@ -15,7 +15,7 @@ function pixflow_fitRowToHeight() {
                     $this.css({'height': $(window).height()});
                 }
             }
-            pixflow_set_vertical_align($this , flag);
+
         }
     });
 }

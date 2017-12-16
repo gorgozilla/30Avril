@@ -20,6 +20,12 @@ pixflow_map(array(
     'as_parent' => array('only' => 'md_tab'),
     'params' => array(
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "param_name" => "appearance_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             "type" => "md_vc_colorpicker",
 
             "edit_field_class" => $filedClass . "first glue",

@@ -8,15 +8,21 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Icon
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
 pixflow_map(
     array(
         "name" => "Icon",
         "base" => "md_icon",
-        "category" => esc_attr__('Media','massive-dynamic'),
+        "category" => esc_attr__('Basic','massive-dynamic'),
         "allowed_container_element" => 'vc_row',
         'show_settings_on_create' => false,
         "params" => array(
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Source", 'massive-dynamic'),
+                "param_name" => "source_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
             array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "first glue",
@@ -24,13 +30,13 @@ pixflow_map(
                 "param_name" => "icon_source",
                 "admin_label" => false,
                 "value" => array(
-                    esc_attr__("Massive Dynamic Icons", 'massive-dynamic') => "massive_dynamic",
+                    esc_attr__("MD Icons", 'massive-dynamic') => "massive_dynamic",
                     esc_attr__("Custom Icon", 'massive-dynamic') => "custom",
                 ),
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "icon_color_separator" . ++$separatorCounter,
+                "param_name" => "icon_color_separator_" . ++$separatorCounter,
                 "admin_label" => false,
             ),
             array(
@@ -58,11 +64,16 @@ pixflow_map(
                     'value' => array('custom')
                 )
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Colors", 'massive-dynamic'),
+                "param_name" => "category_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "first glue",
-                "heading" => esc_attr__("Icon Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Icon", 'massive-dynamic'),
                 "param_name" => "icon_color",
                 "opacity" => true,
                 "value" => "#5f5f5f",
@@ -75,7 +86,7 @@ pixflow_map(
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "first glue",
-                "heading" => esc_attr__("Icon Fill Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Icon Fill", 'massive-dynamic'),
                 "param_name" => "icon_fill_color",
                 "opacity" => true,
                 "value" => "rgba(0,0,0,1)",
@@ -87,7 +98,7 @@ pixflow_map(
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "icon_separator" . ++$separatorCounter,
+                "param_name" => "icon_separator_" . ++$separatorCounter,
                 "admin_label" => false,
                 'dependency' => array(
                     'element' => "icon_source",
@@ -97,7 +108,7 @@ pixflow_map(
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "glue",
-                "heading" => esc_attr__("Icon Stroke Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Icon Stroke", 'massive-dynamic'),
                 "param_name" => "icon_stroke_color",
                 "opacity" => true,
                 "value" => "rgba(0,0,0,1)",
@@ -109,7 +120,7 @@ pixflow_map(
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "icon_color_separator" . ++$separatorCounter,
+                "param_name" => "icon_color_separator_" . ++$separatorCounter,
                 "admin_label" => false,
             ),
             array(
@@ -140,7 +151,7 @@ pixflow_map(
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "icon_color_separator" . ++$separatorCounter,
+                "param_name" => "icon_color_separator_" . ++$separatorCounter,
                 "admin_label" => false,
                 'dependency' => array(
                     'element' => "icon_source",
@@ -159,6 +170,12 @@ pixflow_map(
                     'element' => "icon_source",
                     'value' => array('custom')
                 )
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Sizing", 'massive-dynamic'),
+                "param_name" => "category_group",
+                "edit_field_class" => $filedClass . "glue first last",
             ),
             array(
                 'type' => 'md_vc_slider',
@@ -194,7 +211,7 @@ pixflow_map(
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "icon_link_separator" . ++$separatorCounter,
+                "param_name" => "icon_link_separator_" . ++$separatorCounter,
                 "admin_label" => false,
                 'dependency' => array(
                     'element' => 'icon_use_link',

@@ -16,6 +16,12 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue",
                 "heading" => esc_html__("Title", 'massive-dynamic'),
@@ -46,7 +52,12 @@ pixflow_map(
                 "value" => "icon-PriceTag",
                 "admin_label" => false
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "first glue",

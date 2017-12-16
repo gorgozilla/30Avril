@@ -24,6 +24,37 @@ if(is_wp_error($file_content)){
 }
 
 $mBuilderShortcodes = array();
+$mbuilder_sections = array(
+	1 => array('title' => 'Section 1'),
+	2 => array('title' => 'Section 2'),
+	3 => array('title' => 'Section 3'),
+	4 => array('title' => 'Section 4'),
+	6 => array('title' => 'Section 6'),
+    7 => array('title' => 'Section 7'),
+	9 => array('title' => 'Section 9'),
+    10 => array('title' => 'Section 10'),
+	11 => array('title' => 'Section 11'),
+	12 => array('title' => 'Section 12'),
+	13 => array('title' => 'Section 13'),
+	14 => array('title' => 'Section 14'),
+	16 => array('title' => 'Section 16'),
+	17 => array('title' => 'Section 17'),
+	18 => array('title' => 'Section 18'),
+	19 => array('title' => 'Section 19'),
+	20 => array('title' => 'Section 20'),
+	21 => array('title' => 'Section 21'),
+	22 => array('title' => 'Section 22'),
+	23 => array('title' => 'Section 23'),
+	24 => array('title' => 'Section 24'),
+	25 => array('title' => 'Section 25'),
+	26 => array('title' => 'Section 26'),
+	27 => array('title' => 'Section 27'),
+	29 => array('title' => 'Section 29'),
+	30 => array('title' => 'Section 30'),
+	31 => array('title' => 'Section 31'),
+	32 => array('title' => 'Section 32'),
+	33 => array('title' => 'Section 33'),
+);
 $in_mbuilder = false;
 $mBuilderExternalTypes = array();
 
@@ -138,10 +169,89 @@ class MBuilder{
             }
 
             wp_localize_script('mBuilder', 'mBuilderShortcodes', $mBuilderShortcode);
+
+            $this->map_loader();
+            $this->external_types();
         }
 
     }
 
+    /*
+     * Print script for each shortcode on drop to define its map to the builder
+     *
+     * @param string $shortcode shortcode name
+     * @return void
+     */
+    public static function print_shortcode_map( $shortcode ){
+        global $mBuilderShortcodes;
+        echo '<script>';
+        echo 'builder.refresh_shortcode_params( true );';
+        echo 'builder.shortcodes_param.' . $shortcode . '= ' . json_encode( $mBuilderShortcodes[ $shortcode ] );
+        echo '</script>';
+    }
+
+    /*
+     * Load used shortcodes map for each page that opens in the builder
+     *
+     * @return void
+     */
+    public function map_loader(){
+        global $mBuilderShortcodes;
+		global $mBuilderExternalTypes;
+		global $fonts;
+        $id = get_the_ID();
+        $page_shortcodes = $this->list_used_shortcodes($id);
+        $page_shortcodes_model = array();
+        foreach ($page_shortcodes as $shortcode){
+            if (isset($mBuilderShortcodes[$shortcode])){
+                $page_shortcodes_model[$shortcode] = $mBuilderShortcodes[$shortcode];
+            }
+        }
+		pixflow_add_custom_fields();
+		$spectrum = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/spectrum.min.js';
+		$spectrumcss = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/spectrum.min.css';
+
+		$nouislider = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/jquery.nouislider.min.js';
+		$nouislidercss= PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/jquery.nouislider.min.css';
+
+        $shortcode_maps = array(
+            'shortcodes_param' => json_encode($page_shortcodes_model) ,
+            'google_gonts' => $fonts ,
+            'mBuilder_external_types' => $mBuilderExternalTypes ,
+            'spectrum' => array(
+                'js' => $spectrum ,
+                'css' => $spectrumcss ,
+            ) ,
+            'nouislider' => array(
+                'js' => $nouislider ,
+                'css' => $nouislidercss
+            )
+        );
+        wp_localize_script('mBuilder', 'shortcode_maps', $shortcode_maps);
+    }
+
+    /*
+     * Load external field types template
+     *
+     * @return void
+     */
+    public function external_types(){
+        global $mBuilderExternalTypes;
+        pixflow_add_custom_fields();
+        foreach ( $mBuilderExternalTypes as $type ):
+            ?>
+            <script type="text/html" id="tmpl-mbuilder-field-type-<?php echo $type['callback']?>">
+                <?php echo call_user_func_array( $type[ 'callback' ], array( array(), '{{ value }}', '' , true ) );?>
+            </script>
+            <?php
+        endforeach;
+    }
+
+    /*
+     * Include all shortcode maps php files
+     *
+     * @return void
+     */
     public static function load_shortcode_maps(){
         $shortcodes = PixflowFramework::Pixflow_Shortcodes(false);
         MBuilder::load_shortcode_map($shortcodes);
@@ -158,6 +268,7 @@ class MBuilder{
             'deleteText'  => __('Delete','massive-dynamic'),
             'duplicateText'  => __('Duplicate','massive-dynamic'),
             'animationText'  => __('Animation','massive-dynamic'),
+            'settingText'  => __('Setting','massive-dynamic'),
             'rowText'     => __('Row','massive-dynamic'),
             'layoutText'  => __('Layout','massive-dynamic'),
             'customColText'  => __('Custom Column','massive-dynamic'),
@@ -172,12 +283,16 @@ class MBuilder{
             'designText' => esc_attr__('Design','massive-dynamic'),
             'responsiveText' => esc_attr__('Responsive','massive-dynamic'),
             'spacingText' => esc_attr__('Spacing','massive-dynamic') ,
+            'rowBackground'=> esc_attr__('Background','massive-dynamic') ,
 
         );
         return  $mBuilderValues;
     }
+
     /*
-     * load shortcode map
+     * Include shortcode map php file
+     *
+     * @param string|array $shortcode name or array of shortcode names
      * @return void
     */
     public static function load_shortcode_map( $shortcode ) {
@@ -192,7 +307,6 @@ class MBuilder{
         } elseif( is_array( $shortcode ) ) {
 
             foreach( $shortcode as $name ) {
-
                 if( file_exists( PIXFLOW_THEME_SHORTCODES . '/' . $name . '/map.php' ) ) {
                     require_once( PIXFLOW_THEME_SHORTCODES . '/' . $name . '/map.php' );
                 }
@@ -207,226 +321,7 @@ class MBuilder{
         }
     }
 
-    /**
-     * Build setting panel form and inputs to edit shortcodes visually
-     *
-     * @return void
-     * @since 1.0.0
-     */
-    public static function buildForm($params,$atts = array(),$content=null){
-        $groupJs = array();
-        if(isset($atts['md_text_use_title_slider']) || in_array('md_text_use_title_slider',$atts)){
-            if((isset($atts['md_text_number']) && $atts['md_text_number']<2) || !isset($atts['md_text_number'])){
-                $atts['md_text_use_title_slider'] = '';
-            }
-        }
-        $innerContent = $content;
-        global $mBuilderExternalTypes;
-        foreach($params as $param){
-            if($param['group'] == '') $param['group'] = esc_attr__( "General",  'massive-dynamic');
-            $form[$param['group']][] = $param;
-            extract( shortcode_atts( array(
-                $param['param_name']  => $param['value']
-            ),$atts ));
-        }
-        if(isset($atts['css']) && $atts['css'] != ''){
-            $css = $atts['css'];
-            preg_match ('/.*?{(.*?)}.*?/is', $css,$matches);
-            if(is_array($matches) && isset($matches[1])){
-                $css = $matches[1];
-            }else{
-                $css = '';
-            }
-            $css = str_replace('``','\'',$css);
-            $pat = '~[!]important~s';
-            $css = trim(preg_replace($pat,'', $css));
-            $pat = '~px~s';
-            $css = trim(preg_replace($pat,'', $css));
-            $css = explode(';',$css);
-            $final_css = array();
-            foreach($css as $prop){
-                if($prop == ''){
-                    continue;
-                }
-                $property = explode(':',$prop);
-                $final_css[str_replace('-','_',trim($property[0]))]=trim($property[1]);
-            }
-        }
-        if(count($form[esc_attr__( "General",  'massive-dynamic')])) {
-            $generalTab = $form[esc_attr__("General", 'massive-dynamic')];
-            unset($form[esc_attr__("General", 'massive-dynamic')]);
-            $form = array(esc_attr__("General", 'massive-dynamic') => $generalTab) + $form;
-            $content = $innerContent;
-        }
-        $groupHtml = array();
-        echo '<div id="mBuilderTabs">';
-        echo "<ul>";
-        foreach($form as $key=>$group){
-            echo '<li><a href="#mBuilder'.str_replace(' ','',esc_attr($key)).'">'.esc_attr($key).'</a></li>';
-            foreach($group as $k=>$param){
-                $dependency = '';
-                if(isset($param['dependency'])){
-                    $dependency = "data-mBuilder-dependency='".json_encode($param['dependency'])."'";
-                }
-                if(isset($param['mb_dependency'])){
-                    $dependency = "data-mBuilder-dependency='".json_encode($param['mb_dependency'])."'";
-                }
-                $groupHtml[$key] .='<div class="vc_col-sm-12 vc_column '.$param['type'].' ' . $param['edit_field_class'] . '" '.$dependency.' >';
-                if(isset($atts['css']) && array_key_exists($param['param_name'],$final_css) && ${$param['param_name']}==''){
-                    ${$param['param_name']} = $final_css[$param['param_name']];
-                }
-                if($param['param_name'] == 'content'){
-                    ${$param['param_name']} = $innerContent;
-                }
-                if(count($mBuilderExternalTypes[$param['type']])){
-                    $groupHtml[$key] .='<div class="mBuilder_element_label">' . $param['heading'] . '</div><div class="edit_form_line">' ;
-                    $groupHtml[$key] .= call_user_func_array ($mBuilderExternalTypes[$param['type']]['callback'],array($param,${$param['param_name']}));
-                    $groupHtml[$key] .='</div>';
-                    $groupJs[] = $mBuilderExternalTypes[$param['type']]['requiredjs'];
-                }else {
-                    switch ($param['type']) {
-                        case 'textfield':
-                            $groupHtml[$key] .=
-                                '<div class="mBuilder_element_label">' . $param['heading'] . '</div>' .
-                                '<div class="edit_form_line"><input type="text" class="simple-textbox wpb_vc_param_value wpb-textinput" value="' . ${$param['param_name']} . '" name="' . $param['param_name'] . '"></div>';
-                            break;
-                        case 'hidden':
-                            $groupHtml[$key] .=
-                                '<input type="hidden" class="wpb_vc_param_value wpb-textinput" value="' . ${$param['param_name']} . '" name="' . $param['param_name'] . '">';
-                            break;
-                        case 'textarea_html':
-                            $groupHtml[$key] .=
-                                '<div class="edit_form_line"><textarea id="' . $param['param_name'] . '" name="' . $param['param_name'] . '">' . stripslashes($content) . '</textarea></div>';
-                            break;
-                        case 'textarea':
-                            $groupHtml[$key] .=
-                                '<div class="mBuilder_element_label">' . $param['heading'] . '</div>' .
-                                '<div class="edit_form_line"><textarea id="' . $param['param_name'] . '" name="' . $param['param_name'] . '">' . ${$param['param_name']} . '</textarea></div>';
-                            break;
-                        case 'textarea_raw_html':
-                            $raw_content =(bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', ${$param['param_name']}) ;
-                            $raw_content = ($raw_content)?htmlentities( rawurldecode( base64_decode( strip_tags( $raw_content ) ) ), ENT_COMPAT, 'UTF-8' ):$raw_content;
-                            $groupHtml[$key] .=
-                                '<div class="mBuilder_element_label">' . $param['heading'] . '</div>' .
-                                '<div class="edit_form_line"><textarea class="textarea_raw_html" name="' . $param['param_name'] . '">' . $raw_content . '</textarea></div>';
-                            break;
-                        case 'separator':
-                            $groupHtml[$key] .=
-                                '<div class="edit_form_line"><hr></div>';
-                            break;
-                        case 'dropdown':
-                            $options = '';
-                            foreach ($param['value'] as $optkey => $optValue) {
-                                $select = ($optValue == ${$param['param_name']}) ? 'selected="selected"' : '';
-                                $options .= '<option value="' . $optValue . '" ' . $select . '>' . $optkey . '</option>';
-                            }
-                            $groupHtml[$key] .=
-                                '<div class="mBuilder_element_label">' . $param['heading'] . '</div>' .
-                                '<div class="edit_form_line"><select name="' . $param['param_name'] . '">' .
-                                $options .
-                                '</select></div>';
-                            break;
-                        case 'attach_image':
-                            $image_id = (int)${$param['param_name']};
-                            $placeholder = '';
-                            if($image_id != '' && is_int($image_id) && $image_id != 0){
-                                $style = 'background-image: url('.wp_get_attachment_url( $image_id ).')';
-                                $placeholder .= '<div data-id="'.$image_id.'" class="mBuilder-upload-img single has-img" style="'.$style.'"><span class="remove-img">X</span>';
-                            }else{
-                                $placeholder = '<div class="mBuilder-upload-img single"><span class="remove-img mBuilder-hidden">X</span>';
-                            }
-                            $groupHtml[$key] .=
-                                '<div class="mBuilder_element_label">' . $param['heading'] . '</div>' .
-                                '<div class="edit_form_line">'.
-                                    $placeholder.
-                                    '<input type="text" name="'.$param['param_name'].'" value="'.${$param['param_name']}.'"></div>'.
-                                '</div>';
-                            break;
-                        case 'attach_images':
-                            $images_id = (${$param['param_name']}!='')?explode(',',${$param['param_name']}):array();
-                            $placeholder = '';
-                            if(count($images_id)){
-                                foreach($images_id as $id){
-                                    $style = 'background-image: url('.wp_get_attachment_url( $id ).')';
-                                    $placeholder .= '<div data-id="'.$id.'" class="mBuilder-upload-img multi has-img" style="'.$style.'"><span class="remove-img">X</span></div>';
-                                }
-                                $placeholder .= '<div class="mBuilder-upload-img multi"><span class="remove-img mBuilder-hidden">X</span></div>';
-                            }else{
-                                $placeholder = '<div class="mBuilder-upload-img multi"><span class="remove-img mBuilder-hidden">X</span></div>';
-                            }
 
-                            $groupHtml[$key] .=
-                                '<div class="mBuilder_element_label">' . $param['heading'] . '</div>' .
-                                '<div class="edit_form_line  mBuilder-upload-imgs">'.
-                                $placeholder.
-                                '<input type="text" name="'.$param['param_name'].'" value="'.${$param['param_name']}.'" class="mBuilder-hidden">'.
-                                '</div>';
-                            break;
-                        case 'google_fonts':
-                            $inputValue = ${$param['param_name']};
-                            $value = urldecode(${$param['param_name']});
-                            $value = str_replace("font_family:", "", $value);
-                            $value = str_replace("font_style:", "", $value);
-                            $fontFamily = explode(':',$value);
-                            $fontFamily = $fontFamily[0];
-                            $fontStyle = explode('|',$value);
-                            $fontStyle = $fontStyle[1];
-                            $value = array('font_family'=>$fontFamily,'font_style'=>$fontStyle);
-                            global $fonts;
-                            $fontKey = 0;
-                            $options = '';
-
-                            foreach ( $fonts as $fKey=>$font_data ) {
-                                $select='';
-                                if( strtolower( $value['font_family'] ) == strtolower( $font_data->font_family )){
-                                    $fontKey=$fKey;
-                                    $select = 'selected="selected"';
-                                }
-                                $options .=
-                                    '<option data-font-id="'.$fKey.'" value="'.$font_data->font_family . ':' . $font_data->font_styles.'" data-font="'.$font_data->font_family.'" '.$select.'>'.$font_data->font_family.'</option>';
-                            }
-                            $fontStyleOptions = pixflow_loadfontStyles($fontKey,$value['font_style']);
-                            $groupHtml[$key] .=
-                                '<div class="mBuilder_element_label">Font</div>' .
-                                '<div class="edit_form_line  mBuilder-google-font-picker">'.
-                                '<select class="google-fonts-families" data-input="'.$param['param_name'].'">'.
-                                $options.
-                                '</select>'.
-                                '<select class="google-fonts-styles" data-input="'.$param['param_name'].'">'.
-                                $fontStyleOptions.
-                                '</select>'.
-                                '<input type="text" name="'.$param['param_name'].'" value="'.$inputValue.'" class="mBuilder-hidden"/>'.
-                                '</div>';
-                            break;
-                        default:
-                            $groupHtml[$key] .= '[Unknown controller]';
-                            break;
-                    }
-                }
-                $groupHtml[$key] .= '</div>';
-            }
-        }
-        echo "</ul>";
-        $groupJs = array_unique($groupJs);
-        foreach ($groupHtml as $key=>$html){
-            print('<div id="mBuilder'.str_replace(' ','',esc_attr($key)).'" class="mBuilder-edit-el">'.$html."</div>");
-        }
-        $spectrum = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/spectrum.min.js';
-        echo '<script src="'.esc_url($spectrum).'"></script>';
-        $spectrumCSS = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/spectrum.min.css';
-        echo '<link rel="stylesheet" href="'.esc_url($spectrumCSS).'">';
-
-        $nouislider = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/js/jquery.nouislider.min.js';
-        echo '<script src="'.esc_url($nouislider).'"></script>';
-        $nouisliderCSS = PIXFLOW_THEME_CUSTOMIZER_URI.'/assets/css/jquery.nouislider.min.css';
-        echo '<link rel="stylesheet" href="'.esc_url($nouisliderCSS).'">';
-
-        foreach($groupJs as $value){
-            echo '<script src="'.esc_url($value).'"></script>';
-        }
-        echo "</div>";
-
-    }
 
     public static function parseAttributes($attributes){
         $attr = json_decode(stripslashes($attributes),true);
@@ -563,7 +458,30 @@ class MBuilder{
             }
             $this->generateContent($id);
         }
+        $this->save_sections_images();
         return $this->content;
+    }
+
+    /**
+     * Check content for external images of sections and save its as local
+     *
+     * @return content
+     * @since 1.0.0
+     */
+    public function save_sections_images(){
+        $content = $this->content;
+        $result = preg_match_all('#http:\/\/theme.pixflow.net\/massive-dynamic\/.*?[.](jpg|jpeg|gif|png)#i', $content, $matches);
+		if( $result ){
+            $images = $matches[0];
+            $images = array_unique($images);
+            foreach($images as $image){
+                $image_id = pixflow_save_remote_images( $image );
+                if( $image_id ){
+                    $content = str_replace($image, $image_id, $content);
+                }
+            }
+        }
+        $this->content = $content;
     }
 
     /**
@@ -647,7 +565,34 @@ class MBuilder{
         }
 	    $this->models = $mBuilderModelIdArray;
         $in_mbuilder = $last_in_mbuilder;
+
 	    return $this->models;
+    }
+
+    /**
+     * Get shortcodes in text
+     *
+     * @param $content - content of shortcodes
+     *
+     * @return array - list of used shortcodes
+     * @since 1.0.0
+     */
+
+    public function get_shortcodes_by_content($content){
+        $used_shortcodes = array();
+        $pat = "~\[[^\/][^=]*?( .*?)*?\]~s";
+        if(preg_match_all($pat, $content, $mats)){
+            $els = $mats[0];
+            $dels = array_count_values($els);
+            foreach($dels as $el=>$n){
+                $el = substr($el,1);
+                $el = str_replace(']','',$el);
+                $el = explode(' ',trim($el));
+                $used_shortcodes[] = $el[0];
+            }
+            $used_shortcodes = array_unique($used_shortcodes);
+        }
+        return $used_shortcodes;
     }
 
     public function list_used_shortcodes($page_id=null){
@@ -660,21 +605,8 @@ class MBuilder{
             return $used_shortcodes;
         }
         $content = $content->post_content;
-        $pat = "~\[[^\/][^=]*?( .*?)*?\]~s";
 
-        if(preg_match_all($pat, $content, $mats)){
-            $els = $mats[0];
-            $dels = array_count_values($els);
-            foreach($dels as $el=>$n){
-                $el = substr($el,1);
-                $el = str_replace(']','',$el);
-                $el = explode(' ',trim($el));
-                $used_shortcodes[] = $el[0];
-            }
-            $used_shortcodes = array_unique($used_shortcodes);
-        }
-
-        $this->used_shortcodes = $used_shortcodes ;
+        $this->used_shortcodes = $this->get_shortcodes_by_content($content);
         return $this->used_shortcodes;
     }
 
@@ -689,6 +621,7 @@ class MBuilder{
      */
     public function generate_static_js_css($id){
         require_once(ABSPATH . 'wp-admin/includes/file.php');
+
 	    $page_js_path = PIXFLOW_THEME_CACHE . '/' . $id . '.js';
 	    $page_css_path = PIXFLOW_THEME_CACHE . '/' . $id . '.css';
         WP_Filesystem(false,false,true);
@@ -720,11 +653,11 @@ class MBuilder{
             }
         }
 
-        if ( ! $wp_filesystem->put_contents(  PIXFLOW_THEME_CACHE .'/'.$id.'.js', $js_content) )
+        if ( false === file_put_contents(  PIXFLOW_THEME_CACHE .'/'.$id.'.js', $js_content) )
         {
             echo esc_attr__("error saving file!",'massive-dynamic');
         }
-        if ( ! $wp_filesystem->put_contents(  PIXFLOW_THEME_CACHE . '/'.$id.'.css', $css_content) )
+        if ( false === file_put_contents(  PIXFLOW_THEME_CACHE . '/'.$id.'.css', $css_content) )
         {
             echo esc_attr__("error saving file!",'massive-dynamic');
         }
@@ -847,7 +780,7 @@ add_filter('tiny_mce_before_init', 'pixflow_tinymce_config');
 function mbuilderLateLoadStyles(){
     wp_enqueue_style('bootstrap-style',pixflow_path_combine(PIXFLOW_THEME_CSS_URI,'bootstrap.min.css'),array(),null);
 }
-add_action('get_footer','mbuilderLateLoadStyles',999);
+add_action('wp_enqueue_scripts','mbuilderLateLoadStyles',999);
 
 /**
  * Delete cache files from cache directory after each save post
@@ -876,7 +809,7 @@ if($in_mbuilder){
  * Add custom styles when load pixflow builder toolbar
  * */
 function pixflow_builder_toolbar_style(){
-    $inline_css = 'html { margin-top: 50px !important; }'.'* html body { margin-top: 50px !important; }';
+    $inline_css = 'html { margin-top: 47px !important; }'.'* html body { margin-top: 47px !important; }';
     wp_add_inline_style("responsive-style" , wp_strip_all_tags( $inline_css ) );
 }
 if($in_mbuilder){

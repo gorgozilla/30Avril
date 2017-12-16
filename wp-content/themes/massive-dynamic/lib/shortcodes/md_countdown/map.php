@@ -22,7 +22,12 @@ pixflow_map(
                 "heading" => esc_attr__("Count To", 'massive-dynamic'),
                 "value" => '2020/10/9 20:30',
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "first glue",

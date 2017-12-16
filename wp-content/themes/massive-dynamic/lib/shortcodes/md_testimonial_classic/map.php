@@ -24,37 +24,49 @@ function pixflow_testimoial_classic()
     );
 
     $param = array(
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "content_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+
 
         array(
-            "type" => "dropdown",
+            "type" => "textfield",
             "edit_field_class" => $filedClass . "glue first last",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "heading" => esc_attr__("Title", 'massive-dynamic'),
+            "param_name" => "testimonial_classic_title",
+            "admin_label" => false,
+            "value" => 'TESTIMONIAL'
+        ),
+        array(
+            "type" => "dropdown",
+            "edit_field_class" => $filedClass . "glue first ",
             "group" => esc_attr__("General", 'massive-dynamic'),
             "heading" => esc_attr__("Testimonial Slides:", 'massive-dynamic'),
             "param_name" => $count_num_param,
             "admin_label" => false,
             "value" => $dropDown
         ),
-
-        array(
-            "type" => "textfield",
-            "edit_field_class" => $filedClass . "glue first",
-            "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Title", 'massive-dynamic'),
-            "param_name" => "testimonial_classic_title",
-            "admin_label" => false,
-            "value" => 'TESTIMONIAL',
-        ),
-
         array(
             "type" => 'md_vc_separator',
             "group" => esc_attr__("General", 'massive-dynamic'),
             "param_name" => "testimonial_classic_separator" . ++$separatorCounter,
         ),
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue last",
-            "heading" => esc_attr__("Texts Color", 'massive-dynamic'),
+            "heading" => esc_attr__("General Color", 'massive-dynamic'),
             "group" => esc_attr__("General", 'massive-dynamic'),
             "param_name" => "md_testimonial_solid_color",
             "value" => '#000',

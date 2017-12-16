@@ -8,6 +8,8 @@
 /*******************************************************************
  *                  Count Box
  ******************************************************************/
+global $separatorCounter;
+$separatorCounter = 1;
 pixflow_map(
     array(
         'base' => 'md_countbox',
@@ -17,12 +19,20 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "group" => esc_attr__("General", 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue last",
                 "param_name" => "countbox_to",
                 "heading" => esc_attr__("Count To", 'massive-dynamic'),
                 "value" => '46',
                 "group" => esc_attr__("General", 'massive-dynamic'),
+//                "color_picker" => 'countbox_number_color'
             ),
             array(
                 "type" => "textfield",
@@ -35,7 +45,7 @@ pixflow_map(
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "countbox_title_separator" . ++$separatorCounter,
+                "param_name" => "countbox_title_separator". ++$separatorCounter,
                 "group" => esc_attr__("General", 'massive-dynamic'),
             ),
             array(
@@ -46,6 +56,13 @@ pixflow_map(
                 "admin_label" => false,
                 "value" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porta, mi ut facilisis ullamcorper, magna risus vehicula augue, eget faucibus magna massa at justo.",
                 "group" => esc_attr__("General", 'massive-dynamic'),
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "group" => esc_attr__("General", 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 "type" => "md_vc_colorpicker",
@@ -59,7 +76,7 @@ pixflow_map(
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "countbox_general_color_separator" . ++$separatorCounter,
+                "param_name" => "countbox_general_color_separator". ++$separatorCounter ,
                 "group" => esc_attr__("General", 'massive-dynamic'),
             ),
             array(
@@ -71,11 +88,12 @@ pixflow_map(
                 "admin_label" => false,
                 "opacity" => false,
                 "group" => esc_attr__("General", 'massive-dynamic'),
+//                "inline_color_picker" => true,
             ),
             array(
                 'type' => 'md_vc_checkbox',
                 "edit_field_class" => $filedClass . "first glue last",
-                'heading' => esc_attr__('Use Button', 'massive-dynamic'),
+                'heading' => esc_attr__('Activate', 'massive-dynamic'),
                 'param_name' => 'countbox_use_button',
                 'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
                 'checked' => false,
@@ -84,7 +102,7 @@ pixflow_map(
             array(
                 "type" => 'md_vc_separator',
                 "edit_field_class" => $filedClass . "stick-to-top",
-                "param_name" => "countbox_use_button" . ++$separatorCounter,
+                "param_name" => "countbox_use_button". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "admin_label" => false,
                 "dependency" => array(
@@ -93,10 +111,21 @@ pixflow_map(
                 )
             ),//separator
             array(
+                "type" => "md_group_title",
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+                "heading" => esc_attr__("Style", 'massive-dynamic'),
+                "param_name" => "btn_style_group",
+                "edit_field_class" => $filedClass . "glue first last",
+                "dependency" => array(
+                    'element' => "countbox_use_button",
+                    'value' => array('yes')
+                )
+            ),
+            array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "glue last",
                 "separate" => true,
-                "heading" => esc_attr__("Button Style", 'massive-dynamic'),
+                "heading" => esc_attr__("Style", 'massive-dynamic'),
                 "param_name" => "countbox_button_style",
                 "description" => esc_attr__("Choose between five button style", 'massive-dynamic'),
                 "admin_label" => false,
@@ -117,8 +146,54 @@ pixflow_map(
                 )
             ),//btn kind
             array(
-                "type" => "textfield",
+                "type" => "dropdown",
+                "edit_field_class" => $filedClass . "last glue first",
+                "heading" => esc_attr__("Button size", 'massive-dynamic'),
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+                "param_name" => "countbox_button_size",
+                "admin_label" => false,
+                "description" => esc_attr__("Choose between three button sizes", 'massive-dynamic'),
+                "value" => array(
+                    esc_attr__("Standard", 'massive-dynamic') => "standard",
+                    esc_attr__("Small", 'massive-dynamic') => "small"
+                ),
+                "dependency" => array(
+                    'element' => "countbox_use_button",
+                    'value' => array('yes')
+                )
+            ),//btn size
 
+            array(
+                'type' => 'md_vc_slider',
+                "edit_field_class" => $filedClass . "first glue last",
+                'heading' => esc_attr__('Padding', 'massive-dynamic'),
+                'param_name' => 'left_right_padding',
+                'value' => '0',
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+                'defaultSetting' => array(
+                    "min" => "0",
+                    "max" => "300",
+                    "prefix" => " px",
+                    "step" => "1",
+                ),
+                "dependency" => array(
+                    'element' => "countbox_use_button",
+                    'value' => array('yes')
+                )
+            ),//spacing
+            array(
+                "type" => "md_group_title",
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "btn_content_group",
+                "edit_field_class" => $filedClass . "glue first last",
+                "dependency" => array(
+                    'element' => "countbox_use_button",
+                    'value' => array('yes')
+                )
+            ),
+            array(
+                "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue",
                 "heading" => esc_attr__("Text", 'massive-dynamic'),
                 "param_name" => "countbox_button_text",
@@ -133,7 +208,7 @@ pixflow_map(
             ),//btn text
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "countbox_button_text_separator" . ++$separatorCounter,
+                "param_name" => "countbox_button_text_separator". ++$separatorCounter ,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "countbox_use_button",
@@ -156,6 +231,17 @@ pixflow_map(
                 'value' => 'icon-angle-right'
             ),//btn icon
             array(
+                "type" => "md_group_title",
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "btn_app_group",
+                "edit_field_class" => $filedClass . "glue first last",
+                "dependency" => array(
+                    'element' => "countbox_use_button",
+                    'value' => array('yes')
+                )
+            ),
+            array(
                 "type" => "md_vc_colorpicker",
 
                 "edit_field_class" => $filedClass . "glue first last",
@@ -173,7 +259,7 @@ pixflow_map(
             ),//btn general color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "countbox_button_color_separator" . ++$separatorCounter,
+                "param_name" => "countbox_button_color_separator". ++$separatorCounter,
                 "edit_field_class" => $filedClass . "stick-to-top",
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
@@ -199,7 +285,7 @@ pixflow_map(
             ),//btn text color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "countbox_button_color_separator" . ++$separatorCounter,
+                "param_name" => "countbox_button_color_separator". ++$separatorCounter ,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "countbox_button_style",
@@ -224,7 +310,7 @@ pixflow_map(
             ),//btn bg hover color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "countbox_button_color_separator" . ++$separatorCounter,
+                "param_name" => "countbox_button_color_separator". ++$separatorCounter ,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "countbox_button_style",
@@ -247,57 +333,13 @@ pixflow_map(
                 ),
 
             ),//btn text hover color
-            array(
-                "type" => "dropdown",
 
-                "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Button size", 'massive-dynamic'),
-                "group" => esc_attr__("Button", 'massive-dynamic'),
-                "param_name" => "countbox_button_size",
-                "admin_label" => false,
-                "description" => esc_attr__("Choose between three button sizes", 'massive-dynamic'),
-                "value" => array(
-                    esc_attr__("Standard", 'massive-dynamic') => "standard",
-                    esc_attr__("Small", 'massive-dynamic') => "small"
-                ),
-                "dependency" => array(
-                    'element' => "countbox_use_button",
-                    'value' => array('yes')
-                )
-            ),//btn size
-            array(
-                "type" => 'md_vc_separator',
-                "param_name" => "countbox_button_size_separator" . ++$separatorCounter,
-                "group" => esc_attr__("Button", 'massive-dynamic'),
-                "dependency" => array(
-                    'element' => "countbox_use_button",
-                    'value' => array('yes')
-                )
-            ),//separator
-            array(
-                'type' => 'md_vc_slider',
-                "edit_field_class" => $filedClass . "glue last",
-                'heading' => esc_attr__('Button Padding', 'massive-dynamic'),
-                'param_name' => 'left_right_padding',
-                'value' => '0',
-                "group" => esc_attr__("Button", 'massive-dynamic'),
-                'defaultSetting' => array(
-                    "min" => "0",
-                    "max" => "300",
-                    "prefix" => " px",
-                    "step" => "1",
-                ),
-                "dependency" => array(
-                    'element' => "countbox_use_button",
-                    'value' => array('yes')
-                )
-            ),//spacing
+
             array(
                 "type" => "textfield",
-
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Link URL", 'massive-dynamic'),
+                "heading" => esc_attr__("URL", 'massive-dynamic'),
                 "param_name" => "countbox_button_url",
                 "admin_label" => false,
                 "value" => "#",
@@ -320,7 +362,7 @@ pixflow_map(
                 "type" => "dropdown",
 
                 "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Link's target", 'massive-dynamic'),
+                "heading" => esc_attr__("Target", 'massive-dynamic'),
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "param_name" => "countbox_button_target",
                 "admin_label" => false,

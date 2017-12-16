@@ -18,21 +18,69 @@ pixflow_map(
         'show_settings_on_create' => false,
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "glue first",
                 "heading" => esc_attr__("Title", 'massive-dynamic'),
                 "param_name" => "call_to_action_title",
                 "description" => esc_attr__("Call to action heading text", 'massive-dynamic'),
                 "admin_label" => false,
-                "value" => "Are you looking for job?"
+                "value" => "Are you looking for job?",
+                "color_picker" => "call_to_action_heading_color"
             ),
             array(
                 "type" => 'md_vc_separator',
                 "param_name" => "call_to_action_title_separator" . ++$separatorCounter,
             ),
+
+            array(
+                "type" => "md_vc_colorpicker",
+                "edit_field_class" => $filedClass . "glue last",
+                "heading" => esc_attr__("Title Color", 'massive-dynamic'),
+                "param_name" => "call_to_action_heading_color",
+                "admin_label" => false,
+                "inline_color_picker" => true,
+                "description" => esc_attr__("Choose title color", 'massive-dynamic'),
+                "value" => 'rgb(255,255,255)',
+            ),
+
+            array(
+                "type" => "textarea",
+                "edit_field_class" => $filedClass . "glue first",
+                "heading" => esc_attr__("Description", 'massive-dynamic'),
+                "param_name" => "call_to_action_description",
+                "admin_label" => false,
+                "value" => esc_attr__("We are a fairly small, flexible design studio that designs for print and web. We work flexibly with Send us your resume and portfolio", 'massive-dynamic'),
+                "color_picker" => 'call_to_action_description_color',
+            ),
+            array(
+                "type" => 'md_vc_separator',
+                "param_name" => "call_to_action_title_separator" . ++$separatorCounter,
+                "admin_label" => false,
+            ),
+            array(
+                "type" => "md_vc_colorpicker",
+                "edit_field_class" => $filedClass . "glue last",
+                "heading" => esc_attr__("Description Color", 'massive-dynamic'),
+                "param_name" => "call_to_action_description_color",
+                "admin_label" => false,
+                "inline_color_picker" => true,
+                "value" => 'rgb(255,255,255)',
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Typography", 'massive-dynamic'),
+                "param_name" => "typo_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue",
+                "edit_field_class" => $filedClass . "glue first last",
                 "heading" => esc_attr__("Title size", 'massive-dynamic'),
                 "param_name" => "call_to_action_heading",
                 "description" => esc_attr__("Choose your heading", 'massive-dynamic'),
@@ -47,42 +95,10 @@ pixflow_map(
                 ),
             ),
             array(
-                "type" => 'md_vc_separator',
-                "param_name" => "call_to_action_title_separator" . ++$separatorCounter,
-                "admin_label" => false,
-            ),
-            array(
-                "type" => "md_vc_colorpicker",
-                "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Title Color", 'massive-dynamic'),
-                "param_name" => "call_to_action_heading_color",
-                "admin_label" => false,
-                "description" => esc_attr__("Choose title color", 'massive-dynamic'),
-                "value" => 'rgb(255,255,255)',
-            ),
-
-            array(
-                "type" => "textarea",
-                "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Description", 'massive-dynamic'),
-                "param_name" => "call_to_action_description",
-                "description" => esc_attr__("Call to action description text", 'massive-dynamic'),
-                "admin_label" => false,
-                "value" => esc_attr__("We are a fairly small, flexible design studio that designs for print and web. We work flexibly with Send us your resume and portfolio", 'massive-dynamic'),
-            ),
-            array(
-                "type" => 'md_vc_separator',
-                "param_name" => "call_to_action_title_separator" . ++$separatorCounter,
-                "admin_label" => false,
-            ),
-            array(
-                "type" => "md_vc_colorpicker",
-                "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Description Color", 'massive-dynamic'),
-                "param_name" => "call_to_action_description_color",
-                "admin_label" => false,
-                "description" => esc_attr__("Choose description color", 'massive-dynamic'),
-                "value" => 'rgb(255,255,255)',
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Background", 'massive-dynamic'),
+                "param_name" => "bg_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 "type" => "dropdown",
@@ -91,7 +107,6 @@ pixflow_map(
                 "param_name" => "call_to_action_background_type",
                 "description" => esc_attr__("Choose between color or image background", 'massive-dynamic'),
                 "admin_label" => false,
-                "group" => esc_attr__('Background', 'massive-dynamic'),
                 "value" => array(
                     esc_attr__("Color", 'massive-dynamic') => "color_background",
                     esc_attr__("Image", 'massive-dynamic') => "image_background",
@@ -102,7 +117,6 @@ pixflow_map(
                 "type" => 'md_vc_separator',
                 "edit_field_class" => $filedClass . "stick-to-top",
                 "param_name" => "call_to_action_bg_separator" . ++$separatorCounter,
-                "group" => esc_attr__('Background', 'massive-dynamic'),
                 "admin_label" => false,
                 "dependency" => array(
                     'element' => "call_to_action_background_type",
@@ -115,8 +129,6 @@ pixflow_map(
                 "heading" => esc_attr__("Background Color", 'massive-dynamic'),
                 "param_name" => "call_to_action_background_color",
                 "admin_label" => false,
-                "description" => esc_attr__("Choose background color", 'massive-dynamic'),
-                "group" => esc_attr__('Background', 'massive-dynamic'),
                 "value" => 'rgb(37,37,37)',
                 "dependency" => array(
                     'element' => "call_to_action_background_type",
@@ -129,18 +141,23 @@ pixflow_map(
                 "heading" => esc_attr__("Background Image", 'massive-dynamic'),
                 "param_name" => "call_to_action_background_image",
                 "admin_label" => false,
-                "description" => esc_attr__("Choose background image", 'massive-dynamic'),
-                "group" => esc_attr__('Background', 'massive-dynamic'),
                 "dependency" => Array(
                     'element' => "call_to_action_background_type",
                     'value' => array('image_background')
                 )
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Style", 'massive-dynamic'),
+                "param_name" => "btn_style_group",
+                "group" => esc_attr__('Button', 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue first last",
+                "edit_field_class" => $filedClass . "glue first",
                 "separate" => true,
-                "heading" => esc_attr__("Button Style", 'massive-dynamic'),
+                "heading" => esc_attr__("Style", 'massive-dynamic'),
                 "param_name" => "call_to_action_button_style",
                 "description" => esc_attr__("Choose between five button style", 'massive-dynamic'),
                 "admin_label" => false,
@@ -157,9 +174,55 @@ pixflow_map(
                 ),
             ),
             array(
+                "type" => 'md_vc_separator',
+                "param_name" => "call_to_action_title_separator" . ++$separatorCounter,
+                "group" => esc_attr__('Button', 'massive-dynamic'),
+                "admin_label" => false,
+            ),
+            array(
+                "type" => "dropdown",
+                "edit_field_class" => $filedClass . "glue",
+                "heading" => esc_attr__("Size", 'massive-dynamic'),
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+                "param_name" => "call_to_action_button_size",
+                "admin_label" => false,
+                "description" => esc_attr__("Choose size of your button", 'massive-dynamic'),
+                "value" => array(
+                    esc_attr__("Standard", 'massive-dynamic') => "standard",
+                    esc_attr__("Small", 'massive-dynamic') => "small"
+                ),
+            ),
+            array(
+                "type" => 'md_vc_separator',
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+                "param_name" => "call_to_action_title_separator" . ++$separatorCounter,
+                "admin_label" => false,
+            ),
+            array(
+                'type' => 'md_vc_slider',
+                "edit_field_class" => $filedClass . "glue last",
+                'heading' => esc_attr__('Padding', 'massive-dynamic'),
+                'param_name' => 'call_to_action_left_right_padding',
+                'value' => '0',
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+                'defaultSetting' => array(
+                    "min" => "0",
+                    "max" => "300",
+                    "prefix" => " px",
+                    "step" => "1",
+                ),
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "btn_content_group",
+                "group" => esc_attr__('Button', 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Button Text", 'massive-dynamic'),
+                "heading" => esc_attr__("Text", 'massive-dynamic'),
                 "param_name" => "call_to_action_button_text",
                 "description" => esc_attr__("Button text", 'massive-dynamic'),
                 "group" => esc_attr__('Button', 'massive-dynamic'),
@@ -183,41 +246,12 @@ pixflow_map(
                 'value' => 'icon-chevron-right'
             ),
             array(
-                "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Button Size", 'massive-dynamic'),
-                "group" => esc_attr__("Button", 'massive-dynamic'),
-                "param_name" => "call_to_action_button_size",
-                "admin_label" => false,
-                "description" => esc_attr__("Choose size of your button", 'massive-dynamic'),
-                "value" => array(
-                    esc_attr__("Standard", 'massive-dynamic') => "standard",
-                    esc_attr__("Small", 'massive-dynamic') => "small"
-                ),
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "btn_app_group",
+                "edit_field_class" => $filedClass . "glue first last",
+                "group" => esc_attr__('Button', 'massive-dynamic')
             ),
-            array(
-                "type" => 'md_vc_separator',
-                "group" => esc_attr__("Button", 'massive-dynamic'),
-                "param_name" => "call_to_action_title_separator" . ++$separatorCounter,
-                "admin_label" => false,
-            ),
-
-            array(
-                'type' => 'md_vc_slider',
-                "edit_field_class" => $filedClass . "glue last",
-                'heading' => esc_attr__('Button Padding', 'massive-dynamic'),
-                'param_name' => 'call_to_action_left_right_padding',
-                'value' => '0',
-                "group" => esc_attr__("Button", 'massive-dynamic'),
-                'defaultSetting' => array(
-                    "min" => "0",
-                    "max" => "300",
-                    "prefix" => " px",
-                    "step" => "1",
-                ),
-            ),
-
-
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "glue first last",
@@ -301,9 +335,16 @@ pixflow_map(
                 'value' => '#FFF'
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Link", 'massive-dynamic'),
+                "param_name" => "btn_link_group",
+                "edit_field_class" => $filedClass . "glue first last",
+                "group" => esc_attr__("Button", 'massive-dynamic'),
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Link URL", 'massive-dynamic'),
+                "heading" => esc_attr__("URL", 'massive-dynamic'),
                 "param_name" => "call_to_action_button_url",
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "admin_label" => false,
@@ -319,7 +360,7 @@ pixflow_map(
             array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Link's target", 'massive-dynamic'),
+                "heading" => esc_attr__("Target", 'massive-dynamic'),
                 "param_name" => "call_to_action_button_target",
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "admin_label" => false,

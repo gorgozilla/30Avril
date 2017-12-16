@@ -308,13 +308,12 @@ function mBuilder_vcrow($atts,$content){
 
         <!-- Set background image -->
         <style >
-
             /* Do this code for each id */
             <?php if( $parallax_image_src != '' && $parallax_speed != '10' && ( 'image' == $row_type || 'gradient' == $row_type ) ) {
 
-                echo esc_attr('#' . $id); ?> .row-image-normal
+                echo esc_attr('#' . $id);  ?> .row-image-normal
             {
-                background-image: url( <?php echo esc_attr($parallax_image_src); ?> );
+                background-image: url( <?php echo ( '' != $row_image && (int) $row_image == 0 ) ? $row_image : esc_attr($parallax_image_src); ?> );
             }
 
             <?php } else if ($parallax_speed == '10') {

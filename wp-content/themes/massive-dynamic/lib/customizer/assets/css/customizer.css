@@ -431,14 +431,14 @@ div#customize-info {
 }
 
 .wp-full-overlay-sidebar .wp-full-overlay-sidebar-content {
-    top: 145px;
+    top: 145px !important;
     bottom: 317px;
     height: 495px;
     margin-top: 85px;
 }
 
 .section-open .wp-full-overlay-sidebar .wp-full-overlay-sidebar-content {
-    top: 0;
+    top: 0 !important;
     margin-top: 80px;
 }
 #customize-theme-controls>ul li.customize-section-description-container.section-meta{
@@ -452,7 +452,7 @@ div#customize-info {
 #customize-controls{
     background:#fdfdfd ;
     border: none;
-    margin-top: 50px;
+    margin-top: 47px;
     box-shadow: 0 0 0 1px rgb(241,241,241);
     z-index: 9999;
     -webkit-transition: box-shadow 0.3s;
@@ -1163,7 +1163,7 @@ li.customize-control {
 }
 
 .in-sub-panel .wp-full-overlay-sidebar .wp-full-overlay-sidebar-content {
-    top: 0;
+    top: 0 !important;
 }
 
 .current-panel .accordion-sub-container.control-panel-content{
@@ -2347,7 +2347,7 @@ section.demo-importer-title {
     background: none;
     z-index: 9011;
     transition: none;
-    padding-top: 50px;
+    padding-top: 47px;
 }
 
 /*   Unique Setting customizer styles  */
@@ -3753,7 +3753,7 @@ ul.accordion-section:not(.current-panel):not(.open){
 .customizer-options-menu{
     z-index: 999999;
     background: #2f2f2f;
-    height: 50px;
+    height: 47px;
     display: flex;
     justify-content: space-between;
     position: fixed;
@@ -3775,14 +3775,14 @@ ul.accordion-section:not(.current-panel):not(.open){
 }
 
 .customizer-options-menu > div > ul > li{
-    margin-left: 40px;
+    margin-left: 34px;
     margin-bottom:0;
     display: flex;
     align-items: stretch;
     justify-content: center;
 }
 .customizer-options-menu > div > ul > .massive-brand{
-    margin: 0 30px 0 23px;
+    margin: 0 14px 0 14px;
 }
 
 .customizer-options-menu > div > ul > li > a {
@@ -3791,10 +3791,11 @@ ul.accordion-section:not(.current-panel):not(.open){
 } 
 
 .customizer-btn{
-    -moz-border-radius: 5px;
-    display: inline-block;
     font-size: 12px;
-    color: #969696;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #d4d0d0;
     font-weight: 500;
     text-align: center;
     top: 0;
@@ -3802,15 +3803,13 @@ ul.accordion-section:not(.current-panel):not(.open){
     position: relative;
     text-decoration: none;
     transition: background-color .15s,background-image .15s,color .15s;
+
 }
 
 .customizer-btn:hover{
     color: #fff;
 }
 
-#save-btn .text{
-    text-transform: uppercase;
-}
 
 a.collaps.hold-collapse{
     color: #ffffff;
@@ -3835,25 +3834,21 @@ a.collaps .status{
     transition: background-color .3s;
 }
 
-a.collaps .symbol{
-    margin-left: 10px;
-}
-
 #save-btn{
-    width:60px;
+    width:100%;
 }
 
-#save-btn .save-loading,
+.customizer-publish-btn .save-loading,
 #page-option-btn .save-loading{
     width: 0;
     height: 5px;
     margin-top: -5px;
-    background-color: #52ccff;
-    display: block!important;
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    background-color: #cddeed;
+    display: block !important;
     opacity: 1 !important;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 #page-option-btn .save-loading{
     margin-left: 0;
@@ -3894,21 +3889,12 @@ a.collaps .symbol{
 }
 
  .customizer-options-menu > div >  ul > li.close{
-    margin-left: 13px;
+    margin-left: 0;
 }
 
  .close a {
     margin-left: 18px;
     margin-right: 18px;
-}
- .close a:before{
-    content: '';
-    background-color: rgba(255,255,255,.1);
-    width: 1px;
-    height: 15px;
-    position: absolute;
-    left: -18px;
-    top:18px;
 }
 
  .close svg{
@@ -3916,7 +3902,7 @@ a.collaps .symbol{
 }
 
  .close svg .st0 {
-    fill: #adadad;
+     fill: #e7e7e7 ;
 }
 
  .close:hover svg .st0 {
@@ -4133,4 +4119,62 @@ body {
 
 #available-menu-items #available-menu-items-search ul.accordion-section-content {
     top: 110px;
+}
+.customizer-options-menu .customizer-right-menu ul li a{
+    font-size: 12px;
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+    top: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-decoration: none;
+    transition: background-color .15s,background-image .15s,color .15s;
+}
+.customizer-options-menu .customizer-right-menu ul li.customizer-preview-btn {
+    position: relative;
+    margin: 6px 0 6px 0 !important;
+    padding: 0 27px;
+    border-radius: 3px;
+    background-color: #4e4e4e;
+    transition-duration: .3s;
+}
+.customizer-options-menu .customizer-right-menu ul li.customizer-preview-btn:hover{
+
+    background-color: #fff;
+}
+.customizer-options-menu .customizer-right-menu ul li.customizer-preview-btn:hover a{
+    color: #000;
+}
+.customizer-options-menu .customizer-right-menu ul li.customizer-publish-btn {
+    position: relative;
+    margin: 6px 0 6px 6px;
+    width: 99px;
+    border-radius: 3px;
+    background-color: #46a9ff;
+}
+li.massive-brand a:before {
+    content: '';
+    background-color: rgba(255, 255, 255, .1);
+    width: 1px;
+    height: 47px;
+    position: absolute;
+    left: 54px;
+    top: 0;
+}
+
+#customize-controls #customize-notifications-area{
+    display: none !important;
+}
+#customize-theme-controls .control-panel-content:not(.control-panel-nav_menus) .control-section:nth-child(2){
+    border: none;
+}
+
+.attachment-media-view,
+.media-widget-preview.media_audio,
+.media-widget-preview.media_image{
+    background: transparent;
 }

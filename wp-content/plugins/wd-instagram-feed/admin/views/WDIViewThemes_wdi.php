@@ -31,7 +31,7 @@ class WDIViewThemes_wdi {
            href="https://web-dorado.com/wordpress-instagram-feed-wd/editing-themes.html"><?php _e('Read More in User Guide', "wd-instagram-feed"); ?></a>
       </span>
       <div class="wdi_hb_buy_pro">
-        <a target="_blank" href="https://web-dorado.com/products/wordpress-instagram-feed-wd.html">
+        <a target="_blank" href="https://web-dorado.com/files/fromInstagramFeedWD.php">
           <img alt="web-dorado.com" title="UPGRADE TO PAID VERSION"
                src="<?php echo WDI_URL . '/images/wd-logo.png'; ?>">
           <span><?php _e('Upgrade to paid version', "wd-instagram-feed"); ?></span>

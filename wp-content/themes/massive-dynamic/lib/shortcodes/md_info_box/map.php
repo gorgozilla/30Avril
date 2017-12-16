@@ -3,8 +3,6 @@
  * Pixflow
  */
 
-
-
 /*-----------------------------------------------------------------------------------*/
 /*  Info Box
 /*-----------------------------------------------------------------------------------*/
@@ -17,6 +15,12 @@ function pixflow_info_box()
     $separatorCounter = 0;
 
     $param = array(
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "param_name" => "content_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "textarea",
             "edit_field_class" => $filedClass . "glue first",
@@ -32,19 +36,7 @@ future.",
             "admin_label" => false,
         ),
 
-        array(
-            'type' => 'md_vc_checkbox',
-            "edit_field_class" => $filedClass . "glue",
-            'heading' => esc_attr__('Separator', 'massive-dynamic'),
-            'param_name' => 'info_box_checkbox',
-            'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
-            'checked' => false,
-        ),
-        array(
-            "type" => 'md_vc_separator',
-            "param_name" => "info_box_separator" . ++$separatorCounter,
-            "admin_label" => false,
-        ),
+
 
         array(
             "type" => "textarea",
@@ -70,12 +62,30 @@ future.",
             "description" => esc_attr__("Select an icon", 'massive-dynamic'),
             'value' => 'icon-romance-love-target'
         ),
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
+            'type' => 'md_vc_checkbox',
+            "edit_field_class" => $filedClass . "glue first",
+            'heading' => esc_attr__('Separator', 'massive-dynamic'),
+            'param_name' => 'info_box_checkbox',
+            'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
+            'checked' => false,
+        ),
+        array(
+            "type" => 'md_vc_separator',
+            "param_name" => "info_box_separator" . ++$separatorCounter,
+            "admin_label" => false,
+        ),
         // colors
 
         array(
             "type" => "md_vc_colorpicker",
-            "edit_field_class" => $filedClass . "glue first",
+            "edit_field_class" => $filedClass . "glue",
             "heading" => esc_attr__("Title Color", 'massive-dynamic'),
             "param_name" => "info_box_title_color",
             "admin_label" => false,

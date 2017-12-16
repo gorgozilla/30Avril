@@ -7,7 +7,10 @@
 /*-----------------------------------------------------------------------------------*/
 /*  MD TEXT
 /*-----------------------------------------------------------------------------------*/
+global $separatorCounter;
+$separatorCounter = 1;
 $textParamArray = array(
+
     array(
         "type" => "dropdown",
         "heading" => esc_attr__("Alignment", 'massive-dynamic'),
@@ -21,10 +24,19 @@ $textParamArray = array(
 
         ),
     ),
+
+    array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Line Height", 'massive-dynamic'),
+        "param_name" => "line_height_group",
+        "group" => esc_attr__("Design", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last"
+    ),
+
     array(
         'type' => 'md_vc_slider',
         "edit_field_class" => $filedClass . "glue first",
-        'heading' => esc_attr__('Title Line Height', 'massive-dynamic'),
+        'heading' => esc_attr__('Title ', 'massive-dynamic'),
         'param_name' => 'md_text_title_line_height',
         'value' => '40',
         "group" => esc_attr__("Design", 'massive-dynamic'),
@@ -47,7 +59,7 @@ $textParamArray = array(
     array(
         'type' => 'md_vc_slider',
         "edit_field_class" => $filedClass . "glue last",
-        'heading' => esc_attr__('Description line Height', 'massive-dynamic'),
+        'heading' => esc_attr__('Description ', 'massive-dynamic'),
         'param_name' => 'md_text_desc_line_height',
         'value' => '21',
         "group" => esc_attr__("Design", 'massive-dynamic'),
@@ -58,10 +70,19 @@ $textParamArray = array(
             "step" => "1",
         )
     ),
+
+    array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Spacing", 'massive-dynamic'),
+        "param_name" => "spacing_group",
+        "group" => esc_attr__("Design", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last"
+    ),
+
     array(
         'type' => 'md_vc_slider',
         "edit_field_class" => $filedClass . "glue first",
-        'heading' => esc_attr__('Title Bottom Space', 'massive-dynamic'),
+        'heading' => esc_attr__('Title Bottom ', 'massive-dynamic'),
         'param_name' => 'md_text_title_bottom_space',
         'value' => '10',
         "group" => esc_attr__("Design", 'massive-dynamic'),
@@ -75,14 +96,14 @@ $textParamArray = array(
     array(
         "type" => 'md_vc_separator',
         "edit_field_class" => $filedClass . "glue",
-        "param_name" => "separator" . ++$separatorCounter,
+        "param_name" => "separator". ++$separatorCounter ,
         "group" => esc_attr__("Design", 'massive-dynamic'),
         "admin_label" => false,
     ),
     array(
         'type' => 'md_vc_slider',
         "edit_field_class" => $filedClass . "glue",
-        'heading' => esc_attr__('Separator Bottom Space', 'massive-dynamic'),
+        'heading' => esc_attr__('Separator Bottom ', 'massive-dynamic'),
         'param_name' => 'md_text_separator_bottom_space',
         'value' => '10',
         "group" => esc_attr__("Design", 'massive-dynamic'),
@@ -97,10 +118,11 @@ $textParamArray = array(
             'value' => array('yes')
         )
     ),
+
     array(
         "type" => 'md_vc_separator',
         "edit_field_class" => $filedClass . "glue",
-        "param_name" => "separator" . ++$separatorCounter,
+        "param_name" => "separator". ++$separatorCounter,
         "group" => esc_attr__("Design", 'massive-dynamic'),
         "admin_label" => false,
         "dependency" => array(
@@ -111,7 +133,7 @@ $textParamArray = array(
     array(
         'type' => 'md_vc_slider',
         "edit_field_class" => $filedClass . "glue last",
-        'heading' => esc_attr__('Description Bottom Space', 'massive-dynamic'),
+        'heading' => esc_attr__('Description Bottom', 'massive-dynamic'),
         'param_name' => 'md_text_description_bottom_space',
         'value' => '25',
         "group" => esc_attr__("Design", 'massive-dynamic'),
@@ -122,6 +144,15 @@ $textParamArray = array(
             "step" => "1",
         )
     ),
+
+    array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Seperator", 'massive-dynamic'),
+        "param_name" => "seperator_group",
+        "group" => esc_attr__("Design", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last"
+    ),
+
     array(
         'type' => 'md_vc_checkbox',
         "edit_field_class" => $filedClass . "glue first last",
@@ -134,7 +165,7 @@ $textParamArray = array(
     array(
         "type" => 'md_vc_separator',
         "edit_field_class" => $filedClass . "stick-to-top glue",
-        "param_name" => "separator" . ++$separatorCounter,
+        "param_name" => "separator". ++$separatorCounter,
         "group" => esc_attr__("Design", 'massive-dynamic'),
         "admin_label" => false,
         "dependency" => array(
@@ -163,7 +194,7 @@ $textParamArray = array(
     array(
         "type" => 'md_vc_separator',
         "edit_field_class" => $filedClass . "glue",
-        "param_name" => "separator" . ++$separatorCounter,
+        "param_name" => "separator". ++$separatorCounter ,
         "group" => esc_attr__("Design", 'massive-dynamic'),
         "admin_label" => false,
         "dependency" => array(
@@ -192,7 +223,7 @@ $textParamArray = array(
     array(
         "type" => 'md_vc_separator',
         "edit_field_class" => $filedClass . "glue",
-        "param_name" => "separator" . ++$separatorCounter,
+        "param_name" => "separator". ++$separatorCounter,
         "group" => esc_attr__("Design", 'massive-dynamic'),
         "admin_label" => false,
         "dependency" => array(
@@ -217,8 +248,16 @@ $textParamArray = array(
     ),//separator color
 
     array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Style", 'massive-dynamic'),
+        "param_name" => "title_style_group",
+        "group" => esc_attr__("Title Option", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last"
+    ),
+
+    array(
         "type" => "dropdown",
-        "edit_field_class" => $filedClass . "first glue last",
+        "edit_field_class" => $filedClass . "first glue last   ",
         "heading" => esc_attr__("Title Style", 'massive-dynamic'),
         "param_name" => "md_text_style",
         "group" => esc_attr__("Title Option", 'massive-dynamic'),
@@ -230,7 +269,7 @@ $textParamArray = array(
     ),
     array(
         "type" => "md_vc_colorpicker",
-        "edit_field_class" => $filedClass . "glue last",
+        "edit_field_class" => $filedClass . " first glue last",
         "heading" => esc_attr__("Title Color", 'massive-dynamic'),
         "group" => esc_attr__("Title Option", 'massive-dynamic'),
         "param_name" => "md_text_solid_color",
@@ -244,7 +283,7 @@ $textParamArray = array(
     ),
     array(
         "type" => "md_vc_gradientcolorpicker",
-        "edit_field_class" => $filedClass . "glue last",
+        "edit_field_class" => $filedClass . " first glue last",
         "heading" => esc_attr__("Title Gradient", 'massive-dynamic'),
         "param_name" => "md_text_gradient_color",
         "group" => esc_attr__("Title Option", 'massive-dynamic'),
@@ -261,7 +300,7 @@ $textParamArray = array(
     ),
     array(
         'type' => 'attach_image',
-        "edit_field_class" => $filedClass . "glue last",
+        "edit_field_class" => $filedClass . "first glue last",
         'heading' => esc_attr__('Title Image', 'massive-dynamic'),
         'param_name' => 'md_text_image_bg',
         "group" => esc_attr__("Title Option", 'massive-dynamic'),
@@ -284,10 +323,20 @@ $textParamArray = array(
             "step" => "1",
         )
     ),
+
+
+    array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Spacing", 'massive-dynamic'),
+        "param_name" => "title_letter_space_group",
+        "group" => esc_attr__("Title Option", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last"
+    ),
+
     array(
         'type' => 'md_vc_slider',
         "edit_field_class" => $filedClass . "first glue",
-        'heading' => esc_attr__('Letter Spacing', 'massive-dynamic'),
+        'heading' => esc_attr__('Letter ', 'massive-dynamic'),
         'param_name' => 'md_text_letter_space',
         'value' => '0',
         "group" => esc_attr__("Title Option", 'massive-dynamic'),
@@ -303,11 +352,12 @@ $textParamArray = array(
         "group" => esc_attr__("Title Option", 'massive-dynamic'),
         "param_name" => "md_text_letter_space_separator" . ++$separatorCounter,
     ),
+
     array(
         'type' => 'md_vc_slider',
         "group" => esc_attr__("Title Option", 'massive-dynamic'),
         "edit_field_class" => $filedClass . "glue",
-        'heading' => esc_attr__('Hover Letter Spacing', 'massive-dynamic'),
+        'heading' => esc_attr__('Hover Letter ', 'massive-dynamic'),
         'param_name' => 'md_text_hover_letter_space',
         'value' => '0',
         'defaultSetting' => array(
@@ -336,6 +386,15 @@ $textParamArray = array(
             "easeOutCirc" => "cubic-bezier(0.075, 0.82, 0.165, 1);",
         ),
     ),
+
+    array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Typography", 'massive-dynamic'),
+        "param_name" => "title_font_group",
+        "group" => esc_attr__("Title Option", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last"
+    ),
+
     array(
         'type' => 'md_vc_checkbox',
         "edit_field_class" => $filedClass . "first glue last",
@@ -362,6 +421,7 @@ $textParamArray = array(
         "edit_field_class" => $filedClass . "glue last",
         "group" => esc_attr__("Title Option", 'massive-dynamic'),
         'param_name' => 'md_text_title_google_fonts',
+        'value' => 'font_family:Roboto%3A100%2C200%2C300%2Cregular%2C500%2C600%2C700%2C800%2C900|font_style:300%20light%20regular%3A300%3Anormal' ,
         'settings' => array(
             'fields' => array(
                 'font_family_description' => esc_attr__('Font family', 'massive-dynamic'),
@@ -567,7 +627,7 @@ $textParamArray = array(
     array(
         'type' => 'md_vc_checkbox',
         "edit_field_class" => $filedClass . "first glue last",
-        'heading' => esc_attr__('Use Custom Font For Description', 'massive-dynamic'),
+        'heading' => esc_attr__('Use Custom Font', 'massive-dynamic'),
         'param_name' => 'md_text_use_desc_custom_font',
         'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
         'checked' => false,
@@ -590,6 +650,7 @@ $textParamArray = array(
         "edit_field_class" => $filedClass . "glue last",
         "group" => esc_attr__("Description", 'massive-dynamic'),
         'param_name' => 'md_text_desc_google_fonts',
+        'value' => 'font_family:Roboto%3A100%2C100italic%2C300%2C300italic%2Cregular%2Citalic%2C500%2C500italic%2C700%2C700italic%2C900%2C900italic|font_style:400%20regular%3A400%3Anormal',
         'settings' => array(
             'fields' => array(
                 'font_family_description' => esc_attr__('Font family', 'massive-dynamic'),
@@ -601,10 +662,11 @@ $textParamArray = array(
             'value' => array('yes')
         )
     ),
+
     array(
         'type' => 'md_vc_checkbox',
         "edit_field_class" => $filedClass . "first glue last",
-        'heading' => esc_attr__('Use Button', 'massive-dynamic'),
+        'heading' => esc_attr__('Activate', 'massive-dynamic'),
         'param_name' => 'md_text_use_button',
         'value' => array(esc_attr__('No', 'massive-dynamic') => 'no'),
         'checked' => false,
@@ -617,12 +679,25 @@ $textParamArray = array(
         "value" => esc_attr__("Title bottom space will also affect separator bottom space.", 'massive-dynamic'),
         "group" => esc_attr__("Design", 'massive-dynamic'),
     ),
+
+    array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Style", 'massive-dynamic'),
+        "param_name" => "button_style_group",
+        "group" => esc_attr__("Button", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last",
+        "dependency" => array(
+            'element' => "md_text_use_button",
+            'value' => array('yes')
+        )
+    ),
+
     //add btn
     array(
         "type" => "dropdown",
         "edit_field_class" => $filedClass . "glue first last",
         "separate" => true,
-        "heading" => esc_attr__("Button Style", 'massive-dynamic'),
+        "heading" => esc_attr__("Style", 'massive-dynamic'),
         "param_name" => "md_text_button_style",
         "description" => esc_attr__("Choose between five button style", 'massive-dynamic'),
         "admin_label" => false,
@@ -643,6 +718,61 @@ $textParamArray = array(
         )
     ),//btn kind
     array(
+        "type" => "dropdown",
+        "edit_field_class" => $filedClass . "glue first",
+        "heading" => esc_attr__("Size", 'massive-dynamic'),
+        "group" => esc_attr__("Button", 'massive-dynamic'),
+        "param_name" => "md_text_button_size",
+        "admin_label" => false,
+        "description" => esc_attr__("Choose between three button sizes", 'massive-dynamic'),
+        "value" => array(
+            esc_attr__("Standard", 'massive-dynamic') => "standard",
+            esc_attr__("Small", 'massive-dynamic') => "small"
+        ),
+        "dependency" => array(
+            'element' => "md_text_use_button",
+            'value' => array('yes')
+        )
+    ),//btn size
+    array(
+        "type" => 'md_vc_separator',
+        "param_name" => "md_text_button_text_separator". ++$separatorCounter ,
+        "group" => esc_attr__("Button", 'massive-dynamic'),
+        "dependency" => array(
+            'element' => "md_text_use_button",
+            'value' => array('yes')
+        )
+    ),
+    array(
+        'type' => 'md_vc_slider',
+        "edit_field_class" => $filedClass . "glue last",
+        'heading' => esc_attr__('Padding', 'massive-dynamic'),
+        'param_name' => 'left_right_padding',
+        'value' => '0',
+        "group" => esc_attr__("Button", 'massive-dynamic'),
+        'defaultSetting' => array(
+            "min" => "0",
+            "max" => "300",
+            "prefix" => " px",
+            "step" => "1",
+        ),
+        "dependency" => array(
+            'element' => "md_text_use_button",
+            'value' => array('yes')
+        )
+    ),//spacing
+    array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Content", 'massive-dynamic'),
+        "param_name" => "button_content_group",
+        "group" => esc_attr__("Button", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last",
+        "dependency" => array(
+            'element' => "md_text_use_button",
+            'value' => array('yes')
+        )
+    ),
+    array(
         "type" => "textfield",
         "edit_field_class" => $filedClass . "glue first",
         "heading" => esc_attr__("Text", 'massive-dynamic'),
@@ -658,13 +788,13 @@ $textParamArray = array(
     ),//btn text
     array(
         "type" => 'md_vc_separator',
-        "param_name" => "md_text_button_text_separator" . ++$separatorCounter,
+        "param_name" => "md_text_button_text_separator". ++$separatorCounter ,
         "group" => esc_attr__("Button", 'massive-dynamic'),
         "dependency" => array(
             'element' => "md_text_use_button",
             'value' => array('yes')
         )
-    ),//separator
+    ),
     array(
         "type" => "md_vc_iconpicker",
         "edit_field_class" => $filedClass . "glue last",
@@ -679,6 +809,18 @@ $textParamArray = array(
         ),
         'value' => 'icon-angle-right'
     ),//btn icon
+
+    array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+        "param_name" => "button_appearance_group",
+        "group" => esc_attr__("Button", 'massive-dynamic'),
+        "edit_field_class" => $filedClass . "glue first last",
+        "dependency" => array(
+            'element' => "md_text_use_button",
+            'value' => array('yes')
+        )
+    ),
     array(
         "type" => "md_vc_colorpicker",
         "edit_field_class" => $filedClass . "glue first last",
@@ -696,7 +838,7 @@ $textParamArray = array(
     ),//btn general color
     array(
         "type" => 'md_vc_separator',
-        "param_name" => "md_text_button_color_separator" . ++$separatorCounter,
+        "param_name" => "md_text_button_color_separator". ++$separatorCounter,
         "edit_field_class" => $filedClass . "stick-to-top",
         "group" => esc_attr__("Button", 'massive-dynamic'),
         "dependency" => array(
@@ -721,7 +863,7 @@ $textParamArray = array(
     ),//btn text color
     array(
         "type" => 'md_vc_separator',
-        "param_name" => "md_text_button_color_separator" . ++$separatorCounter,
+        "param_name" => "md_text_button_color_separator". ++$separatorCounter,
         "group" => esc_attr__("Button", 'massive-dynamic'),
         "dependency" => array(
             'element' => "md_text_button_style",
@@ -745,7 +887,7 @@ $textParamArray = array(
     ),//btn bg hover color
     array(
         "type" => 'md_vc_separator',
-        "param_name" => "md_text_button_color_separator" . ++$separatorCounter,
+        "param_name" => "md_text_button_color_separator". ++$separatorCounter,
         "group" => esc_attr__("Button", 'massive-dynamic'),
         "dependency" => array(
             'element' => "md_text_button_style",
@@ -767,50 +909,20 @@ $textParamArray = array(
         ),
 
     ),//btn text hover color
+
+
     array(
-        "type" => "dropdown",
-        "edit_field_class" => $filedClass . "glue first",
-        "heading" => esc_attr__("Button size", 'massive-dynamic'),
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Link", 'massive-dynamic'),
+        "param_name" => "button_link_group",
         "group" => esc_attr__("Button", 'massive-dynamic'),
-        "param_name" => "md_text_button_size",
-        "admin_label" => false,
-        "description" => esc_attr__("Choose between three button sizes", 'massive-dynamic'),
-        "value" => array(
-            esc_attr__("Standard", 'massive-dynamic') => "standard",
-            esc_attr__("Small", 'massive-dynamic') => "small"
-        ),
+        "edit_field_class" => $filedClass . "glue first last",
         "dependency" => array(
             'element' => "md_text_use_button",
             'value' => array('yes')
         )
-    ),//btn size
-    array(
-        "type" => 'md_vc_separator',
-        "param_name" => "md_text_button_size_separator" . ++$separatorCounter,
-        "group" => esc_attr__("Button", 'massive-dynamic'),
-        "dependency" => array(
-            'element' => "md_text_use_button",
-            'value' => array('yes')
-        )
-    ),//separator
-    array(
-        'type' => 'md_vc_slider',
-        "edit_field_class" => $filedClass . "glue last",
-        'heading' => esc_attr__('Button Padding', 'massive-dynamic'),
-        'param_name' => 'left_right_padding',
-        'value' => '0',
-        "group" => esc_attr__("Button", 'massive-dynamic'),
-        'defaultSetting' => array(
-            "min" => "0",
-            "max" => "300",
-            "prefix" => " px",
-            "step" => "1",
-        ),
-        "dependency" => array(
-            'element' => "md_text_use_button",
-            'value' => array('yes')
-        )
-    ),//spacing
+    ),
+
     array(
         "type" => "textfield",
         "group" => esc_attr__("Button", 'massive-dynamic'),
@@ -827,7 +939,7 @@ $textParamArray = array(
     ),//btn url
     array(
         "type" => 'md_vc_separator',
-        "param_name" => "md_text_button_linkr_separator" . ++$separatorCounter,
+        "param_name" => "md_text_button_linkr_separator". ++$separatorCounter ,
         "group" => esc_attr__("Button", 'massive-dynamic'),
         "dependency" => array(
             'element' => "md_text_use_button",

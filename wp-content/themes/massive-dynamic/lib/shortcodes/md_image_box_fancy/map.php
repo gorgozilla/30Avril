@@ -19,7 +19,12 @@ pixflow_map(
         "params" => array(
 
             /* Background image tab */
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Images(s)", 'massive-dynamic'),
+                "param_name" => "img_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
             array(
                 'type' => 'attach_images',
                 'edit_field_class' => $filedClass . "first glue last",
@@ -27,8 +32,14 @@ pixflow_map(
                 'param_name' => 'image_box_fancy_image',
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Sizing", 'massive-dynamic'),
+                "param_name" => "size_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
+            array(
                 'type' => 'dropdown',
-                "edit_field_class" => $filedClass . "first glue",
+                "edit_field_class" => $filedClass . " first glue ",
                 'heading' => esc_attr__('Height', 'massive-dynamic'),
                 'param_name' => 'image_box_fancy_height_type',
                 "value" => array(
@@ -83,19 +94,15 @@ pixflow_map(
 
             // Description
             array(
-                'type' => 'dropdown',
-                "edit_field_class" => $filedClass . "first last glue",
-                'heading' => esc_attr__('Style', 'massive-dynamic'),
-                'param_name' => 'image_box_fancy_style',
-                'value' => array(
-                    esc_attr__('Normal Overlay', 'massive-dynamic') => 'normal',
-                    esc_attr__('Full Overlay', 'massive-dynamic') => 'full',
-                ),
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
                 "group" => esc_attr__("Description", 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last",
             ),
             array(
                 "type" => "md_vc_iconpicker",
-                "edit_field_class" => $filedClass . "first glue last",
+                "edit_field_class" => $filedClass . " first glue last",
                 "heading" => esc_attr__("Icon", 'massive-dynamic'),
                 "param_name" => "image_box_fancy_icon",
                 "value" => "icon-Diamond",
@@ -126,7 +133,24 @@ pixflow_map(
                 "group" => esc_attr__("Description", 'massive-dynamic'),
                 "admin_label" => false,
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "group" => esc_attr__("Description", 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
+            array(
+                'type' => 'dropdown',
+                "edit_field_class" => $filedClass . "first glue last",
+                'heading' => esc_attr__('Style', 'massive-dynamic'),
+                'param_name' => 'image_box_fancy_style',
+                'value' => array(
+                    esc_attr__('Normal Overlay', 'massive-dynamic') => 'normal',
+                    esc_attr__('Full Overlay', 'massive-dynamic') => 'full',
+                ),
+                "group" => esc_attr__("Description", 'massive-dynamic'),
+            ),
             array(
                 "type" => "md_vc_colorpicker",
 
@@ -175,7 +199,7 @@ pixflow_map(
             array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Slider Effect", 'massive-dynamic'),
+                "heading" => esc_attr__("Effect", 'massive-dynamic'),
                 "param_name" => "image_box_fancy_effect_slider",
                 "admin_label" => false,
                 "group" => esc_attr__("Slider", 'massive-dynamic'),
@@ -195,7 +219,7 @@ pixflow_map(
             array(
                 'type' => 'md_vc_slider',
                 "edit_field_class" => $filedClass . "glue last",
-                'heading' => esc_attr__('Slider Speed', 'massive-dynamic'),
+                'heading' => esc_attr__('Speed', 'massive-dynamic'),
                 'param_name' => 'image_box_fancy_speed',
                 'value' => '3000',
                 "group" => esc_attr__("Slider", 'massive-dynamic'),

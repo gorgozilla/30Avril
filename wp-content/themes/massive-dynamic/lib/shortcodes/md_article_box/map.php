@@ -15,7 +15,12 @@ pixflow_map(
         "show_settings_on_create" => false,
         "allowed_container_element" => 'vc_row',
         "params" => array(
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "attach_image",
                 "edit_field_class" => $filedClass . "first glue  last",
@@ -41,8 +46,16 @@ pixflow_map(
             ),
 
             array(
+                "type" => "textarea",
+                "edit_field_class" => $filedClass . "glue last",
+                "heading" => esc_html__("Description", 'massive-dynamic'),
+                "param_name" => "article_text",
+                "admin_label" => false,
+                "value" => "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed",
+            ),
+            array(
                 "type" => "md_vc_iconpicker",
-                "edit_field_class" => $filedClass . "glue",
+                "edit_field_class" => $filedClass . "first glue",
                 "heading" => esc_html__("Choose an icon", 'massive-dynamic'),
                 "param_name" => "article_icon",
                 "value" => "icon-file-tasks-add",
@@ -53,18 +66,15 @@ pixflow_map(
                 "type" => 'md_vc_separator',
                 "param_name" => "separator" . ++$separatorCounter,
             ),
-
             array(
-                "type" => "textarea",
-                "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_html__("Description", 'massive-dynamic'),
-                "param_name" => "article_text",
-                "admin_label" => false,
-                "value" => "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed",
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 'type' => 'md_vc_slider',
-                "edit_field_class" => $filedClass . "first glue last",
+                "edit_field_class" => $filedClass . " glue last",
                 'heading' => esc_attr__('Height', 'massive-dynamic'),
                 'param_name' => 'article_height',
                 'value' => '345',
@@ -110,11 +120,16 @@ pixflow_map(
                 "admin_label" => false,
                 "opacity" => true,
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Read More", 'massive-dynamic'),
+                "param_name" => "read_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue",
-                "heading" => esc_html__("Read more Text", 'massive-dynamic'),
+                "heading" => esc_html__("Text", 'massive-dynamic'),
                 "param_name" => "article_read_more_text",
                 "value" => 'VIEW MORE',
                 "admin_label" => false,
@@ -127,7 +142,7 @@ pixflow_map(
             array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "glue",
-                "heading" => esc_html__("Read more Link", 'massive-dynamic'),
+                "heading" => esc_html__("Link", 'massive-dynamic'),
                 "param_name" => "article_read_more_link",
                 "value" => '#',
                 "admin_label" => false,
@@ -139,7 +154,7 @@ pixflow_map(
             array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Link's target", 'massive-dynamic'),
+                "heading" => esc_attr__("Target", 'massive-dynamic'),
                 "param_name" => "article_target",
                 "admin_label" => false,
                 "description" => esc_attr__("Open the link in the same tab or a blank browser tab", 'massive-dynamic'),

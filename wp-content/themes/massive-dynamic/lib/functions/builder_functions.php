@@ -198,3 +198,58 @@ function pixflow_is_builder_editable($id){
 
 }
 
+function pixflow_save_custom_section(){
+
+	if( isset( $_POST['section'] ) && $_POST['section_name'] ) {
+		$section_params = $_POST['section'];
+		$section_list = get_option( 'pixflow_custom_section' );
+		if( false !== $section_list ) {
+			$section_list = json_decode( $section_list, true );
+			$section_list[ $_POST['section_name'] ] = $section_params ;
+			$section_list = json_encode( $section_list );
+		} else {
+			$section_list = array();
+			$section_list[ $_POST['section_name'] ] =  $section_params;
+			$section_list = json_encode( $section_list );
+		}
+
+		update_option( 'pixflow_custom_section', $section_list );
+		wp_die('1');
+	}
+
+	wp_die('0');
+
+}
+
+function pixflow_delete_custom_section(){
+
+	$section_list = get_option( 'pixflow_custom_section' );
+	if ( isset( $_POST['section_name'] ) &&  false !== $section_list ){
+		$section_list = json_decode( $section_list, true );
+		if( isset( $section_list[ $_POST['section_name'] ] ) ){
+			unset( $section_list[ $_POST['section_name'] ]  );
+			$section_list = json_encode( $section_list );
+			update_option( 'pixflow_custom_section', $section_list );
+			wp_die('1');
+		}
+
+	}
+
+	wp_die('0');
+}
+
+
+function pixflow_get_custom_section(){
+
+	$section_list = get_option( 'pixflow_custom_section' );
+	if ( false === $section_list ){
+		$section_list = array();
+	}
+
+	wp_localize_script( 'mBuilder', 'customSections', $section_list );
+
+}
+
+add_action( 'wp_ajax_mBuilder_save_custom_section', 'pixflow_save_custom_section' );
+add_action( 'wp_ajax_mBuilder_delete_custom_section', 'pixflow_delete_custom_section' );
+add_filter( 'wp_footer', 'pixflow_get_custom_section' );

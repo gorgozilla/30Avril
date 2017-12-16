@@ -15,6 +15,12 @@ pixflow_map(
         "category" => esc_attr__('Business', 'massive-dynamic'),
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue",
                 "heading" => esc_attr__("Title", 'massive-dynamic'),
@@ -33,6 +39,19 @@ pixflow_map(
                 "param_name" => "subscribe_desc",
                 "value" => 'To get the latest news from us please subscribe your email.we promise worthy news with no spam.',
                 "admin_label" => false,
+            ),
+            array(
+                'type' => 'attach_image',
+                "edit_field_class" => $filedClass . "glue first last",
+                'heading' => esc_attr__('Image', 'massive-dynamic'),
+                'param_name' => 'subscribe_image',
+                'value' => PIXFLOW_THEME_IMAGES_URI . "/place-holder.jpg",
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 'type' => 'md_vc_checkbox',
@@ -67,18 +86,12 @@ pixflow_map(
                 "admin_label" => false,
                 "opacity" => true,
             ),
-            array(
-                'type' => 'attach_image',
-                "edit_field_class" => $filedClass . "glue first last",
-                'heading' => esc_attr__('Image', 'massive-dynamic'),
-                'param_name' => 'subscribe_image',
-                'value' => PIXFLOW_THEME_IMAGES_URI . "/place-holder.jpg",
-            ),
+
             array(
                 "type" => "md_vc_description",
                 "param_name" => "modern_description",
                 "admin_label" => false,
-                "value" => '<ul><li>' . esc_attr__('You must install and configure "MailChimp for WordPress Lite" plugin before using this shortcode.', 'massive-dynamic') . '</li></ul>',
+                "value" => '<ul><li>' . __('You must install and configure "MailChimp for WordPress Lite" plugin before using this shortcode.', 'massive-dynamic') . '</li></ul>',
             ),
         )
     )

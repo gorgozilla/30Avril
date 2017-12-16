@@ -48,8 +48,11 @@ function pixflow_js_remove_wpautop($content, $autop = false){
                     $pat = '~'.preg_quote($el,'/')."~s";
                     for($i=0;$i<$c;$i++){
                         $replace = trim($el);
-                        $replace = str_replace(']'," el_id='".uniqid()."']",$replace);
-                        $shortcode = preg_replace($pat,$replace, $shortcode,1);
+                        preg_match( '~\[([^( |\])]*)~s', $replace, $shortcode_name );
+                        if(shortcode_exists( $shortcode_name[1] )) {
+                            $replace = str_replace(']', " el_id='" . uniqid() . "']", $replace);
+                            $shortcode = preg_replace($pat, $replace, $shortcode, 1);
+                        }
                     }
                 }
             }
@@ -63,8 +66,9 @@ function pixflow_js_remove_wpautop($content, $autop = false){
                 foreach ($matches[0] as $key => $match) {
                     $el = $matches[2][$key];
                     $inArray = true;
+                    $id = count($mBuilderModelIdArray);
                     while($inArray) {
-                        $id = count($mBuilderModelIdArray)+1;
+                        $id++;
                         if(!array_key_exists($id,$mBuilderModelIdArray)){
                             $content = $matches[5][$key];
                             if(preg_match('~^\[.*?\]~s',$content)){
@@ -80,6 +84,7 @@ function pixflow_js_remove_wpautop($content, $autop = false){
                     }
                     if(preg_match('/mbuilder-id=\\\?["\'](.*?)\\\?["\']/s',$matches[3][$key],$ids)){
                         $id = $ids[1];
+	                    $mBuilderModelIdArray[$id] = array('attr'=>$matches[3][$key],'content'=>$content,'type'=>$el);
                     }
                     $el_classes = '';
                     if('md_text' == $el){
@@ -241,6 +246,7 @@ function mBuilderVcColumn(){
     );
     $designOptions = array('margin'=>array('top','right','bottom','left'),'padding'=>array('top','right','bottom','left'),'border'=>array('top','right','bottom','left'));
     $showBorderRelated = false;
+    $group = '';
     foreach($designOptions as $key=>$option){
         $g = 0;
         foreach($option as $filed){
@@ -252,9 +258,16 @@ function mBuilderVcColumn(){
                 if($showBorderRelated == false){
                     $showBorderRelated = true;
                     $params[] = array(
+                        "type" => "md_group_title",
+                        "heading" => esc_attr__("Border", 'massive-dynamic'),
+                        "param_name" => "border_group",
+                        'group'            => esc_attr__("Design", 'massive-dynamic'),
+                        "edit_field_class" => "glue first last"
+                    );
+                    $params[] = array(
                         "type"             => "md_vc_colorpicker",
                         "edit_field_class" => "first glue".' column-design-css',
-                        "heading"          => esc_attr__("Border Color", 'massive-dynamic'),
+                        "heading"          => esc_attr__("Color", 'massive-dynamic'),
                         "param_name"       => "border_color",
                         'group'            => esc_attr__("Design", 'massive-dynamic'),
                         "opacity"	       => true,
@@ -269,7 +282,7 @@ function mBuilderVcColumn(){
                     $params[] = array(
                         "type" => "dropdown",
                         "edit_field_class" => "glue last".' column-design-css',
-                        "heading" => esc_attr__("Border Style", 'massive-dynamic'),
+                        "heading" => esc_attr__("Style", 'massive-dynamic'),
                         "param_name" => "border_style",
                         "admin_label" => false,
                         'group'            => esc_attr__("Design", 'massive-dynamic'),
@@ -298,10 +311,28 @@ function mBuilderVcColumn(){
                     $max = "500";
                 }
             }
-            $heading = ucfirst($key).' '.ucfirst($filed);
+            $heading = ucfirst($filed);
             $edit_field_class = ($g == 0)?'first glue':'glue';
             $edit_field_class = ($g == 3)?$edit_field_class.' last':$edit_field_class;
+            if($key != $group){
+                $group = $key;
+
+                $params[] = array(
+                    "type" => "md_group_title",
+                    "heading" => esc_attr__(ucfirst($key)." Space", 'massive-dynamic'),
+                    "param_name" => $key."_group",
+                    'group'            => esc_attr__("Spacing", 'massive-dynamic'),
+                    "edit_field_class" => "glue first last"
+                );
+            }
+            
+			$extera_class = '' ;
+            if ( $param_name == 'padding_left' || $param_name == 'padding_right' ){
+            	$extera_class = 'dont-show';
+			}
+
             if($param_name=='padding_top') {
+
                 $params[] = array(
                     "type" => "md_vc_slider",
                     "edit_field_class" => $edit_field_class . ' column-design-css column-design-prefix-px',
@@ -320,7 +351,7 @@ function mBuilderVcColumn(){
             }else{
                 $params[] = array(
                     "type" => "md_vc_slider",
-                    "edit_field_class" => $edit_field_class . ' column-design-css column-design-prefix-px',
+                    "edit_field_class" => $edit_field_class . ' column-design-css column-design-prefix-px ' . $extera_class ,
                     'group' => esc_attr__("Spacing", 'massive-dynamic'),
                     "heading" => $heading,
                     "param_name" => $param_name,
@@ -345,9 +376,16 @@ function mBuilderVcColumn(){
         }
     }
     $params[] = array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Background", 'massive-dynamic'),
+        "param_name" => "app_group",
+        'group'            => esc_attr__("Design", 'massive-dynamic'),
+        "edit_field_class" => "glue first last"
+    );
+    $params[] = array(
         "type"             => "md_vc_colorpicker",
         "edit_field_class" => "first glue".' column-design-css',
-        "heading"          => esc_attr__("Background Color", 'massive-dynamic'),
+        "heading"          => esc_attr__("Color", 'massive-dynamic'),
         "param_name"       => "background_color",
         'group'            => esc_attr__("Design", 'massive-dynamic'),
         "opacity"	       => true,
@@ -362,7 +400,7 @@ function mBuilderVcColumn(){
     $params[] = array(
         'type'             => 'attach_image',
         'edit_field_class' => "glue".' column-design-css',
-        'heading'          => esc_attr__( 'Background Image', 'massive-dynamic' ),
+        'heading'          => esc_attr__( 'Image', 'massive-dynamic' ),
         'param_name'       => 'background_image',
         'group'            => esc_attr__("Design", 'massive-dynamic'),
         "value"            => "",
@@ -375,7 +413,7 @@ function mBuilderVcColumn(){
     $params[] = array(
         "type" => "dropdown",
         "edit_field_class" => "glue last".' column-design-css',
-        "heading" => esc_attr__("Background Style", 'massive-dynamic'),
+        "heading" => esc_attr__("Style", 'massive-dynamic'),
         "param_name" => "background_size",
         "admin_label" => false,
         'group'            => esc_attr__("Design", 'massive-dynamic'),
@@ -388,21 +426,35 @@ function mBuilderVcColumn(){
         )
     );
 
+    $params[] = array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("On Laptop", 'massive-dynamic'),
+        "param_name" => "lap_group",
+        'group'            => esc_attr__("Responsive", 'massive-dynamic'),
+        "edit_field_class" => "glue first last"
+    );
+
     // Column Responsive
     $params[] = array(
         "type" => "md_vc_checkbox",
         "edit_field_class" => "first glue last".' column-design-css',
-        "heading" => esc_attr__("Laptop Visibility", 'massive-dynamic'),
+        "heading" => esc_attr__("Visibility", 'massive-dynamic'),
         "param_name" => "md_laptop_visibility",
         'group'            => esc_attr__("Responsive", 'massive-dynamic'),
         'value' => array(esc_attr__('Enable', 'massive-dynamic') => 'yes'),
         'checked' => true,
     );
-
+    $params[] = array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("On Tablet", 'massive-dynamic'),
+        "param_name" => "tab_group",
+        'group'            => esc_attr__("Responsive", 'massive-dynamic'),
+        "edit_field_class" => "glue first last"
+    );
     $params[] = array(
         "type" => "md_vc_checkbox",
         "edit_field_class" => "first glue".' column-design-css',
-        "heading" => esc_attr__("Tablet Portrait Visibility", 'massive-dynamic'),
+        "heading" => esc_attr__("Portrait Visibility", 'massive-dynamic'),
         "param_name" => "md_tablet_portrait_visibility",
         'group'            => esc_attr__("Responsive", 'massive-dynamic'),
         'value' => array(esc_attr__('Enable', 'massive-dynamic') => 'yes'),
@@ -418,7 +470,7 @@ function mBuilderVcColumn(){
     $params[] = array(
         "type" => "md_vc_checkbox",
         "edit_field_class" => "glue last".' column-design-css',
-        "heading" => esc_attr__("Tablet Landscape Visibility", 'massive-dynamic'),
+        "heading" => esc_attr__("Landscape Visibility", 'massive-dynamic'),
         "param_name" => "md_tablet_landscape_visibility",
         'group'            => esc_attr__("Responsive", 'massive-dynamic'),
         'value' => array(esc_attr__('Enable', 'massive-dynamic') => 'yes'),
@@ -426,9 +478,31 @@ function mBuilderVcColumn(){
     );
 
     $params[] = array(
+        "type" => "dropdown",
+        "edit_field_class" => "glue first last".' column-design-css',
+        "heading" => esc_attr__("Portrait Width", 'massive-dynamic'),
+        "param_name" => "md_tablet_portrait_width",
+        'group'            => esc_attr__("Responsive", 'massive-dynamic'),
+        'value' => array(
+            esc_attr__('Select', 'massive-dynamic') => '0',
+            esc_attr__('12/12(Full)', 'massive-dynamic') => '12',
+            esc_attr__('6/12(Half
+            )', 'massive-dynamic') => '6',
+        )
+    );
+
+    $params[] = array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("On Mobile", 'massive-dynamic'),
+        "param_name" => "mob_group",
+        'group'            => esc_attr__("Responsive", 'massive-dynamic'),
+        "edit_field_class" => "glue first last"
+    );
+
+    $params[] = array(
         "type" => "md_vc_checkbox",
         "edit_field_class" => "first glue".' column-design-css',
-        "heading" => esc_attr__("Mobile Portrait Visibility", 'massive-dynamic'),
+        "heading" => esc_attr__("Portrait Visibility", 'massive-dynamic'),
         "param_name" => "md_mobile_portrait_visibility",
         'group'            => esc_attr__("Responsive", 'massive-dynamic'),
         'value' => array(esc_attr__('Enable', 'massive-dynamic') => 'yes'),
@@ -444,25 +518,11 @@ function mBuilderVcColumn(){
     $params[] = array(
         "type" => "md_vc_checkbox",
         "edit_field_class" => "glue last".' column-design-css',
-        "heading" => esc_attr__("Mobile Landscape Visibility", 'massive-dynamic'),
+        "heading" => esc_attr__("Landscape Visibility", 'massive-dynamic'),
         "param_name" => "md_mobile_landscape_visibility",
         'group'            => esc_attr__("Responsive", 'massive-dynamic'),
         'value' => array(esc_attr__('Enable', 'massive-dynamic') => 'yes'),
         'checked' => true,
-    );
-
-    $params[] = array(
-        "type" => "dropdown",
-        "edit_field_class" => "glue first last".' column-design-css',
-        "heading" => esc_attr__("Tablet Portrait Width", 'massive-dynamic'),
-        "param_name" => "md_tablet_portrait_width",
-        'group'            => esc_attr__("Responsive", 'massive-dynamic'),
-        'value' => array(
-            esc_attr__('Select', 'massive-dynamic') => '0',
-            esc_attr__('12/12(Full)', 'massive-dynamic') => '12',
-            esc_attr__('6/12(Half
-            )', 'massive-dynamic') => '6',
-        )
     );
 
 
@@ -494,6 +554,7 @@ function pixflow_add_custom_fields() {
     pixflow_add_shortcode_param('md_vc_multiselect', 'pixflow_vc_multiselect_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
     pixflow_add_shortcode_param('md_vc_checkbox', 'pixflow_vc_checkbox_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
     pixflow_add_shortcode_param('md_vc_description', 'pixflow_vc_description_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
+    pixflow_add_shortcode_param('md_group_title', 'pixflow_group_title_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
     pixflow_add_shortcode_param('md_vc_separator', 'pixflow_vc_separator_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
     pixflow_add_shortcode_param('md_vc_gradientcolorpicker', 'pixflow_vc_gradientcolorpicker_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
     pixflow_add_shortcode_param('md_vc_base64_text', 'pixflow_vc_base64_text_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
@@ -501,7 +562,6 @@ function pixflow_add_custom_fields() {
     pixflow_add_shortcode_param('md_vc_colorpicker', 'pixflow_vc_colorpicker_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
     pixflow_add_shortcode_param('md_vc_iconpicker', 'pixflow_vc_iconpicker_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
     pixflow_add_shortcode_param('md_vc_datepicker', 'pixflow_vc_datepicker_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
-    pixflow_add_shortcode_param('md_vc_spacing', 'pixflow_vc_spacing_field', PIXFLOW_THEME_LIB_URI . '/extendvc/js/all.min.js' );
 
 }
 add_action( 'admin_init', 'pixflow_add_custom_fields');

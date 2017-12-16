@@ -7,7 +7,8 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Icon Box Top
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
+$separatorCounter = 1;
 pixflow_map(
     array(
         "name" => "Icon Box Top",
@@ -16,6 +17,29 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         'show_settings_on_create' => false,
         "params" => array(
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "line_height_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
+                "type" => "md_vc_iconpicker",
+                "edit_field_class" => $filedClass . "first glue last",
+                "heading" => esc_attr__("Choose an icon", 'massive-dynamic'),
+                "param_name" => "iconbox_icon",
+                "value" => "icon-diamond",
+                "admin_label" => false,
+                "description" => esc_attr__("Select an icon", 'massive-dynamic')
+            ),
+            array(
+                'type' => 'md_vc_checkbox',
+                "edit_field_class" => $filedClass . " glue last first ",
+                'heading' => esc_attr__('Active', 'massive-dynamic'),
+                'param_name' => 'iconbox_button',
+                'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
+                "group" => esc_attr__('Button', 'massive-dynamic'),
+            ),
             array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue",
@@ -30,8 +54,23 @@ pixflow_map(
                 "param_name" => "iconbox_title_separator" . ++$separatorCounter,
             ),
             array(
+                "type" => "textarea",
+                "edit_field_class" => $filedClass . " glue last",
+                "heading" => esc_attr__("Description", 'massive-dynamic'),
+                "param_name" => "iconbox_description",
+                "value" => "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable",
+                "description" => esc_attr__("Iconbox description text", 'massive-dynamic'),
+                "admin_label" => false,
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "line_height_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue last",
+                "edit_field_class" => $filedClass . "first glue last",
                 "heading" => esc_attr__("Title size", 'massive-dynamic'),
                 "param_name" => "iconbox_heading",
                 "description" => esc_attr__("Choose your heading", 'massive-dynamic'),
@@ -44,15 +83,6 @@ pixflow_map(
                     "H5" => "h5",
                     "H6" => "h6"
                 ),
-            ),
-            array(
-                "type" => "textarea",
-                "edit_field_class" => $filedClass . "first glue last",
-                "heading" => esc_attr__("Description", 'massive-dynamic'),
-                "param_name" => "iconbox_description",
-                "value" => "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable",
-                "description" => esc_attr__("Iconbox description text", 'massive-dynamic'),
-                "admin_label" => false,
             ),
             array(
                 "type" => "dropdown",
@@ -78,35 +108,14 @@ pixflow_map(
             ),
             array(
                 "type" => "md_vc_colorpicker",
-                "edit_field_class" => $filedClass . "first glue",
+                "edit_field_class" => $filedClass . "first glue last",
                 "heading" => esc_attr__("Icon Color", 'massive-dynamic'),
                 "param_name" => "iconbox_icon_color",
                 "value" => "rgb(0,0,0)",
                 "admin_label" => false,
                 "description" => esc_attr__("Choose icon color", 'massive-dynamic'),
             ),
-            array(
-                "type" => 'md_vc_separator',
-                "param_name" => "icon_color_separator" . ++$separatorCounter,
-                "admin_label" => false,
-            ),
-            array(
-                "type" => "md_vc_iconpicker",
-                "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Choose an icon", 'massive-dynamic'),
-                "param_name" => "iconbox_icon",
-                "value" => "icon-diamond",
-                "admin_label" => false,
-                "description" => esc_attr__("Select an icon", 'massive-dynamic')
-            ),
-            array(
-                'type' => 'md_vc_checkbox',
-                "edit_field_class" => $filedClass . " glue last first ",
-                'heading' => esc_attr__('Add Button', 'massive-dynamic'),
-                'param_name' => 'iconbox_button',
-                'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
-                "group" => esc_attr__('Button', 'massive-dynamic'),
-            ),// iconbox top add button
+
             array(
                 "type" => 'md_vc_separator',
                 "edit_field_class" => $filedClass . "stick-to-top",

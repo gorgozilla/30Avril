@@ -29,24 +29,15 @@ function pixflow_tablet_slider_param()
     );
     $param = array(
         array(
-            "type" => "md_vc_colorpicker",
-            "edit_field_class" => $filedClass . "first glue",
-
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Slider", 'massive-dynamic'),
             "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Text Color", 'massive-dynamic'),
-            "param_name" => "tablet_slider_text_color",
-            "admin_label" => false,
-            "defaultColor" => '#000'
-        ),
-        array(
-            "type" => 'md_vc_separator',
-            "group" => esc_attr__("General", 'massive-dynamic'),
-            "param_name" => "tablet_slider_separator" . ++$separatorCounter,
-            "admin_label" => false,
+            "param_name" => "category_group",
+            "edit_field_class" => $filedClass . "glue first last",
         ),
         array(
             "type" => "dropdown",
-            "edit_field_class" => $filedClass . "glue last slide_number",
+            "edit_field_class" => $filedClass . "glue first last slide_number",
             "group" => esc_attr__("General", 'massive-dynamic'),
             "heading" => esc_attr__("Slide Number:", 'massive-dynamic'),
             "param_name" => $slide_num_param,
@@ -56,12 +47,30 @@ function pixflow_tablet_slider_param()
         array(
             'type' => 'md_vc_checkbox',
             "edit_field_class" => $filedClass . "glue first last",
-            'heading' => esc_attr__('Auto Slideshow  ', 'massive-dynamic'),
+            'heading' => esc_attr__('Autoplay  ', 'massive-dynamic'),
             'param_name' => 'tablet_slider_slideshow',
             "group" => esc_attr__('General', 'massive-dynamic'),
             'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
             'checked' => true,
         ),
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Color(s)", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "category_group",
+            "edit_field_class" => $filedClass . "glue first last",
+        ),
+        array(
+            "type" => "md_vc_colorpicker",
+            "edit_field_class" => $filedClass . "first glue last",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "heading" => esc_attr__("Text", 'massive-dynamic'),
+            "param_name" => "tablet_slider_text_color",
+            "admin_label" => false,
+            "defaultColor" => '#000'
+        ),
+
+
     );
 
     for ($i = 1; $i <= (int)$slide_num; $i++) {

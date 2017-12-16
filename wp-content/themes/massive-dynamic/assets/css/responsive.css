@@ -9,8 +9,6 @@
         width:95%;
     }
 
-
-
 }
 
 /* Custom, iPhone Retina (480px and below) */
@@ -961,7 +959,10 @@
 }
 
 /** All Small Devices Except Portrait Tablet **/
-@media (max-width: 767px) {
+@media (max-width: 1270px) {
+    /*live text responsive*/
+
+
 
     /*text shortcode */
     body:not(.compose-mode) .md-text,
@@ -1347,10 +1348,19 @@
 
 /* All Mobile And Small Devices(800px and below) */
 @media (max-width: 800px) {
+    .md-live-text.md-align-left , .md-live-text.md-align-right{
+        justify-content: center;
+    }
+    .meditor.meditor-responsive.inline-md-editor.meditor-responsive div * ,
+    .meditor.meditor-responsive.inline-md-editor.meditor-responsive div {
+        text-align: center !important;
+    }
 
-
-    body .wpb_row.vc_row{
-        display: block;
+    body .wpb_row.vc_row:not(.fit-to-height),
+    body .wpb_row.vc_row.remove-flex,
+    body .wpb_row.vc_row.remove-flex .wrap,
+    .row-content-middle.vc_row.remove-flex .wrap{
+        flex-wrap: wrap;
     }
 
     /* style for video play icon - set all to center in tablet size */
@@ -1386,7 +1396,7 @@
 
     .responsive-full-width{
         width: 100%!important;
-        pading-left:0 !important;
+        padding-left:0 !important;
         padding-right: 0 !important;
     }
 
@@ -1465,7 +1475,7 @@
     .md-text-container.md-align-left .md-text-button{
         align-self: auto;
     }
-    
+
     /** Call To Action Shortcode **/
     .call-to-action .content{
         padding: 40px 10%;
@@ -1514,7 +1524,7 @@
     }
 
     .iconbox-side .iconbox-side-container,
-    .iconbox-top .description{
+    .iconbox-top .description , .iconbox-top .title{
         margin: 0 auto!important;
         width: 100% !important;
         text-align: center;
@@ -2528,6 +2538,7 @@
     }
 }
 
+/* For Apple Ipad Portrate*/
 
 /* Small Devices, Tablets (768px to 991px) */
 @media (min-width : 768px) and (max-width: 991px) {
@@ -3250,6 +3261,26 @@
         padding: 0 20px;
     }
 
+    /* Notification Center */
+    .notification-center .header{
+        margin-bottom: 10px;
+    }
+    #notification-tabs .pager{
+        margin-bottom: 40px;
+    }
+
+    #notification-tabs .cart_list li div.cart-img{
+        height: 200px;
+    }
+
+    #notification-tabs .cart_list{
+        height: 290px;
+    }
+
+    #notification-tabs p.total{
+        margin-top: 15px;
+    }
+
 
 
 }
@@ -3733,7 +3764,7 @@
         transform: translateY(0);
     }
 
-    .wpb_tour_tabs_wrapper{
+    body:not( .compose-mode ) .wpb_tour_tabs_wrapper{
         height: auto!important;
     }
 
@@ -4275,7 +4306,6 @@
     .hidden-laptop {
         display: none;
     }
-
 }
 
 /* Tablet */

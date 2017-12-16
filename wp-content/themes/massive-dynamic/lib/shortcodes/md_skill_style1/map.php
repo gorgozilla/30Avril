@@ -47,6 +47,7 @@ function pixflow_skill_style1_param()
             $value[] = (string)$k;
         }
 
+
         $param[] = array(
             "type" => "textfield",
             "edit_field_class" => $filedClass . "first glue",
@@ -67,6 +68,18 @@ function pixflow_skill_style1_param()
             "type" => 'md_vc_separator',
             "group" => esc_attr__("Bar ", 'massive-dynamic') . $i,
             "param_name" => "skill_style1_bar_" . $i . "_separator" . ++$separatorCounter,
+            'dependency' => array(
+                'element' => $bar_num_param,
+                'value' => $value
+            ),
+        );
+
+        $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "param_name" => "app_group" . $i ,
+            "group" => esc_attr__("Bar ", 'massive-dynamic') . $i,
+            "edit_field_class" => $filedClass . "glue first last" ,
             'dependency' => array(
                 'element' => $bar_num_param,
                 'value' => $value

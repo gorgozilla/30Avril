@@ -28,6 +28,24 @@ function pixflow_display_slider_param()
     );
     $param = array(
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last",
+        ),
+        array(
+            "type" => "dropdown",
+            "edit_field_class" => $filedClass . "first glue last slide_number",
+            //"class" => "slide_number",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "heading" => esc_attr__("Slide Number", 'massive-dynamic'),
+            "param_name" => $slide_num_param,
+            "admin_label" => false,
+            "value" => $dropDown
+        ),
+
+        array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "first glue",
             "group" => esc_attr__("General", 'massive-dynamic'),
@@ -36,6 +54,13 @@ function pixflow_display_slider_param()
             "admin_label" => false,
             "defaultColor" => '#000'
         ),
+         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Autoplay", 'massive-dynamic'),
+            "param_name" => "title_group",
+             "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last",
+         ),
         array(
             "type" => 'md_vc_separator',
             "group" => esc_attr__("General", 'massive-dynamic'),
@@ -43,19 +68,9 @@ function pixflow_display_slider_param()
             "admin_label" => false,
         ),
         array(
-            "type" => "dropdown",
-            "edit_field_class" => $filedClass . "glue last slide_number",
-            //"class" => "slide_number",
-            "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Slide Number:", 'massive-dynamic'),
-            "param_name" => $slide_num_param,
-            "admin_label" => false,
-            "value" => $dropDown
-        ),
-        array(
             'type' => 'md_vc_checkbox',
-            "edit_field_class" => $filedClass . "glue first last",
-            'heading' => esc_attr__('Auto Slideshow ? ', 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue  last",
+            'heading' => esc_attr__('Activate', 'massive-dynamic'),
             'param_name' => 'device_slider_slideshow',
             "group" => esc_attr__('General', 'massive-dynamic'),
             'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),

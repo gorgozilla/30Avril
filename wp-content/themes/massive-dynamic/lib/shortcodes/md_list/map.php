@@ -29,6 +29,15 @@ function pixflow_list_param()
 
     );
     $param = array(
+
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "param_name" => "line_height_group",
+            'group' => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+
         array(
             'type' => 'dropdown',
             'heading' => esc_attr__('Style', 'massive-dynamic'),

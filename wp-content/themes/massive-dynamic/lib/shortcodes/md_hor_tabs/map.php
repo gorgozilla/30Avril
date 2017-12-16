@@ -7,6 +7,7 @@
 /* -------------------------------------------------------
 --------------------------Horizontal Tab-----------------------------
 ---------------------------------------------------------*/
+global $separatorCounter;
 pixflow_map(array(
     "name" => esc_attr__('Horizontal Tabs', 'massive-dynamic'),
     'base' => 'md_hor_tabs',
@@ -16,23 +17,17 @@ pixflow_map(array(
     'description' => esc_attr__('Tabbed content', 'massive-dynamic'),
     'as_parent' => array('only' => 'md_hor_tab'),
     'params' => array(
-        array(
-            "type" => "md_vc_colorpicker",
 
-            "edit_field_class" => $filedClass . "first glue",
-            "heading" => esc_attr__("General Color", 'massive-dynamic'),
-            "param_name" => "general_color",
-            "value" => "rgb(255,255,255)",
-            "admin_label" => false,
-        ),
         array(
-            "type" => 'md_vc_separator',
-            "param_name" => "general_color_separator" . ++$separatorCounter,
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Background", 'massive-dynamic'),
+            "param_name" => "bg_group",
+            "edit_field_class" => $filedClass . "glue first ",
         ),
         array(
             'type' => 'md_vc_checkbox',
-            "edit_field_class" => $filedClass . "glue last",
-            'heading' => esc_attr__('Use Background', 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "first glue last",
+            'heading' => esc_attr__('Activate', 'massive-dynamic'),
             'param_name' => 'use_bg',
             'value' => array(esc_attr__('yes', 'massive-dynamic') => 'yes'),
             'checked' => true,
@@ -50,7 +45,7 @@ pixflow_map(array(
         array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue",
-            "heading" => esc_attr__("Background Type", 'massive-dynamic'),
+            "heading" => esc_attr__("Type", 'massive-dynamic'),
             "param_name" => "bg_type",
             "dependency" => array(
                 'element' => "use_bg",
@@ -72,7 +67,7 @@ pixflow_map(array(
         array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue last",
-            "heading" => esc_attr__("Background Color", 'massive-dynamic'),
+            "heading" => esc_attr__("Color", 'massive-dynamic'),
             "param_name" => "bg_color",
             "value" => 'rgb(215,176,126)',
             "admin_label" => false,
@@ -85,12 +80,18 @@ pixflow_map(array(
         array(
             'type' => 'attach_image',
             "edit_field_class" => $filedClass . "glue last",
-            'heading' => esc_attr__('Background Image', 'massive-dynamic'),
+            'heading' => esc_attr__('Image', 'massive-dynamic'),
             'param_name' => 'bg_image',
             "dependency" => array(
                 'element' => "bg_type",
                 'value' => array('image')
             ),
+        ),
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Color(s)", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "edit_field_class" => $filedClass . "glue first ",
         ),
         array(
             "type" => 'md_vc_separator',
@@ -103,8 +104,18 @@ pixflow_map(array(
         ),
         array(
             "type" => "md_vc_colorpicker",
+
+            "edit_field_class" => $filedClass . " glue last",
+            "heading" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "general_color",
+            "value" => "rgb(255,255,255)",
+            "admin_label" => false,
+        ),
+
+        array(
+            "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue last",
-            "heading" => esc_attr__("Hover Color", 'massive-dynamic'),
+            "heading" => esc_attr__("Hover", 'massive-dynamic'),
             "param_name" => "hor_tab_hover_color",
             "value" => 'rgb(215,176,126)',
             "admin_label" => false,

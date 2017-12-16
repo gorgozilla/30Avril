@@ -1,8 +1,4 @@
 <?php
-if(session_id() == '' && !headers_sent()) {
-    session_start();
-}
-
 /**
  * The main pixflow_customizer class
  */
@@ -106,7 +102,7 @@ class pixflow_customizer
             'faildImportServer' => esc_attr__('Your Server Prevent Remote File Get','massive-dynamic'),
             'faildImportPermission' => esc_attr__('Folder Permission is not correct ','massive-dynamic'),
             'imported' => esc_attr__('IMPORTED!','massive-dynamic'),
-            'importDemo' => esc_attr__('import demo','massive-dynamic'),
+            'importDemo' => esc_attr__('import template','massive-dynamic'),
             'mastersettingMsg1' => wp_kses( __('You are about to change <a class="mastersettingMsg1">master template settings,</a> current unique settings of this page will be lost! Are you sure?','massive-dynamic'),array('a' => array('class' => array()))),
             'mastersettingMsgTitle' => esc_attr__('CAUTION!','massive-dynamic'),
             'mastersettingMsgYes' => esc_attr__('Yes, Do it','massive-dynamic'),
@@ -219,12 +215,12 @@ class pixflow_customizer
             'fullname' => $firstName.' '.$lastName,
             'logo_path' => PIXFLOW_THEME_LIB_URI.'/assets/img/builder-logo.png',
             'edit_profile'=> esc_attr__('Edit Profile','massive-dynamic'),
-            'importDemo' => esc_attr__('import demo','massive-dynamic'),
+            'importDemo' => esc_attr__('import template','massive-dynamic'),
             'adminURL' => esc_url(admin_url()),
             'dashboard' => esc_attr__('  Dashboard','massive-dynamic'),
             'saveAndView' => esc_attr__('Publish','massive-dynamic'),
             'edit_content' => esc_attr__('Edit Content','massive-dynamic'),
-            'demos' => esc_attr__('Import Demo','massive-dynamic') ,
+            'demos' => esc_attr__('Import Template','massive-dynamic') ,
         );
         $options = apply_filters('customizer/config', array());
         $customizer_url = isset($options['url_path']) ? $options['url_path'] : plugin_dir_url(__FILE__);

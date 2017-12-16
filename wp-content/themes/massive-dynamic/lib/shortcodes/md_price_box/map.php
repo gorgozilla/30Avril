@@ -30,7 +30,12 @@ function pixflow_price_box()
     );
 
     $param = array(
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Details", 'massive-dynamic'),
+            "param_name" => "details_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "textfield",
             "edit_field_class" => $filedClass . "first glue last textNsize-text",
@@ -38,6 +43,7 @@ function pixflow_price_box()
             "param_name" => "price_box_title",
             "value" => 'Personal',
             "admin_label" => false,
+            "color_picker" => "price_box_title_color",
         ),
         array(
             "type" => "md_vc_colorpicker",
@@ -46,6 +52,7 @@ function pixflow_price_box()
             "param_name" => "price_box_title_color",
             "admin_label" => false,
             "value" => "#623e95",
+            "inline_color_picker" => true,
         ),
         array(
             "type" => "textfield",
@@ -82,6 +89,12 @@ function pixflow_price_box()
             "admin_label" => false,
         ),
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Colors", 'massive-dynamic'),
+            "param_name" => "details_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue first",
             "heading" => esc_attr__("General Color", 'massive-dynamic'),
@@ -102,9 +115,15 @@ function pixflow_price_box()
             "value" => "#cccccc",
         ),
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Offer", 'massive-dynamic'),
+            "param_name" => "details_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             'type' => 'md_vc_checkbox',
             "edit_field_class" => $filedClass . "first glue last",
-            'heading' => esc_attr__('Use Button', 'massive-dynamic'),
+            'heading' => esc_attr__('Activate', 'massive-dynamic'),
             'param_name' => 'price_box_use_button',
             'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
             'checked' => true,
@@ -350,7 +369,7 @@ function pixflow_price_box()
         array(
             "type" => "md_vc_checkbox",
             "edit_field_class" => $filedClass . "glue first last",
-            "heading" => esc_attr__("Enable Offer", 'massive-dynamic'),
+            "heading" => esc_attr__("Activate", 'massive-dynamic'),
             "param_name" => "price_box_offer_chk",
             "admin_label" => false,
             "value" => array(esc_attr__('No', 'massive-dynamic') => 'no'),
@@ -404,6 +423,13 @@ function pixflow_price_box()
             "param_name" => "price_box_items_color",
             "admin_label" => false,
             "value" => "#898989",
+        ),
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "param_name" => "content_group",
+            "group" => esc_attr__("Items", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last"
         ),
 
     );

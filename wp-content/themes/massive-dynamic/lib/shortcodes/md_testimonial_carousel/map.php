@@ -76,33 +76,23 @@ function pixflow_testimonial_carousel()
         }
 
         $param[] = array(
-            "type" => "textarea",
-            "edit_field_class" => $filedClass . "glue first",
+            "type" => 'attach_image',
+            "edit_field_class" => $filedClass . "first glue last",
+            "heading" => esc_attr__('Title Image', 'massive-dynamic'),
+            "param_name" => "testimonial_carousel_img_" . $i,
+            "description" => esc_attr__("Testimonial Title", 'massive-dynamic'),
             "group" => esc_attr__("Slide", 'massive-dynamic') . $i,
-            "heading" => esc_attr__("Description", 'massive-dynamic'),
-            "param_name" => "testimonial_carousel_desc_" . $i,
             "admin_label" => false,
-            "value" => 'orem ipsum dolor sit amet, nec in adipiscing purus luctus, urna pellentesque fringilla vel, non sed arcu integevestibulum in lorem nec',
-            'dependency' => array(
-                'element' => $count_num_param,
-                'value' => $value
+            "dependency" => array(
+                "element" => $count_num_param,
+                "value" => $value
             ),
         );
 
-        $param[] = array(
-            "type" => 'md_vc_separator',
-            "edit_field_class" => $filedClass . "glue",
-            "group" => esc_attr__("Slide", 'massive-dynamic') . $i,
-            "param_name" => "testimonial_carousel_slide_" . $i . "_separator" . ++$separatorCounter,
-            'dependency' => array(
-                'element' => $count_num_param,
-                'value' => $value
-            ),
-        );
 
         $param[] = array(
             "type" => "textfield",
-            "edit_field_class" => $filedClass . "glue",
+            "edit_field_class" => $filedClass . " first glue",
             "group" => esc_attr__("Slide", 'massive-dynamic') . $i,
             "heading" => esc_attr__("Name", 'massive-dynamic'),
             "param_name" => "testimonial_carousel_name_" . $i,
@@ -151,18 +141,24 @@ function pixflow_testimonial_carousel()
         );
 
         $param[] = array(
-            "type" => 'attach_image',
+            "type" => "textarea",
             "edit_field_class" => $filedClass . "glue last",
-            "heading" => esc_attr__('Title Image', 'massive-dynamic'),
-            "param_name" => "testimonial_carousel_img_" . $i,
-            "description" => esc_attr__("Testimonial Title", 'massive-dynamic'),
             "group" => esc_attr__("Slide", 'massive-dynamic') . $i,
+            "heading" => esc_attr__("Description", 'massive-dynamic'),
+            "param_name" => "testimonial_carousel_desc_" . $i,
             "admin_label" => false,
-            "dependency" => array(
-                "element" => $count_num_param,
-                "value" => $value
+            "value" => 'orem ipsum dolor sit amet, nec in adipiscing purus luctus, urna pellentesque fringilla vel, non sed arcu integevestibulum in lorem nec',
+            'dependency' => array(
+                'element' => $count_num_param,
+                'value' => $value
             ),
         );
+
+
+
+
+
+
     }
     return $param;
 }

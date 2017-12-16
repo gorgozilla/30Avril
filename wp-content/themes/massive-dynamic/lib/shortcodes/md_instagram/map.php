@@ -30,8 +30,8 @@ pixflow_map(
             ),
             array(
                 "type" => "md_vc_description",
-
-                "param_name" => "row_inner_type_width_description",
+                "param_name" => "get_token_access_link",
+                "edit_field_class" => "get_token_access_link",
                 "admin_label" => false,
                 "value" => "<a href='" . $InstagramloginURL . "' target='_blank'>" . esc_attr__('Get Token Access', 'massive-dynamic') . "</a>"
             ),
@@ -41,6 +41,12 @@ pixflow_map(
                 'param_name' => 'instagram_title',
                 "heading" => esc_attr__("Title", 'massive-dynamic'),
                 "value" => "Follow on Instagram",
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Options", 'massive-dynamic'),
+                "param_name" => "category_group",
+                "edit_field_class" => $filedClass . "glue first ",
             ),
             array(
                 "type" => 'md_vc_slider',
@@ -88,10 +94,16 @@ pixflow_map(
                 'checked' => true,
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Colors", 'massive-dynamic'),
+                "param_name" => "color_group",
+                "edit_field_class" => $filedClass . "glue first ",
+            ),
+            array(
                 "type" => "md_vc_colorpicker",
 
                 "edit_field_class" => $filedClass . "first glue",
-                "heading" => esc_attr__("General Color", 'massive-dynamic'),
+                "heading" => esc_attr__("General", 'massive-dynamic'),
                 "param_name" => "instagram_general_color",
                 "value" => 'rgb(0,0,0)',
                 "admin_label" => false,
@@ -105,7 +117,7 @@ pixflow_map(
                 "type" => "md_vc_colorpicker",
 
                 "edit_field_class" => $filedClass . "last glue",
-                "heading" => esc_attr__("Overlay Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Overlay", 'massive-dynamic'),
                 "param_name" => "instagram_overlay_color",
                 "value" => 'rgba(255,255,255,0.6)',
                 "admin_label" => false,

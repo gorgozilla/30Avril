@@ -17,6 +17,12 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue last",
                 "param_name" => "statistic_to",
@@ -45,6 +51,12 @@ pixflow_map(
                 "value" => "Complete Projects",
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "first glue",
                 "heading" => esc_attr__("General  Color", 'massive-dynamic'),
@@ -71,9 +83,15 @@ pixflow_map(
                 "param_name" => "separator" . ++$separatorCounter,
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Separator", 'massive-dynamic'),
+                "param_name" => "sep_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 'type' => 'md_vc_checkbox',
                 "edit_field_class" => $filedClass . "glue last",
-                'heading' => esc_attr__('Separator', 'massive-dynamic'),
+                'heading' => esc_attr__('Activate', 'massive-dynamic'),
                 'param_name' => 'statistic_separatoe',
                 'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
                 'checked' => true,

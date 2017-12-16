@@ -6,7 +6,8 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Pixflow Price Table
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
+$separatorCounter = 1;
 pixflow_map(
     array(
         'base' => 'md_price_table',
@@ -16,12 +17,19 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue last textNsize-text",
                 "heading" => esc_attr__("Title", 'massive-dynamic'),
                 "param_name" => "title",
                 "value" => 'Personal Plan',
                 "admin_label" => false,
+                "color_picker" => "title_color",
             ),
             array(
                 "type" => "md_vc_colorpicker",
@@ -30,6 +38,26 @@ pixflow_map(
                 "param_name" => "title_color",
                 "admin_label" => false,
                 "value" => "#623e95",
+                "inline_color_picker" => true,
+            ),
+            array(
+                "type" => "textarea",
+                "edit_field_class" => $filedClass . "glue first last",
+                "heading" => esc_attr__("Description", 'massive-dynamic'),
+                "param_name" => "description",
+                "admin_label" => false,
+                "value" =>
+                    "Mobile-Optimized
+Powerful Metrics
+Free Domain
+Annual Purchase
+24/7 Support",
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("pricing", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 "type" => "textfield",
@@ -56,22 +84,12 @@ pixflow_map(
                     esc_attr__('Pound', 'massive-dynamic') => '&pound;'
                 )
             ),
+
             array(
-                "type" => "textarea",
-                "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Description", 'massive-dynamic'),
-                "param_name" => "description",
-                "admin_label" => false,
-                "value" =>
-                    "Mobile-Optimized
-Powerful Metrics
-Free Domain
-Annual Purchase
-24/7 Support",
-            ),
-            array(
-                "type" => 'md_vc_separator',
-                "param_name" => "separator" . ++$separatorCounter,
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Colors", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 "type" => "md_vc_colorpicker",
@@ -83,7 +101,7 @@ Annual Purchase
             ),
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "separator" . ++$separatorCounter,
+                "param_name" => "separator". ++$separatorCounter ,
             ),
             array(
                 "type" => "md_vc_colorpicker",
@@ -96,7 +114,7 @@ Annual Purchase
             array(
                 'type' => 'md_vc_checkbox',
                 "edit_field_class" => $filedClass . "first glue last",
-                'heading' => esc_attr__('Use Button', 'massive-dynamic'),
+                'heading' => esc_attr__('Active', 'massive-dynamic'),
                 'param_name' => 'use_button',
                 'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
                 'checked' => true,
@@ -105,7 +123,7 @@ Annual Purchase
             array(
                 "type" => 'md_vc_separator',
                 "edit_field_class" => $filedClass . "stick-to-top",
-                "param_name" => "separator" . ++$separatorCounter,
+                "param_name" => "separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "admin_label" => false,
                 "dependency" => array(
@@ -151,7 +169,7 @@ Annual Purchase
             ),//btn text
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "separator" . ++$separatorCounter,
+                "param_name" => "separator". ++$separatorCounter ,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "use_button",
@@ -187,7 +205,7 @@ Annual Purchase
             ),//btn general color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "separator" . ++$separatorCounter,
+                "param_name" => "separator". ++$separatorCounter,
                 "edit_field_class" => $filedClass . "stick-to-top",
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
@@ -211,7 +229,7 @@ Annual Purchase
             ),//btn text color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "separator" . ++$separatorCounter,
+                "param_name" => "separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "button_style",
@@ -234,7 +252,7 @@ Annual Purchase
             ),//btn bg hover color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "separator" . ++$separatorCounter,
+                "param_name" => "separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "button_style",
@@ -273,7 +291,7 @@ Annual Purchase
             ),//btn size
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "separator" . ++$separatorCounter,
+                "param_name" => "separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "use_button",
@@ -314,7 +332,7 @@ Annual Purchase
             ),//btn url
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "separator" . ++$separatorCounter,
+                "param_name" => "separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "use_button",

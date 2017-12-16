@@ -16,6 +16,12 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue ",
                 "param_name" => "pie_chart_title",
@@ -41,6 +47,12 @@ pixflow_map(
             array(
                 "type" => 'md_vc_separator',
                 "param_name" => "pie_chart_percent_separator" . ++$separatorCounter,
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "appearance_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 "type" => "md_vc_colorpicker",

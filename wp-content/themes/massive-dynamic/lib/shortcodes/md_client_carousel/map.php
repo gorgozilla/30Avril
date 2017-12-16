@@ -56,7 +56,7 @@ function pixflow_client_carousel_param()
         array(
             'type' => 'md_vc_checkbox',
             "edit_field_class" => $filedClass . "first glue last",
-            'heading' => esc_attr__('Play Mode:', 'massive-dynamic'),
+            'heading' => esc_attr__('Auto Play', 'massive-dynamic'),
             'param_name' => 'client_play_mode',
             'value' => array(esc_attr__('No', 'massive-dynamic') => 'no'),
             'checked' => false,
@@ -73,7 +73,7 @@ function pixflow_client_carousel_param()
         $param[] = array(
             'type' => 'attach_image',
             'edit_field_class' => $filedClass . "glue first last",
-            'heading' => esc_attr__('Client Logo', 'massive-dynamic'),
+            'heading' => esc_attr__('Client '.$i, 'massive-dynamic'),
             'param_name' => 'client_carousel_logo_' . $i,
             "group" => esc_attr__("Client", 'massive-dynamic'),
             'dependency' => array(

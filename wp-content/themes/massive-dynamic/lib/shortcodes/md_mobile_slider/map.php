@@ -29,6 +29,13 @@ function pixflow_mobile_slider_param()
     );
     $param = array(
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Slider", 'massive-dynamic'),
+            "param_name" => "slider_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last",
+        ),
+        array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first last slide_number",
             "group" => esc_attr__("General", 'massive-dynamic'),
@@ -40,13 +47,21 @@ function pixflow_mobile_slider_param()
         array(
             'type' => 'md_vc_checkbox',
             "edit_field_class" => $filedClass . "glue first last",
-            'heading' => esc_attr__('Auto Slideshow  ', 'massive-dynamic'),
+            'heading' => esc_attr__('Autoplay  ', 'massive-dynamic'),
             'param_name' => 'mobile_slider_slideshow',
             "group" => esc_attr__('General', 'massive-dynamic'),
             'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
             'checked' => true,
         ),
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Slides", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "slides_group",
+            "edit_field_class" => $filedClass . "glue first last",
+        ),
     );
+
 
     for ($i = 1; $i <= (int)$slide_num; $i++) {
         $value = array();
@@ -57,8 +72,8 @@ function pixflow_mobile_slider_param()
         $param[] = array(
             "type" => "attach_image",
             "edit_field_class" => $filedClass . "glue first last",
-            "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
-            "heading" => esc_attr__("Slide Image", 'massive-dynamic'),
+            "group" => esc_attr__('General', 'massive-dynamic'),
+            "heading" => esc_attr__("Image ".$i , 'massive-dynamic'),
             "param_name" => "mobile_slider_slide_image_" . $i,
             "admin_label" => false,
             "description" => esc_attr__("Choose Slide image", 'massive-dynamic'),

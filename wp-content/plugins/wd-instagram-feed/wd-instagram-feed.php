@@ -3,9 +3,9 @@
 Plugin Name: Instagram Feed WD
 Plugin URI: https://web-dorado.com/products/wordpress-instagram-feed-wd.html
 Description: WD Instagram Feed is a user-friendly tool for displaying user or hashtag-based feeds on your website. You can create feeds with one of the available layouts. It allows displaying image metadata, open up images in lightbox, download them and even share in social networking websites.
-Version: 1.2.5
+Version: 1.2.10
 Author: WebDorado
-Author URI: https://web-dorado.com
+Author URI: https://web-dorado.com/wordpress-plugins-bundle.html
 License: GPLv2 or later
 Text Domain: wd-instagram-feed
 */
@@ -21,7 +21,7 @@ define("WDI_META", "_".WDI_VAR."_meta");
 //define("wdi",'wdi');
 define('WDI_FEED_TABLE','wdi_feeds');
 define('WDI_THEME_TABLE','wdi_themes');
-define('WDI_VERSION','1.2.5');
+define('WDI_VERSION','1.2.10');
 define('WDI_IS_PRO','false');
 
 
@@ -658,6 +658,99 @@ function wdi_wd_lib_init(){
 
 
 }
+if (!function_exists('wdi_wd_bp_install_notice')) {
+
+  if(get_option('wds_bk_notice_status')==='' || get_option('wds_bk_notice_status')==='1'){
+	return;
+  }
+  
+  function wdi_wd_bp_script_style() {
+    $wd_bp_plugin_url = WDI_URL;
+    wp_enqueue_script('wd_bck_install', $wd_bp_plugin_url . '/js/wd_bp_install.js', array('jquery'));
+    wp_enqueue_style('wd_bck_install', $wd_bp_plugin_url . '/css/wd_bp_install.css');
+  }
+  add_action('admin_enqueue_scripts', 'wdi_wd_bp_script_style');
+
+  /**
+   * Show notice to install backup plugin
+   */
+  function wdi_wd_bp_install_notice() {
+    $wd_bp_plugin_url = WDI_URL;
+	
+	$screen = get_current_screen();
+	if($screen->id != "instagram-feed-wd_page_wdi_licensing" && $screen->id != "toplevel_page_wdi_feeds" && $screen->id != "instagram-feed-wd_page_wdi_themes" && $screen->id != "instagram-feed-wd_page_wdi_settings" && $screen->id != "instagram-feed-wd_page_wdi_uninstall" && $screen->id != "instagram-feed-wd_page_overview_wdi" && $screen->id != "instagram-feed-wd_page_wdi_updates" ){
+		return;
+	}
+	
+    $prefix = 'wdi';
+    $meta_value = get_option('wd_bk_notice_status');
+    if ($meta_value === '' || $meta_value === false) {
+      ob_start();
+      ?>
+      <div class="notice notice-info" id="wd_bp_notice_cont">
+        <p>
+          <img id="wd_bp_logo_notice" src="<?php echo $wd_bp_plugin_url . '/images/logo.png'; ?>">
+          <?php _e("Instagram Feed WD advises: Install brand new FREE", $prefix) ?>
+          <a href="https://wordpress.org/plugins/backup-wd/" title="<?php _e("More details", $prefix) ?>"
+             target="_blank"><?php _e("Backup WD", $prefix) ?></a>
+          <?php _e("plugin to keep your data and website safe.", $prefix) ?>
+          <a class="button button-primary"
+             href="<?php echo esc_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=backup-wd'), 'install-plugin_backup-wd')); ?>">
+            <span onclick="wd_bp_notice_install()"><?php _e("Install", $prefix); ?></span>
+          </a>
+        </p>
+        <button type="button" class="wd_bp_notice_dissmiss notice-dismiss"><span class="screen-reader-text"></span>
+        </button>
+      </div>
+      <script>wd_bp_url = '<?php echo add_query_arg(array('action' => 'wd_bp_dismiss',), admin_url('admin-ajax.php')); ?>'</script>
+      <?php
+      echo ob_get_clean();
+    }
+  }
+
+  if (!is_dir(plugin_dir_path(dirname(__FILE__)) . 'backup-wd')) {
+    add_action('admin_notices', 'wdi_wd_bp_install_notice');
+  }
+
+  /**
+   * Add usermeta to db
+   *
+   * empty: notice,
+   * 1    : never show again
+   */
+  function wdi_wd_bp_install_notice_status() {
+    update_option('wd_bk_notice_status', '1', 'no');
+  }
+  add_action('wp_ajax_wd_bp_dismiss', 'wdi_wd_bp_install_notice_status');
+}
 
 
+add_filter("plugin_row_meta", 'wdi_add_plugin_meta_links', 10, 2);
+
+function wdi_add_plugin_meta_links($meta_fields, $file){
+
+  if(plugin_basename(__FILE__) == $file) {
+
+    $meta_fields[] = "<a href='https://wordpress.org/support/plugin/wd-instagram-feed/' target='_blank'>Support Forum</a>";
+    $meta_fields[] = "<a href='https://wordpress.org/support/plugin/wd-instagram-feed/reviews#new-post' target='_blank' title='Rate'>
+            <i class='wdi-rate-stars'>"
+      . "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
+      . "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
+      . "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
+      . "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
+      . "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-star'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg>"
+      . "</i></a>";
+
+    $stars_color = "#ffb900";
+
+    echo "<style>"
+      . ".wdi-rate-stars{display:inline-block;color:" . $stars_color . ";position:relative;top:3px;}"
+      . ".wdi-rate-stars svg{fill:" . $stars_color . ";}"
+      . ".wdi-rate-stars svg:hover{fill:" . $stars_color . "}"
+      . ".wdi-rate-stars svg:hover ~ svg{fill:none;}"
+      . "</style>";
+  }
+
+  return $meta_fields;
+}
 

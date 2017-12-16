@@ -35,11 +35,14 @@ function pixflow_sc_image_box_fancy($atts, $content = null)
 
 
     // Main Image
-    $imageSrc = wp_get_attachment_url($image_box_fancy_image);
-    $imageSrc = (false == $imageSrc)?PIXFLOW_PLACEHOLDER1:$imageSrc;
+    if( '' != $image_box_fancy_image && (int) $image_box_fancy_image === 0 ) {
+		$imageSrc = $image_box_fancy_image ;
+    }else{
+		$imageSrc = wp_get_attachment_url($image_box_fancy_image);
+		$imageSrc = (false == $imageSrc)?PIXFLOW_PLACEHOLDER1:$imageSrc;
+    }
     $image_url = $imageSrc;
     $image_pointer = explode(",",$image_box_fancy_image);
-
     $counter = 0;
     ?>
     <style >
@@ -61,14 +64,15 @@ function pixflow_sc_image_box_fancy($atts, $content = null)
     <div id="<?php echo esc_attr($id); ?>" data-effect="<?php echo esc_attr($image_box_fancy_effect_slider); ?>" data-speed="<?php echo esc_attr($image_box_fancy_speed); ?>" class="img-box-fancy <?php echo esc_attr($animation['has-animation'].' md-align-'.$align); ?>" <?php echo esc_attr($animation['animation-attrs']); ?>>
 
         <ul class="slides">
-            <?php foreach( $image_pointer as $value )
-            {
-                $image_url = wp_get_attachment_url($value);
-                $image_url_flag = true;
-                if ($image_url == false){
-                    $image_url = PIXFLOW_PLACEHOLDER1;
-                    $image_url_flag = false;
-                }
+            <?php foreach( $image_pointer as $value ){
+			    if( ! ( '' != $value && (int) $value === 0 ) ) {
+					$image_url = wp_get_attachment_url($value);
+					$image_url_flag = true;
+					if ($image_url == false){
+						$image_url = PIXFLOW_PLACEHOLDER1;
+						$image_url_flag = false;
+					}
+				}
                 ?>
                 <li>
                     <div class="imgBox-image imgBox-image-main image-<?php echo esc_attr($id).$counter ?>" style="<?php echo "background-image:url('".esc_attr($image_url)."');background-size:" . esc_attr($image_box_fancy_size); ?>"></div>

@@ -7,12 +7,6 @@
 /*  Quote
 /*-----------------------------------------------------------------------------------*/
 
-
-/*-----------------------------------------------------------------------------------*/
-/*  Quote
-/*-----------------------------------------------------------------------------------*/
-
-
 function pixflow_quote()
 {
 
@@ -20,7 +14,12 @@ function pixflow_quote()
     $separatorCounter = 0;
 
     $param = array(
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "param_name" => "content_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "textfield",
             "edit_field_class" => $filedClass . "glue first",
@@ -78,7 +77,12 @@ function pixflow_quote()
             "param_name" => "quote_image_separator" . ++$separatorCounter,
             "admin_label" => false,
         ),
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Colors", 'massive-dynamic'),
+            "param_name" => "colors_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue",

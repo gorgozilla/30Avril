@@ -6,7 +6,8 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Product Compare
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
+$separatorCounter = 1;
 pixflow_map(
     array(
         "name" => "Product Compare",
@@ -15,7 +16,12 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         'show_settings_on_create' => false,
         "params" => array(
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Pricing", 'massive-dynamic'),
+                "param_name" => "pricing_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue",
@@ -44,7 +50,12 @@ pixflow_map(
                     esc_attr__('Pound', 'massive-dynamic') => '&pound;'
                 )
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "pricing_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "first glue",
@@ -91,7 +102,12 @@ pixflow_map(
                 "description" => esc_attr__("Text", 'massive-dynamic'),
                 "admin_label" => false,
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Color", 'massive-dynamic'),
+                "param_name" => "pricing_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "first glue last",
@@ -136,7 +152,7 @@ pixflow_map(
             array(
                 'type' => 'md_vc_checkbox',
                 "edit_field_class" => $filedClass . "first glue last",
-                'heading' => esc_attr__('Add Button', 'massive-dynamic'),
+                'heading' => esc_attr__('Active', 'massive-dynamic'),
                 'param_name' => 'product_compare_button',
                 'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
                 'checked' => true,
@@ -234,7 +250,7 @@ pixflow_map(
             ),//btn general color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "button_hover_color_separator" . ++$separatorCounter,
+                "param_name" => "button_hover_color_separator". ++$separatorCounter,
                 "edit_field_class" => $filedClass . "stick-to-top",
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
@@ -260,7 +276,7 @@ pixflow_map(
             ),//text color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "button_hover_color_separator" . ++$separatorCounter,
+                "param_name" => "button_hover_color_separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "product_compare_button_style",
@@ -284,7 +300,7 @@ pixflow_map(
             ),//bg hover color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "button_hover_color_separator" . ++$separatorCounter,
+                "param_name" => "button_hover_color_separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "product_compare_button_style",

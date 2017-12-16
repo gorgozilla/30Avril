@@ -7256,7 +7256,7 @@ msgid ""
 "issue.<br/>Please disable all plugins and test the save functionality again. "
 "If it worked, try enabling them one by one to find the one that is causing "
 "the issue. If this method didn't work, please submit a ticket from <a "
-"href='https://help.massivedynamic.co/hc/en-us/requests/new' "
+"href='https://help.pixflow.net/hc/en-us/requests/new' "
 "target='_blank'>Help Center</a> and we will help you quickly."
 msgstr ""
 

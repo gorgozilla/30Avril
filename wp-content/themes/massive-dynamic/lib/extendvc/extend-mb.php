@@ -16,175 +16,296 @@ $filedClass = 'vc_col-sm-12 vc_column ';
 $separatorCounter = 0;
 
 /* custom icon picker field */
-function pixflow_vc_iconpicker_field($settings, $value)
-{
-
-    return '<button value="' . $value . '" input-class="wpb_vc_param_value wpb-textinput px-input-vc-icon'
-    . $settings['param_name'] . ' ' . $settings['type'] . '_field" name="' . $settings['param_name'] . '" class="iconpicker" data-original-title="" title="">'
-    . '</button>';
+function pixflow_vc_iconpicker_field ( $settings, $value, $shortcode_name = '', $js_template = false ) {
+    if( ! $js_template ) {
+        return '<button value="' . $value . '" input-class="wpb_vc_param_value wpb-textinput px-input-vc-icon'
+        . $settings['param_name'] . ' ' . $settings['type'] . '_field" name="' . $settings['param_name'] . '" class="iconpicker" data-original-title="" title="">'
+        . '</button>';
+    }else{
+        return '<button value="{{ data.value }}" input-class="wpb_vc_param_value wpb-textinput px-input-vc-icon {{ data.param_name }} {{ data.type }}_field" name="{{ data.param_name }}" class="iconpicker" data-original-title="" title=""></button>';
+    }
 }
 
 /* custom date picker field */
-function pixflow_vc_datepicker_field($settings, $value)
-{
-    return '<input type="text" value="' . $value . '" name="' . $settings['param_name'] . '" class="wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_datepicker" data-timepicker="true" data-language="en"  data-time-format="hh:ii"/>';
+function pixflow_vc_datepicker_field ( $settings, $value, $shortcode_name = '', $js_template = false ) {
+    if( ! $js_template ) {
+        return '<input type="text" value="' . $value . '" name="' . $settings['param_name'] . '" class="wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_datepicker" data-timepicker="true" data-language="en"  data-time-format="hh:ii"/>';
+    }else{
+        return '<input type="text" value="{{ data.value }}" name="{{ data.param_name }}" class="wpb_vc_param_value wpb-textinput {{ data.type }}_field md_vc_datepicker" data-timepicker="true" data-language="en"  data-time-format="hh:ii"/>';
+    }
 }
 
 /* custom base64 text field  */
-function pixflow_vc_base64_text_field($settings, $value){
+function pixflow_vc_base64_text_field ( $settings, $value, $shortcode_name = '', $js_template = false ) {
 
-    if( preg_match('/pixflow_base64/' , $value)){
-        $value = str_replace('pixflow_base64' , '' , $value);
-        $value = base64_decode($value);
+    if( ! $js_template ) {
+        if (preg_match('/pixflow_base64/', $value)) {
+            $value = str_replace('pixflow_base64', '', $value);
+            $value = base64_decode($value);
+        }
+        return '<input type="text" name="' . $settings['param_name'] . '_text" class="to-base64 mbuilder-skip">
+            <input type="hidden" name="' . $settings['param_name'] . '" value="pixflow_base64' . base64_encode($value) . '" class="wpb_vc_param_value wpb-textinput ">';
+    }else{
+        return '<input type="text" name="{{ data.param_name }}_text" class="to-base64 mbuilder-skip">
+            <input type="hidden" name="{{ data.param_name }}" value="pixflow_base64{{ data.base64_value }}" class="wpb_vc_param_value wpb-textinput ">';
     }
-    return '<input type="text" name="'.$settings['param_name'].'_text" class="to-base64 mbuilder-skip">
-            <input type="hidden" name="'.$settings['param_name'].'" value="pixflow_base64'.base64_encode($value).'" class="wpb_vc_param_value wpb-textinput ">';
 }
 /* custom base64 text field  */
-function pixflow_vc_base64_textarea_field($settings, $value){
+function pixflow_vc_base64_textarea_field( $settings, $value, $shortcode_name = '', $js_template = false ) {
 
-    if( preg_match('/pixflow_base64/' , $value)){
-        $value = str_replace('pixflow_base64' , '' , $value);
-        $value = base64_decode($value);
+    if( ! $js_template ) {
+        if (preg_match('/pixflow_base64/', $value)) {
+            $value = str_replace('pixflow_base64', '', $value);
+            $value = base64_decode($value);
+        }
+        return '<textarea name="' . $settings['param_name'] . '_text" class="to-base64 mbuilder-skip">' . $value . '</textarea>
+            <textarea name="' . $settings['param_name'] . '" class="wpb_vc_param_value wpb-textinput mBuilder-hidden hidden">pixflow_base64' . base64_encode($value) . '</textarea>';
+    }else{
+        return '<textarea name="{{ data.param_name }}_text" class="to-base64 mbuilder-skip">{{ data.value }}</textarea>' .
+            '<textarea name="{{ data.param_name }}" class="wpb_vc_param_value wpb-textinput mBuilder-hidden hidden">pixflow_base64{{ data.base64_value }}</textarea>';
     }
-    return '<textarea name="'.$settings['param_name'].'_text" class="to-base64 mbuilder-skip">'.$value.'</textarea>
-            <textarea name="'.$settings['param_name'].'" class="wpb_vc_param_value wpb-textinput mBuilder-hidden hidden">pixflow_base64'.base64_encode($value).'</textarea>';
 }
 /* custom color picker field */
-function pixflow_vc_colorpicker_field($settings, $value)
-{
+function pixflow_vc_colorpicker_field( $settings, $value, $shortcode_name = '', $js_template = false ) {
 
-    $opacity = (isset($settings['opacity']) && $settings['opacity'] === true) ? 'true' : 'false';
-    $defaultColor = (isset($settings['defaultColor']) && $settings['defaultColor'] != '') ? $settings['defaultColor'] : '#000';
-    $value = ($value != '') ? $value : $defaultColor;
-    $id = uniqid();
-    return '<input id="' . $id . '" opacity="' . $opacity . '" type="text" value="' . $value . '" name="' . $settings['param_name'] . '" class="wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_colorpicker" />';
+    if( ! $js_template ) {
+        $opacity = (isset($settings['opacity']) && $settings['opacity'] === true) ? 'true' : 'false';
+        $defaultColor = (isset($settings['defaultColor']) && $settings['defaultColor'] != '') ? $settings['defaultColor'] : '#000';
+        $value = ($value != '') ? $value : $defaultColor;
+        $id = uniqid();
+        return '<input id="' . $id . '" opacity="' . $opacity . '" type="text" value="' . $value . '" name="' . $settings['param_name'] . '" class="wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_colorpicker" />';
+    }else{
+        return '<input id="{{ data.id }}" opacity="{{ data.opacity }}" type="text" value="{{ data.value }}" name="{{ data.param_name }}" class="wpb_vc_param_value wpb-textinput {{ data.type }}_field md_vc_colorpicker" />';
+    }
 }
 
 /* custom gradient color picker field */
-function pixflow_vc_gradientcolorpicker_field($settings, $value)
-{
-    if( preg_match('/pixflow_base64/' , $value)){
-        $value = str_replace('pixflow_base64' , '' , $value);
-        $value = base64_decode($value);
-    }
-    $value = str_replace('``', '"', $value);
-    $value = str_replace('\'', '"', $value);
+function pixflow_vc_gradientcolorpicker_field( $settings, $value, $shortcode_name = '', $js_template = false ) {
     $output = '';
-    $defaults = (object)array('color1' => '#fff', 'color2' => '#000', 'color1Pos' => '0', 'color2Pos' => '100', 'angle' => '0');
-    $defaultColor = (isset($settings['defaultColor']) && $settings['defaultColor'] != '') ? $settings['defaultColor'] : $defaults;
-//    $value = (!isset($value)) ? $defaultColor : $value;
-
-    $value = ($value != '' && isset($value)) ? json_decode($value) : $defaultColor;
-    $value = ($value == null)?$defaultColor:$value;
-    $id = uniqid();
-    $output .= '<input id="input-' . $id . '" type="text" value="' . json_encode($value) . '" name="' . $settings['param_name'] . '" class="md-hidden wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_gradientcolorpicker md-base64" />';
-    $output .= '<div id="' . $id . '" pos1="' . $value->{"color1Pos"} . '" pos2="' . $value->{"color2Pos"} . '" col1="' . $value->{"color1"} . '" col2="' . $value->{"color2"} . '" class="gradient_color_picker"></div>';
-    $output .= '<br/><br/>';
-    $output .= '<div angle="' . $value->{"angle"} . '" gID="' . $id . '" id="angle-' . $id . '" class="gradient_color_picker_angle"></div><input type="text" id="angleValue-' . $id . '" class="gradient-angle" value="' . $value->{"angle"} . '" />';
-    return $output;
+    if( ! $js_template ) {
+        if (preg_match('/pixflow_base64/', $value)) {
+            $value = str_replace('pixflow_base64', '', $value);
+            $value = base64_decode($value);
+        }
+        $value = str_replace('``', '"', $value);
+        $value = str_replace('\'', '"', $value);
+        $defaults = (object)array('color1' => '#fff', 'color2' => '#000', 'color1Pos' => '0', 'color2Pos' => '100', 'angle' => '0');
+        $defaultColor = (isset($settings['defaultColor']) && $settings['defaultColor'] != '') ? $settings['defaultColor'] : $defaults;
+        $value = ($value != '' && isset($value)) ? json_decode($value) : $defaultColor;
+        $value = ($value == null) ? $defaultColor : $value;
+        $id = uniqid();
+        $output .= '<input id="input-' . $id . '" type="text" value="' . json_encode($value) . '" name="' . $settings['param_name'] . '" class="md-hidden wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_gradientcolorpicker md-base64" />';
+        $output .= '<div id="' . $id . '" pos1="' . $value->{"color1Pos"} . '" pos2="' . $value->{"color2Pos"} . '" col1="' . $value->{"color1"} . '" col2="' . $value->{"color2"} . '" class="gradient_color_picker"></div>';
+        $output .= '<br/><br/>';
+        $output .= '<div angle="' . $value->{"angle"} . '" gID="' . $id . '" id="angle-' . $id . '" class="gradient_color_picker_angle"></div><input type="text" id="angleValue-' . $id . '" class="gradient-angle" value="' . $value->{"angle"} . '" />';
+        return $output;
+    }else{
+        $output .= '<span data-preview-id="{{ data.id }}" class="gradient-color-picker-popup" />';
+        $output .= '<div data-preview-id="{{ data.id }}" class="gradient-popup">';
+        $output .= '<input id="input-{{ data.id }}" type="text" value="{{ data.json_value }}" name="{{ data.param_name }}" class="md-hidden wpb_vc_param_value wpb-textinput {{ data.type }}_field md_vc_gradientcolorpicker md-base64" />';
+        $output .= '<div id="{{ data.id }}" pos1="{{ data.color1_pos }}" pos2="{{ data.color2_pos }}" col1="{{ data.color1 }}" col2="{{ data.color2 }}" class="gradient_color_picker"></div>';
+        $output .= '<br/><br/>';
+        $output .= '<div angle="{{ data.angle }}" gID="{{ data.id }}" id="angle-{{ data.id }}" class="gradient_color_picker_angle"></div><input type="text" id="angleValue-{{ data.id }}" class="gradient-angle" value="{{ data.angle }}" />';
+        $output .= '</div>';
+        return $output;
+    }
 }
 
 /* custom range slider controller */
-function pixflow_vc_slider_field($settings, $value)
-{
-// Note : You can define these parameters to your range slider --> min, max, prefix, step.
+function pixflow_vc_slider_field( $settings, $value, $shortcode_name = '', $js_template = false  ) {
     $output = '';
-    $defaults = array('min' => '0', 'max' => '100', 'prefix' => '%', 'step' => '1', 'decimal' => '0');
-    $defaultSetting = (isset($settings['defaultSetting']) && $settings['defaultSetting'] != '') ? $settings['defaultSetting'] : $defaults;
-    $defaultSetting['decimal'] = (isset($defaultSetting['decimal'])) ? $defaultSetting['decimal'] : 0;
-    if ((int)$defaultSetting['step'] < 1) {
-        $value = ((float)$value === '') ? $defaultSetting['min'] : (float)$value;
-        $value = number_format($value, 1);
-    } else {
-        $value = ((int)$value === '') ? $defaultSetting['min'] : (int)$value;
+    if( ! $js_template ) {
+        // Note : You can define these parameters to your range slider --> min, max, prefix, step.
+        $defaults = array('min' => '0', 'max' => '100', 'prefix' => '%', 'step' => '1', 'decimal' => '0');
+        $defaultSetting = (isset($settings['defaultSetting']) && $settings['defaultSetting'] != '') ? $settings['defaultSetting'] : $defaults;
+        $defaultSetting['decimal'] = (isset($defaultSetting['decimal'])) ? $defaultSetting['decimal'] : 0;
+        if ((int)$defaultSetting['step'] < 1) {
+            $value = ((float)$value === '') ? $defaultSetting['min'] : (float)$value;
+            $value = number_format($value, 1);
+        } else {
+            $value = ((int)$value === '') ? $defaultSetting['min'] : (int)$value;
+        }
+        $id = uniqid();
+        $output .= '<input step="' . $defaultSetting['step'] . '" id="input-' . $id . '" type="number" value="' . $value . '" name="' . $settings['param_name'] . '" class="wpb_vc_param_value ' . $settings['type'] . '_field md_vc_number" min="' . $defaultSetting['min'] . '" />';
+        $output .= '<div id="' . $id . '" class="vc_slider_value" >' . $defaultSetting['prefix'] . '</div>';
+        return $output;
+    }else{
+        $output .= '<div class="md-number-input">' .
+            '<div id="{{ data.id }}" class="vc_number_prefix" > {{ data.prefix }} </div>' .
+            '<input id="input-{{ data.id }}" data-min="{{ data.min }}" data-max="{{ data.max }}" data-step="{{ data.step }}" type="text" value="{{ data.value }}" name="{{ data.param_name }}" class="wpb_vc_param_value {{ data.type }}_field md_vc_number" />'.
+            '</div>' .
+            '<div class="md-increament-controller" >' .
+            '<span class="md-increament-plus" data-action="plus" ><i class="icon-plus7"></i></span>' .
+            '<span class="md-increament-minus" data-action="minus" ><i class="icon-minus5"></i></span>' .
+            '</div>';
+        return $output;
     }
-    $id = uniqid();
-    $defaultSetting['prefix'] = isset($defaultSetting['prefix']) ? $defaultSetting['prefix'] : '';
-    $output .= '<input id="input-' . $id . '" type="text" value="' . $value . '" name="' . $settings['param_name'] . '" class="wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_slider" />';
-    $output .= '<div value="' . $value . '" id="' . $id . '" class="vc_slider" min="' . $defaultSetting['min'] . '" max="' . $defaultSetting['max'] . '" prefix="' . $defaultSetting['prefix'] . '" step="' . $defaultSetting['step'] . '" decimal="' . $defaultSetting['decimal'] . '" ></div>';
-    $output .= '<div id="' . $id . '" class="vc_slider_value" value="' . $value . '">' . $value . $defaultSetting['prefix'] . '</div>';
-    return $output;
 }
 
-/* Spacing field */
-function pixflow_vc_spacing_field($settings,$value){
-    $value = str_replace('``', '"', $value);
-    $value = str_replace("'", '"', $value);
 
-    $value = ($value != '' && isset($value)) ? json_decode($value,true) : $settings['defaultSetting'];
-    $value = ($value == null)?$settings['defaultSetting']:$value;
-
-    $output = '';
-    $id = uniqid();
-
-    $output = '<div class="spacing-field">';
-    $output .= '<input id="' . $id . '" type="text" value=\'' . json_encode($value) . '\' name="' . $settings['param_name'] . '" class="md-hidden wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_spacing" />';
-    $output .= '<input class="val margin-left mbuilder-skip" name="'.$settings['param_name'].'_marginLeft" value="'.$value['marginLeft'].'"><input class="val margin-top mbuilder-skip" name="'.$settings['param_name'].'_marginTop" value="'.$value['marginTop'].'"><input class="val margin-right mbuilder-skip" name="'.$settings['param_name'].'_marginRight" value="'.$value['marginRight'].'"><input class="val margin-bottom mbuilder-skip" name="'.$settings['param_name'].'_marginBottom" value="'.$value['marginBottom'].'">';
-    $output .= '<div class="border"><input class="val padding-left mbuilder-skip" name="'.$settings['param_name'].'_paddingLeft" value="'.$value['paddingLeft'].'"><input class="val padding-top mbuilder-skip" name="'.$settings['param_name'].'_paddingTop" value="'.$value['paddingTop'].'"><input class="val padding-right mbuilder-skip" name="'.$settings['param_name'].'_paddingRight" value="'.$value['paddingRight'].'" ><input class="val padding-bottom mbuilder-skip" name = "'.$settings['param_name'].'_paddingBottom" value="'.$value['paddingBottom'].'"></div>';
-    $output .= '</div>';
-    return $output;
-
-}
 
 /* custom multiselect field */
-function pixflow_vc_multiselect_field($settings, $value)
-{
+function pixflow_vc_multiselect_field( $settings, $value, $shortcode_name = '', $js_template = false ) {
     $output = '';
-    $items = (isset($settings['items']) && is_array($settings['items'])) ? $settings['items'] : array();
-    $defaults = (isset($settings['defaults']) && $settings['defaults'] == 'all') ? $items : array();
-    $value = ($value != '') ? $value : implode(',', $defaults);
-    $values = explode(',', $value);
-    $id = uniqid();
-    $output .= '<input id="input-' . $id . '" type="text" value="' . $value . '" name="' . $settings['param_name'] . '" class="md-hidden wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_muliselect" />';
-    ob_start();
-    ?>
-    <dl class="dropdown" xmlns="http://www.w3.org/1999/html">
-        <dt>
-            <a href="#">
-                <span class="hida"><?php esc_attr_e('Select Items', 'massive-dynamic') ?></span>
-                <span data-id="<?php echo esc_attr($id); ?>" class="multiSel"></span>
-            </a>
-        </dt>
-        <dd>
-            <div class="mutliSelect">
-                <ul>
-                    <?php if (count($items) < 1) { ?>
-                        <li><?php esc_attr_e('No items to select!', 'massive-dynamic') ?></li>
-                    <?php } else { ?>
-                        <?php foreach ($items as $item) { ?>
-                            <li>
-                                <input
-                                    data-id="<?php echo esc_attr($id); ?>" <?php echo (in_array($item, $values)) ? 'checked="checked"' : ''; ?>
-                                    type="checkbox"
-                                    value="<?php echo esc_attr($item); ?>"/><?php echo esc_attr($item); ?>
-                            </li>
-                        <?php }
-                    } ?>
-                </ul>
-            </div>
-        </dd>
-    </dl>
-    <?php
-    $output .= ob_get_clean();
-    return $output;
+    if( ! $js_template ) :
+        $items = (isset($settings['items']) && is_array($settings['items'])) ? $settings['items'] : array();
+        $defaults = (isset($settings['defaults']) && $settings['defaults'] == 'all') ? $items : array();
+        $value = ($value != '') ? $value : implode(',', $defaults);
+        $values = explode(',', $value);
+        $id = uniqid();
+        $output .= '<input id="input-' . $id . '" type="text" value="' . $value . '" name="' . $settings['param_name'] . '" class="md-hidden wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field md_vc_muliselect" />';
+        ob_start();
+        ?>
+        <dl class="dropdown" xmlns="http://www.w3.org/1999/html">
+            <dt>
+                <a href="#">
+                    <span class="hida"><?php esc_attr_e('Select Items', 'massive-dynamic') ?></span>
+                    <span data-id="<?php echo esc_attr($id); ?>" class="multiSel"></span>
+                </a>
+            </dt>
+            <dd>
+                <div class="mutliSelect">
+                    <ul>
+                        <?php if (count($items) < 1) { ?>
+                            <li><?php esc_attr_e('No items to select!', 'massive-dynamic') ?></li>
+                        <?php } else { ?>
+                            <?php foreach ($items as $item) { ?>
+                                <li>
+                                    <input
+                                        data-id="<?php echo esc_attr($id); ?>" <?php echo (in_array($item, $values)) ? 'checked="checked"' : ''; ?>
+                                        type="checkbox"
+                                        value="<?php echo esc_attr($item); ?>"/><?php echo esc_attr($item); ?>
+                                </li>
+                            <?php }
+                        } ?>
+                    </ul>
+                </div>
+            </dd>
+        </dl>
+        <?php
+        $output .= ob_get_clean();
+        return $output;
+    else:
+        $output .= '<input id="input-{{ data.id }}" type="text" value="{{ data.value }}" name="{{ data.param_name }}" class="md-hidden wpb_vc_param_value wpb-textinput {{ data.type }}_field md_vc_muliselect" />';
+        ob_start();
+        ?>
+        <dl class="dropdown multiselect-dropdown" xmlns="http://www.w3.org/1999/html">
+            <dt>
+                <a href="#" class="multi-select-titles">
+                    <span class="hida inactive-text-color">Select Items</span>
+                    <span data-id="{{ data.id }}" class="multiSel inactive-text-color"></span>
+                    <span class="mbuilder-dropdown-arrow px-icon icon-arrow-down6 inactive-text-color "></span>
+                </a>
+            </dt>
+            <dd>
+                <div class="mutliSelect">
+                    <ul class="setting-background">
+                        <# if ( data.length  < 1 ) { #>
+                            <li>No items to select!</li>
+                        <# } else {  #>
+                            <# _.each( data.items , function( item, index){ #>
+                                <li class="active-text-color" >
+                                    <input
+                                        data-id="{{ data.id }}"
+                                        <# if(  data.values.indexOf(item) != -1 ) { #>
+                                            checked="checked"
+                                            <# } #>
+                                        type="checkbox"
+                                        value=" {{ item }}"/>
+                                                <label for="{{ data.id }}" class="mb-checkbox-label-multi-select">
+
+                                                </label>
+                                                <span class=" <# if(  data.values.indexOf(item) != -1 ) { #> select-option-multi <# } #> " >
+                                                    {{ item }}
+                                                </span>
+
+                                </li>
+                            <# }) #>
+                        <# } #>
+                    </ul>
+                </div>
+            </dd>
+        </dl>
+        <?php
+        $output .= ob_get_clean();
+        return $output;
+    endif;
 }
 
-function pixflow_vc_checkbox_field($settings, $value)
+function pixflow_vc_checkbox_field( $settings , $value ,$shortcode_name = '', $js_template = false )
 {
-    $output = '';
-    $id = uniqid();
-    if (is_array($value)) {
-        foreach ($value as $val) {
-            $value = $val;
-            break;
-        }
+	$output = '';
+	if( ! $js_template ) {
+		$id = uniqid();
+		if (is_array($value)) {
+			foreach ($value as $val) {
+				$value = $val;
+				break;
+			}
+		}
+		$checked = checked($value, 'yes', false);
+		$output .= '<input ' . $checked . ' data-name=' . $settings['param_name'] . '  el-id="' . $id . '" value="' . $value . '" class="wpb_vc_param_value ' . $settings['param_name'] . ' ' . $settings['type'] . '" type="checkbox" > ';
+		$output .= '<input id="' . $settings['param_name'] . '-" el-id="' . $id . '" type="hidden" value="' . $value . '" name="' . $settings['param_name'] . '" class="wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field ' . $settings['param_name'] . ' md_vc_checkbox" />';
+    }else{
+	    $output .= '<input {{ data.checked }} data-name="{{ data.param_name }}" el-id="{{ data.id }}" value="{{ data.value }}" class="wpb_vc_param_value mb-checkbox {{ data.param_name }} {{ data.type }}" type="checkbox" > <label for="{{ data.id }}" class="mb-checkbox-label"></label>';
+		$output .= '<input id="{{ data.param_name }}-" el-id="{{ data.id }}" type="hidden" value="{{ data.value }}" name="{{ data.param_name }}" class="wpb_vc_param_value wpb-textinput {{ data.type }}_field {{ data.param_name }}  md_vc_checkbox" />';
     }
-    $checked = checked($value, 'yes', false);
-    $output .= '<input ' . $checked . ' data-name=' . $settings['param_name'] . '  el-id="' . $id . '" value="' . $value . '" class="wpb_vc_param_value ' . $settings['param_name'] . ' ' . $settings['type'] . '" type="checkbox" > ';
-    $output .= '<input id="' . $settings['param_name'] . '-" el-id="' . $id . '" type="hidden" value="' . $value . '" name="' . $settings['param_name'] . '" class="wpb_vc_param_value wpb-textinput ' . $settings['type'] . '_field ' . $settings['param_name'] . ' md_vc_checkbox" />';
+	return $output;
+}
 
-    return $output;
+
+function pixflow_vc_separator_field( $settings , $js_template = false )
+{
+	if( ! $js_template ) {
+		return '<hr/>' . '<input class="wpb_vc_param_value wpb-textinput" type="hidden" name="' . $settings['param_name'] . '">';
+    }else{
+		return '<hr/>' . '<input class="wpb_vc_param_value wpb-textinput" type="hidden" name="{{ data.param_name }}">';
+    }
+}
+
+function pixflow_vc_url_field( $settings, $value , $shortcode_name = '', $js_template = false ){
+	$output = '';
+	if( ! $js_template ):
+		$id = esc_attr(uniqid());
+		ob_start();
+		?>
+        <div class="md_vc_url_control">
+        <input id="<?php echo esc_attr($id) ?>" type="text" value="<?php echo esc_attr($value); ?>"
+               name="<?php echo esc_attr($settings['param_name']); ?>"
+               class="wpb_vc_param_value wpb-textinput <?php echo esc_attr($settings['type']) . '_field'; ?> md_vc_url"/>
+        <textarea onclick="this.focus();this.select()" readonly id="<?php echo esc_attr('url_' . $id) ?>" class="add"
+                  rows="4" cols="50"><?php esc_attr_e('Type section name and copy URL', 'massive-dynamic') ?></textarea>
+        </div>
+        <?php
+		$output .= ob_get_clean();
+    else:
+		$output = '<div class="md_vc_url_control">' .
+            '<input id="{{ data.id }}" type="text" value="{{ data.value }}"' .
+                   'name="{{ data.param_name }}"' .
+                   ' class="wpb_vc_param_value wpb-textinput {{ data.type }}_field md_vc_url" placeholder="URL"/>' .
+            '<textarea onclick="this.focus();this.select()" readonly id="url_{{ data.id }}" class="add md-vc-url-textarea"' .
+                      'rows="4" cols="50">Type section name and copy URL</textarea>' .
+        '</div>' ;
+        endif;
+	return $output;
+}
+
+function pixflow_vc_description_field( $settings, $value, $shortcode_name = '', $js_template = false )
+{
+    if( ! $js_template ){
+		return "<div class='content'>" . $settings['value'] .' '. '<input class="wpb_vc_param_value wpb-textinput" type="hidden" name="' . $settings['param_name'] . '">'. "</div>" ;
+    }else{
+		return '<div class="content"> {{ data.value }} </div> <input class="wpb_vc_param_value wpb-textinput" type="hidden" name="{{ data.param_name }}">';
+    }
+}
+
+function pixflow_group_title_field( $settings, $value, $shortcode_name = '', $js_template = false )
+{
+    if( ! $js_template ){
+        return "<div class='group-title wpb_vc_param_value wpb-textinput'>" . $settings['heading'] . "</div>". '<input class="wpb_vc_param_value wpb-textinput" type="hidden" name="' . $settings['param_name'] . '">';
+    }else{
+        return '<div class="group-title"> {{ data.title }} </div>';
+    }
 }
 
 if (!function_exists('js_composer_bridge_admin')) {
@@ -232,33 +353,7 @@ if (!function_exists('js_composer_bridge_admin')) {
 
 }
 
-function pixflow_vc_separator_field($settings)
-{
-    return '<hr/>' . '<input class="wpb_vc_param_value wpb-textinput" type="hidden" name="' . $settings['param_name'] . '">';
-}
 
-function pixflow_vc_url_field($settings, $value)
-{
-    $output = '';
-    $id = esc_attr(uniqid());
-    ob_start();
-    ?>
-    <div class="md_vc_url_control">
-        <input id="<?php echo esc_attr($id) ?>" type="text" value="<?php echo esc_attr($value); ?>"
-               name="<?php echo esc_attr($settings['param_name']); ?>"
-               class="wpb_vc_param_value wpb-textinput <?php echo esc_attr($settings['type']) . '_field'; ?> md_vc_url"/>
-        <textarea onclick="this.focus();this.select()" readonly id="<?php echo esc_attr('url_' . $id) ?>" class="add"
-                  rows="4" cols="50"><?php esc_attr_e('Type section name and copy URL', 'massive-dynamic') ?></textarea>
-    </div>
-    <?php
-    $output .= ob_get_clean();
-    return $output;
-}
-
-function pixflow_vc_description_field($settings)
-{
-    return "<div class='content'>" . $settings['value'] . "</div>" . '<input class="wpb_vc_param_value wpb-textinput" type="hidden" name="' . $settings['param_name'] . '">';
-}
 
 
 
@@ -290,8 +385,8 @@ pixflow_remove_element("vc_posts_slider");
 pixflow_remove_element("vc_carousel");
 pixflow_remove_element("vc_images_carousel");
 //pixflow_remove_element("vc_column_text");
-pixflow_remove_element("vc_separator");
-pixflow_remove_element("vc_text_separator");
+//pixflow_remove_element("vc_separator");
+//pixflow_remove_element("vc_text_separator");
 pixflow_remove_element("vc_toggle");
 pixflow_remove_element("vc_single_image");
 pixflow_remove_element("vc_gallery");
@@ -408,6 +503,24 @@ $separator_setting = array(
     "'show_settings_on_create" => true,
     "controls" => '',
 );
+// ***** row - general - tab *****
+
+pixflow_add_param("vc_row", array(
+    "type" => "dropdown",
+    "weight" => "5",
+    "heading" => esc_attr__("Row Background", 'massive-dynamic'),
+    "param_name" => "row_type",
+    "group" => esc_attr__("Background", 'massive-dynamic'),
+    "description" => esc_attr__("Choose different type of containers and set the options.", 'massive-dynamic'),
+    "edit_field_class" => $filedClass . "glue first last",
+    "value" => array(
+		__("Solid Color" , 'massive-dynamic') => "none",
+		__("Image" , 'massive-dynamic') => "image",
+		__("Color Transition" , 'massive-dynamic') => "transition",
+		__("Gradient and Image" , 'massive-dynamic') => "gradient",
+		__("Video", 'massive-dynamic') => "video",
+    ),
+));
 
 // row spacing - Padding all directions
 pixflow_add_param('vc_row', array(
@@ -435,16 +548,23 @@ pixflow_add_param("vc_row", array(
                         <li>Click on Add To Menu button and refresh your page</li>
                     </ul>", "massive-dynamic"), array('strong' => array(), 'ul' => array(), 'li' => array()))
 ));
+pixflow_add_param("vc_row",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Padding", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    'group' => esc_attr__("Spacing", 'massive-dynamic'),
+    "edit_field_class" => $filedClass . "glue first last"
+));
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_slider',
     "weight" => "2",
-    "heading" => esc_attr__("Padding Top", 'massive-dynamic'),
+    "heading" => esc_attr__("Top", 'massive-dynamic'),
     "param_name" => "row_padding_top",
     "description" => esc_attr__("insert top padding for current row . example : 200 ", 'massive-dynamic'),
     "value" => "45",
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
-    "edit_field_class" => $filedClass . "glue first",
+    "edit_field_class" => $filedClass . "glue first dont-show-in-builder",
     'defaultSetting' => array(
         "min" => "0",
         "max" => "800",
@@ -461,12 +581,12 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_slider',
-    "heading" => esc_attr__("Padding Bottom", 'massive-dynamic'),
+    "heading" => esc_attr__("Bottom", 'massive-dynamic'),
     "param_name" => "row_padding_bottom",
     "description" => esc_attr__("insert bottom padding for current row . example : 200", 'massive-dynamic'),
     "value" => "45",
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
-    "edit_field_class" => $filedClass . "glue",
+    "edit_field_class" => $filedClass . "glue dont-show-in-builder",
     'defaultSetting' => array(
         "min" => "0",
         "max" => "800",
@@ -483,7 +603,7 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_slider',
-    "heading" => esc_attr__("Padding Right", 'massive-dynamic'),
+    "heading" => esc_attr__("Right", 'massive-dynamic'),
     "param_name" => "row_padding_right",
     "description" => esc_attr__("insert Right padding for current row . example : 200", 'massive-dynamic'),
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
@@ -504,7 +624,7 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_slider',
-    "heading" => esc_attr__("Padding Left", 'massive-dynamic'),
+    "heading" => esc_attr__("Left", 'massive-dynamic'),
     "param_name" => "row_padding_left",
     "description" => esc_attr__("insert left padding for current row . example : 200", 'massive-dynamic'),
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
@@ -518,11 +638,18 @@ pixflow_add_param("vc_row", array(
 ));
 
 // row spacing Margin only top and bottom
+pixflow_add_param("vc_row",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Margin", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    'group' => esc_attr__("Spacing", 'massive-dynamic'),
+    "edit_field_class" => $filedClass . "glue first last"
+));
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_slider',
     "edit_field_class" => $filedClass . "glue first",
-    "heading" => esc_attr__("Margin Top", 'massive-dynamic'),
+    "heading" => esc_attr__("Top", 'massive-dynamic'),
     "param_name" => "row_margin_top",
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
     'defaultSetting' => array(
@@ -542,7 +669,7 @@ pixflow_add_param("vc_row", array(
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_slider',
     "edit_field_class" => $filedClass . "glue last",
-    "heading" => esc_attr__("Margin Bottom", 'massive-dynamic'),
+    "heading" => esc_attr__("Bottom", 'massive-dynamic'),
     "param_name" => "row_margin_bottom",
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
     'defaultSetting' => array(
@@ -559,7 +686,7 @@ pixflow_add_param("vc_row", array(
     "edit_field_class" => $filedClass . "glue first last",
     "heading" => esc_attr__("Color", 'massive-dynamic'),
     "param_name" => "background_color",
-    "group" => esc_attr__("BG [color]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "opacity" => true,
     "admin_label" => false,
@@ -577,7 +704,7 @@ pixflow_add_param("vc_row", array(
     "edit_field_class" => $filedClass . "glue first",
     "heading" => esc_attr__("Webm file URL", 'massive-dynamic'),
     "param_name" => "row_webm_url",
-    "group" => esc_attr__("BG [video]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "admin_label" => false,
     'dependency' => array(
@@ -588,7 +715,7 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_separator',
-    "group" => esc_attr__("BG [video]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "param_name" => "row_webm_url_separator" . ++$separatorCounter,
     "dependency" => array(
@@ -602,7 +729,7 @@ pixflow_add_param("vc_row", array(
     "edit_field_class" => $filedClass . "glue",
     "heading" => esc_attr__("MP4 file URL", 'massive-dynamic'),
     "param_name" => "row_mp4_url",
-    "group" => esc_attr__("BG [video]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "admin_label" => false,
     'dependency' => array(
@@ -613,7 +740,7 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_separator',
-    "group" => esc_attr__("BG [video]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "param_name" => "row_poster_url_separator" . ++$separatorCounter,
     "dependency" => array(
@@ -627,7 +754,7 @@ pixflow_add_param("vc_row", array(
     "edit_field_class" => $filedClass . "glue last",
     "heading" => esc_attr__("Video Preview Image", 'massive-dynamic'),
     "param_name" => "row_poster_url",
-    "group" => esc_attr__("BG [video]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "admin_label" => false,
     'dependency' => array(
@@ -640,7 +767,7 @@ pixflow_add_param("vc_row", array(
     "type" => "md_vc_description",
     "param_name" => "row_video_description",
     "admin_label" => false,
-    "group" => esc_attr__("BG [video]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     'dependency' => array(
         'element' => "row_type",
         'value' => array('video'),
@@ -654,7 +781,7 @@ pixflow_add_param("vc_row", array(
     "edit_field_class" => $filedClass . "glue first last",
     "heading" => esc_attr__("Color", 'massive-dynamic'),
     "param_name" => "background_color_image",
-    "group" => esc_attr__("BG [Image]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "opacity" => true,
     "admin_label" => false,
@@ -668,7 +795,7 @@ pixflow_add_param("vc_row", array(
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_separator',
     "edit_field_class" => $filedClass . "stick-to-top",
-    "group" => esc_attr__("BG [Image]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "param_name" => "row_bg_tab_separator" . ++$separatorCounter,
     "dependency" => array(
@@ -684,7 +811,7 @@ pixflow_add_param("vc_row", array(
     "edit_field_class" => $filedClass . "glue first",
     "heading" => esc_attr__("Starting Color", 'massive-dynamic'),
     "param_name" => "first_color",
-    "group" => esc_attr__("BG [Transition]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "opacity" => false,
     "admin_label" => false,
@@ -697,7 +824,7 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_separator',
-    "group" => esc_attr__("BG [Transition]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "param_name" => "row_bg_tab_separator" . ++$separatorCounter,
     "dependency" => array(
@@ -712,7 +839,7 @@ pixflow_add_param("vc_row", array(
 
     "heading" => esc_attr__("Destination Color", 'massive-dynamic'),
     "param_name" => "second_color",
-    "group" => esc_attr__("BG [Transition]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "opacity" => false,
     "admin_label" => false,
@@ -727,7 +854,7 @@ pixflow_add_param("vc_row", array(
     "type" => "md_vc_description",
     "param_name" => "row_transition_description",
     "admin_label" => false,
-    "group" => esc_attr__("BG [Transition]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     'dependency' => array(
         'element' => "row_type",
         'value' => array('transition'),
@@ -742,7 +869,7 @@ pixflow_add_param("vc_row", array(
     "edit_field_class" => $filedClass . "glue first",
     "heading" => esc_attr__("Gradient", 'massive-dynamic'),
     "param_name" => "row_gradient_color",
-    "group" => esc_attr__("BG [Gradient]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "description" => esc_attr__("Choose a color to be used as this section's background. Please notice that background color, has higher priority than background image.", 'massive-dynamic'),
     'dependency' => array(
@@ -759,7 +886,7 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_separator',
-    "group" => esc_attr__("BG [Gradient]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "param_name" => "row_bg_tab_separator" . ++$separatorCounter,
     "weight" => "3",
     "admin_label" => false,
@@ -778,7 +905,7 @@ pixflow_add_param("vc_row", array(
     'param_name' => 'row_image',
     'description' => esc_attr__('choose image from media library.', 'massive-dynamic'),
     "value" => "",
-    "group" => esc_attr__("BG [Image]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     'dependency' => array(
         'element' => "row_type",
@@ -793,7 +920,7 @@ pixflow_add_param("vc_row", array(
     'param_name' => 'row_image_gradient',
     'description' => esc_attr__('choose image from media library.', 'massive-dynamic'),
     "value" => "",
-    "group" => esc_attr__("BG [Gradient]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     'dependency' => array(
         'element' => "row_type",
@@ -803,7 +930,7 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_separator',
-    "group" => esc_attr__("BG [Image]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "param_name" => "row_image_separator" . ++$separatorCounter,
     "weight" => "3",
     'dependency' => array(
@@ -814,7 +941,7 @@ pixflow_add_param("vc_row", array(
 
 pixflow_add_param("vc_row", array(
     "type" => 'md_vc_separator',
-    "group" => esc_attr__("BG [Gradient]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "param_name" => "row_image_separator" . ++$separatorCounter,
     "weight" => "3",
     'dependency' => array(
@@ -827,7 +954,7 @@ pixflow_add_param("vc_row", array(
     "type" => "dropdown",
     "heading" => esc_attr__("Image Position", 'massive-dynamic'),
     "param_name" => "row_image_position",
-    "group" => esc_attr__("BG [Image]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "weight" => "3",
     "edit_field_class" => $filedClass . "glue last",
     "value" => array(
@@ -846,7 +973,7 @@ pixflow_add_param("vc_row", array(
     "weight" => "3",
     "heading" => esc_attr__("Image Position", 'massive-dynamic'),
     "param_name" => "row_image_position_gradient",
-    "group" => esc_attr__("BG [Gradient]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "edit_field_class" => $filedClass . "glue last",
     "value" => array(
         esc_attr__("Fit to row", 'massive-dynamic') => "fit",
@@ -860,23 +987,7 @@ pixflow_add_param("vc_row", array(
 ));
 
 
-// ***** row - general - tab *****
 
-pixflow_add_param("vc_row", array(
-    "type" => "dropdown",
-    "weight" => "5",
-    "heading" => esc_attr__("Row Background", 'massive-dynamic'),
-    "param_name" => "row_type",
-    "description" => esc_attr__("Choose different type of containers and set the options.", 'massive-dynamic'),
-    "edit_field_class" => $filedClass . "glue first last",
-    "value" => array(
-        esc_attr__("Solid Color", 'massive-dynamic') => "none",
-        esc_attr__("Image", 'massive-dynamic') => "image",
-        esc_attr__("Color Transition", 'massive-dynamic') => "transition",
-        esc_attr__("Gradient and Image", 'massive-dynamic') => "gradient",
-        esc_attr__("Video", 'massive-dynamic') => "video",
-    ),
-));
 
 // Background Image Size On mage Tab
 pixflow_add_param("vc_row", array(
@@ -885,7 +996,7 @@ pixflow_add_param("vc_row", array(
     "heading" => esc_attr__("Image Size", 'massive-dynamic'),
     "param_name" => "row_bg_image_size_tab_image",
     "description" => esc_attr__("Enable Image Size", 'massive-dynamic'),
-    "group" => esc_attr__("BG [Image]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "value" => array(
         esc_attr__("Stretch", 'massive-dynamic') => "cover",
         esc_attr__("Real Size", 'massive-dynamic') => "auto",
@@ -904,7 +1015,7 @@ pixflow_add_param("vc_row", array(
     "heading" => esc_attr__("Image Size", 'massive-dynamic'),
     "param_name" => "row_bg_image_size_tab_gradient",
     "description" => esc_attr__("Enable Image Size", 'massive-dynamic'),
-    "group" => esc_attr__("BG [Gradient]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     "value" => array(
         esc_attr__("Stretch", 'massive-dynamic') => "cover",
         esc_attr__("Real Size", 'massive-dynamic') => "auto",
@@ -917,13 +1028,20 @@ pixflow_add_param("vc_row", array(
 ));
 
 // Background width
+pixflow_add_param("vc_row",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Width", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    "edit_field_class" => $filedClass . "glue first last"
+));
+
 
 pixflow_add_param("vc_row", array(
     "type" => "dropdown",
     "weight" => "4",
     "edit_field_class" => $filedClass . "first glue",
 
-    "heading" => esc_attr__("Background Width", 'massive-dynamic'),
+    "heading" => esc_attr__("Background", 'massive-dynamic'),
     "param_name" => "type_width",
     "description" => esc_attr__("Full width will use all of your screen width, while Boxed will created an invisible box in middle of your screen.", 'massive-dynamic'),
     "value" => array(
@@ -944,7 +1062,7 @@ pixflow_add_param("vc_row", array(
     "type" => "dropdown",
     "weight" => "4",
     "edit_field_class" => $filedClass . "glue last",
-    "heading" => esc_attr__("Content Width", 'massive-dynamic'),
+    "heading" => esc_attr__("Content", 'massive-dynamic'),
     "param_name" => "box_size_states",
     "description" => esc_attr__("Full width will use all of your screen width, while Boxed will created an invisible box in middle of your screen.", 'massive-dynamic'),
     "value" => array(
@@ -1109,15 +1227,26 @@ pixflow_add_param("vc_row", array(
         "step" => '1',
     )
 ));
+pixflow_add_param("vc_row",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Extra", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    "edit_field_class" => $filedClass . "glue first last"
+));
 
 pixflow_add_param("vc_row", array(
     "type" => "textfield",
     "edit_field_class" => $filedClass . "glue first last",
-    "heading" => esc_attr__("Extra Class Name", 'massive-dynamic'),
+    "heading" => esc_attr__("Class Name", 'massive-dynamic'),
     "param_name" => "el_class",
     "description" => esc_attr__("Enable fit to height feature", 'massive-dynamic')
 ));
-
+pixflow_add_param("vc_row",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Alignment", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    "edit_field_class" => $filedClass . "glue first last"
+));
 
 // Fit to screen
 pixflow_add_param("vc_row", array(
@@ -1158,7 +1287,7 @@ pixflow_add_param("vc_row", array(
 pixflow_add_param("vc_row", array(
     "type" => "md_vc_checkbox",
     "edit_field_class" => $filedClass . "glue first last",
-    "heading" => esc_attr__("Equalize Column's Height", 'massive-dynamic'),
+    "heading" => esc_attr__("Equalize Column's", 'massive-dynamic'),
     "param_name" => "row_equal_column_heigh",
     'value' => array(esc_attr__('Enable', 'massive-dynamic') => 'no'),
     'checked' => false,
@@ -1168,7 +1297,7 @@ pixflow_add_param("vc_row", array(
 pixflow_add_param("vc_row", array(
     "type" => "dropdown",
     "edit_field_class" => $filedClass . "glue first last",
-    "heading" => esc_attr__("Element's Vertical Position", 'massive-dynamic'),
+    "heading" => esc_attr__("Vertical Position", 'massive-dynamic'),
     "param_name" => "row_content_vertical_align",
     "value" => array(
         esc_attr__('None', 'massive-dynamic') => "0",
@@ -1185,7 +1314,7 @@ pixflow_add_param("vc_row", array(
     "heading" => esc_attr__("Repeat Image", 'massive-dynamic'),
     "param_name" => "row_bg_repeat_image_gp",
     "description" => esc_attr__("Enable repeat background", 'massive-dynamic'),
-    "group" => esc_attr__("BG [Image]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     'value' => array(esc_attr__('No', 'massive-dynamic') => 'no'),
     'checked' => false,
     'dependency' => array(
@@ -1201,7 +1330,7 @@ pixflow_add_param("vc_row", array(
     "heading" => esc_attr__("Repeat Image", 'massive-dynamic'),
     "param_name" => "row_bg_repeat_gradient_gp",
     "description" => esc_attr__("Enable repeat background", 'massive-dynamic'),
-    "group" => esc_attr__("BG [Gradient]", 'massive-dynamic'),
+    "group" => esc_attr__("Background", 'massive-dynamic'),
     'value' => array(esc_attr__('No', 'massive-dynamic') => 'no'),
     'checked' => false,
     'dependency' => array(
@@ -1240,19 +1369,19 @@ pixflow_add_param("vc_row", array(
 
 // Row description
 
-pixflow_add_param("vc_row", array(
-    "type" => "md_vc_description",
-    "param_name" => "row_type_width_description",
-    "admin_label" => false,
-    "value" => wp_kses(__("<ul>
-                        <li>When you change Row Background, you can choose the related options in BG tab.</li>
-                        <li>Container size can be set from Site Content > Main Layout > Container Width</li>
-                        <li>Full Screen size will ignore the container width and get the same width as user's screen</li>
-                        <li>Fit To Screen option increases the row height to same height of user's screen, it's a great choice for first row.</li>
-                        <li>Centered Content will only appear if you choose Fit To Screen, it will move(vertically) all columns of current row to center of the row. Also it will ignore top padding and bottom padding.</li>
-                        <li>Element's Vertical Position gives you the option to arrange elements based on the highest column in this row.</li>
-                    </ul>", 'massive-dynamic'), array('ul' => array(), 'li' => array()))
-));
+//pixflow_add_param("vc_row", array(
+//    "type" => "md_vc_description",
+//    "param_name" => "row_type_width_description",
+//    "admin_label" => false,
+//    "value" => wp_kses(__("<ul>
+//                        <li>When you change Row Background, you can choose the related options in BG tab.</li>
+//                        <li>Container size can be set from Site Content > Main Layout > Container Width</li>
+//                        <li>Full Screen size will ignore the container width and get the same width as user's screen</li>
+//                        <li>Fit To Screen option increases the row height to same height of user's screen, it's a great choice for first row.</li>
+//                        <li>Centered Content will only appear if you choose Fit To Screen, it will move(vertically) all columns of current row to center of the row. Also it will ignore top padding and bottom padding.</li>
+//                        <li>Element's Vertical Position gives you the option to arrange elements based on the highest column in this row.</li>
+//                    </ul>", 'massive-dynamic'), array('ul' => array(), 'li' => array()))
+//));
 
 // VC shortcodes update
 
@@ -1362,11 +1491,18 @@ $separator_setting = array(
 );
 
 // row spacing - Padding all directions
+pixflow_add_param("vc_row_inner",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Padding", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    'group' => esc_attr__("Spacing", 'massive-dynamic'),
+    "edit_field_class" => $filedClass . "glue first last"
+));
 
 pixflow_add_param("vc_row_inner", array(
     "type" => 'md_vc_slider',
     "weight" => "2",
-    "heading" => esc_attr__("Padding Top", 'massive-dynamic'),
+    "heading" => esc_attr__(" Top", 'massive-dynamic'),
     "param_name" => "inner_row_padding_top",
     "description" => esc_attr__("insert top padding for current row . example : 200 ", 'massive-dynamic'),
     "value" => "45",
@@ -1388,7 +1524,7 @@ pixflow_add_param("vc_row_inner", array(
 
 pixflow_add_param("vc_row_inner", array(
     "type" => 'md_vc_slider',
-    "heading" => esc_attr__("Padding Bottom", 'massive-dynamic'),
+    "heading" => esc_attr__(" Bottom", 'massive-dynamic'),
     "param_name" => "inner_row_padding_bottom",
     "description" => esc_attr__("insert bottom padding for current row . example : 200", 'massive-dynamic'),
     "value" => "47",
@@ -1410,7 +1546,7 @@ pixflow_add_param("vc_row_inner", array(
 
 pixflow_add_param("vc_row_inner", array(
     "type" => 'md_vc_slider',
-    "heading" => esc_attr__("Padding Right", 'massive-dynamic'),
+    "heading" => esc_attr__("Right", 'massive-dynamic'),
     "param_name" => "inner_row_padding_right",
     "description" => esc_attr__("insert Right padding for current row . example : 200", 'massive-dynamic'),
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
@@ -1431,7 +1567,7 @@ pixflow_add_param("vc_row_inner", array(
 
 pixflow_add_param("vc_row_inner", array(
     "type" => 'md_vc_slider',
-    "heading" => esc_attr__("Padding Left", 'massive-dynamic'),
+    "heading" => esc_attr__(" Left", 'massive-dynamic'),
     "param_name" => "inner_row_padding_left",
     "description" => esc_attr__("insert left padding for current row . example : 200", 'massive-dynamic'),
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
@@ -1445,11 +1581,19 @@ pixflow_add_param("vc_row_inner", array(
 ));
 
 // row spacing Margin only top and bottom
+pixflow_add_param("vc_row_inner",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Margin", 'massive-dynamic'),
+    'group' => esc_attr__("Spacing", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    "edit_field_class" => $filedClass . "glue first last"
+));
+
 
 pixflow_add_param("vc_row_inner", array(
     "type" => 'md_vc_slider',
     "edit_field_class" => $filedClass . "glue first",
-    "heading" => esc_attr__("Margin Top", 'massive-dynamic'),
+    "heading" => esc_attr__("Top", 'massive-dynamic'),
     "param_name" => "inner_row_margin_top",
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
     'defaultSetting' => array(
@@ -1469,7 +1613,7 @@ pixflow_add_param("vc_row_inner", array(
 pixflow_add_param("vc_row_inner", array(
     "type" => 'md_vc_slider',
     "edit_field_class" => $filedClass . "glue last",
-    "heading" => esc_attr__("Margin Bottom", 'massive-dynamic'),
+    "heading" => esc_attr__("Bottom", 'massive-dynamic'),
     "param_name" => "inner_row_margin_bottom",
     'group' => esc_attr__("Spacing", 'massive-dynamic'),
     'defaultSetting' => array(
@@ -1568,7 +1712,7 @@ pixflow_add_param("vc_row_inner", array(
     'param_name' => 'row_inner_image',
     'description' => esc_attr__('choose image from media library.', 'massive-dynamic'),
     "value" => "",
-    "group" => esc_attr__("Background", 'massive-dynamic'),
+    "group" => esc_attr__("BackgroundBackground", 'massive-dynamic'),
     'dependency' => array(
         'element' => "inner_row_type",
         'value' => array('gradient')
@@ -1606,13 +1750,19 @@ pixflow_add_param("vc_row_inner", array(
 // ***** row - general - tab *****
 
 // Background width
+pixflow_add_param("vc_row_inner",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Width", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    "edit_field_class" => $filedClass . "glue first last"
+));
 
 pixflow_add_param("vc_row_inner", array(
     "type" => "dropdown",
     "weight" => "4",
     "edit_field_class" => $filedClass . "first glue",
 
-    "heading" => esc_attr__("Background Width", 'massive-dynamic'),
+    "heading" => esc_attr__("Background", 'massive-dynamic'),
     "param_name" => "row_inner_type_width",
     "description" => esc_attr__("Full width will use all of your screen width, while Boxed will created an invisible box in middle of your screen.", 'massive-dynamic'),
     "value" => array(
@@ -1635,7 +1785,7 @@ pixflow_add_param("vc_row_inner", array(
     "weight" => "4",
     "edit_field_class" => $filedClass . "glue last",
 
-    "heading" => esc_attr__("Content Width", 'massive-dynamic'),
+    "heading" => esc_attr__("Content ", 'massive-dynamic'),
     "param_name" => "row_inner_box_size_states",
     "description" => esc_attr__("Full width will use all of your screen width, while Boxed will created an invisible box in middle of your screen.", 'massive-dynamic'),
     "value" => array(
@@ -1643,36 +1793,47 @@ pixflow_add_param("vc_row_inner", array(
         esc_attr__("Full Screen", 'massive-dynamic') => "content_full_size",
     )
 ));
-
+pixflow_add_param("vc_row_inner",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Extra", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    "edit_field_class" => $filedClass . "glue first last"
+));
 pixflow_add_param("vc_row_inner", array(
     "type" => 'textfield',
     "edit_field_class" => $filedClass . "glue first last",
-    "heading" => esc_attr__("Extra Class Name", 'massive-dynamic'),
+    "heading" => esc_attr__(" Class Name", 'massive-dynamic'),
     "param_name" => "el_class",
 ));
 
 // Inner shadow
+pixflow_add_param("vc_row_inner",array(
+    "type" => "md_group_title",
+    "heading" => esc_attr__("Shadow", 'massive-dynamic'),
+    "param_name" => "bg_group",
+    "edit_field_class" => $filedClass . "glue first last"
+));
 
 pixflow_add_param("vc_row_inner", array(
     "type" => "md_vc_checkbox",
     "edit_field_class" => $filedClass . "glue first last",
     "param_name" => "row_inner_inner_shadow",
-    "heading" => esc_attr__('Inner shadow', 'massive-dynamic')
+    "heading" => esc_attr__('Inner', 'massive-dynamic')
 ));
 
 
 // Row description
-
-pixflow_add_param("vc_row_inner", array(
-    "type" => "md_vc_description",
-
-    "param_name" => "row_inner_type_width_description",
-    "admin_label" => false,
-    "value" => wp_kses(__("<ul>
-                        <li>Container size can be set from Site Content > Main Layout > Container Width</li>
-                        <li>Full Screen size will ignore the container width and get the same width as user's screen</li>
-                    </ul>", 'massive-dynamic'), array('ul' => array(), 'li' => array()))
-));
+//
+//pixflow_add_param("vc_row_inner", array(
+//    "type" => "md_vc_description",
+//
+//    "param_name" => "row_inner_type_width_description",
+//    "admin_label" => false,
+//    "value" => wp_kses(__("<ul>
+//                        <li>Container size can be set from Site Content > Main Layout > Container Width</li>
+//                        <li>Full Screen size will ignore the container width and get the same width as user's screen</li>
+//                    </ul>", 'massive-dynamic'), array('ul' => array(), 'li' => array()))
+//));
 
 
 /*************************************
@@ -1725,12 +1886,13 @@ function pixflow_addAnimationTab($shortcode)
         'md_skill_style2'
     );
     $filedClass = 'vc_col-sm-12 vc_column ';
+    global $separatorCounter;
     $separatorCounter = 0;
     $animationTab = array(
         array(
             'type' => 'md_vc_checkbox',
             "edit_field_class" => $filedClass . "glue first last",
-            'heading' => esc_attr__('Use Animation', 'massive-dynamic'),
+            'heading' => esc_attr__('Activate', 'massive-dynamic'),
             'param_name' => $shortcode . '_animation',
             "group" => esc_attr__('Animation', 'massive-dynamic'),
             'checked' => false,
@@ -1738,7 +1900,7 @@ function pixflow_addAnimationTab($shortcode)
         array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first last",
-            "heading" => esc_attr__("Animation Type", 'massive-dynamic'),
+            "heading" => esc_attr__("Type", 'massive-dynamic'),
             "param_name" => $shortcode . "_animation_type",
             "admin_label" => false,
             "group" => esc_attr__('Animation', 'massive-dynamic'),
@@ -1781,7 +1943,7 @@ function pixflow_addAnimationTab($shortcode)
         array(
             'type' => 'md_vc_slider',
             "edit_field_class" => $filedClass . "glue",
-            'heading' => esc_attr__('Animation delay', 'massive-dynamic'),
+            'heading' => esc_attr__('Delay', 'massive-dynamic'),
             'param_name' => $shortcode . '_animation_delay',
             "group" => esc_attr__('Animation', 'massive-dynamic'),
             'defaultSetting' => array(
@@ -1836,7 +1998,7 @@ function pixflow_addAnimationTab($shortcode)
         array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue ",
-            "heading" => esc_attr__("Animation Type", 'massive-dynamic'),
+            "heading" => esc_attr__("Play Mode", 'massive-dynamic'),
             "param_name" => $shortcode . "_animation_show",
             "admin_label" => false,
             "group" => esc_attr__('Animation', 'massive-dynamic'),
@@ -1861,7 +2023,7 @@ function pixflow_addAnimationTab($shortcode)
         array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue last",
-            "heading" => esc_attr__("Animation Easing", 'massive-dynamic'),
+            "heading" => esc_attr__("Easing", 'massive-dynamic'),
             "param_name" => $shortcode . "_animation_easing",
             "admin_label" => false,
             "group" => esc_attr__('Animation', 'massive-dynamic'),
@@ -1918,7 +2080,7 @@ function pixflow_addAnimationTab($shortcode)
 /* **************************************************************************************************** */
 if(
     strpos( $_SERVER[ 'REQUEST_URI' ], 'post.php' ) !== false
-    || strpos( $_SERVER[ 'REQUEST_URI' ], 'post_new.php') !== false
+    || strpos( $_SERVER[ 'REQUEST_URI' ], 'post_new.php' ) !== false
 ){
     MBuilder::load_shortcode_maps();
 }elseif(defined( 'DOING_AJAX' ) && isset($_POST['action']) && 'vc_edit_form' == $_POST['action']){

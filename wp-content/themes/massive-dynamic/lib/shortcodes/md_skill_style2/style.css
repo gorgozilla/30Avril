@@ -34,12 +34,12 @@
     width: 45px;
 }
 
-.skill-style1 .bar-container{
+.skill-style1.style2 .bar-container{
     height: 100%;
     max-width: 400px;
     overflow: hidden;
     vertical-align: middle;
-    display: list-item;
+    display: block;
     line-height: 100%;
     opacity: 0;
 }

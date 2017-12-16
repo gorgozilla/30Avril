@@ -44,7 +44,7 @@ pixflow_map(
                 "heading" => esc_attr__("line-height", 'massive-dynamic'),
                 "param_name" => "meditor_line_height",
                 "admin_label" => false,
-                "value" => "1",
+                "value" => "1.5",
                 "group" => esc_attr__("Animation" , 'massive-dynamic'),
                 'defaultSetting' => array(
                     "min" => "0",

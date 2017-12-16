@@ -100,25 +100,25 @@ function pixflow_theme_scripts()
 
 	$mbuilder = MBuilder::getInstance();
 	global $in_mbuilder;
-	if(!$in_mbuilder){
-		wp_enqueue_script('smooth-scroll-js', pixflow_path_combine(PIXFLOW_THEME_JS_URI, 'smooth_scroll.min.js'), array(), null, true);
-		pixflow_load_shortcodes();
-	}
-	// Scripts and  of shortcodes
-	$page_id = get_the_id();
-	$page_js_path = PIXFLOW_THEME_CACHE . '/' . $page_id . '.js';
-	$page_css_path = PIXFLOW_THEME_CACHE . '/' . $page_id . '.css';
-	$last_modified = get_post_modified_time('Y-m-d-h-i-s');
-	if(!file_exists($page_js_path) || !file_exists($page_css_path)){
-		$mbuilder->generate_static_js_css($page_id);
-	}
-	if(file_exists($page_js_path)){
-		wp_enqueue_script('page-script',PIXFLOW_THEME_CACHE_URI.'/'.$page_id.'.js' , array('main-custom-js') , $last_modified,true);
-	}
-	if(file_exists($page_css_path)){
-		wp_enqueue_style('page-style',PIXFLOW_THEME_CACHE_URI.'/'.$page_id.'.css' ,false,$last_modified);
-	}
+	if(!$in_mbuilder) {
+        wp_enqueue_script('smooth-scroll-js', pixflow_path_combine(PIXFLOW_THEME_JS_URI, 'smooth_scroll.min.js'), array(), null, true);
+        pixflow_load_shortcodes();
 
+        // Scripts and  of shortcodes
+        $page_id = get_the_id();
+        $page_js_path = PIXFLOW_THEME_CACHE . '/' . $page_id . '.js';
+        $page_css_path = PIXFLOW_THEME_CACHE . '/' . $page_id . '.css';
+        $last_modified = get_post_modified_time('Y-m-d-h-i-s') . PIXFLOW_THEME_VERSION;
+        if (!file_exists($page_js_path) || !file_exists($page_css_path)) {
+            $mbuilder->generate_static_js_css($page_id);
+        }
+        if (file_exists($page_js_path)) {
+            wp_enqueue_script('page-script', PIXFLOW_THEME_CACHE_URI . '/' . $page_id . '.js', array('main-custom-js'), $last_modified, true);
+        }
+        if (file_exists($page_css_path)) {
+            wp_enqueue_style('page-style', PIXFLOW_THEME_CACHE_URI . '/' . $page_id . '.css', false, $last_modified);
+        }
+    }
 	wp_enqueue_style('responsive-style', pixflow_path_combine(PIXFLOW_THEME_CSS_URI, 'responsive.min.css'), false, PIXFLOW_THEME_VERSION);
 	//styles Inline
 	require_once (PIXFLOW_THEME_CSS .'/styles-inline.php');
@@ -361,14 +361,22 @@ function pixflow_generate_static_js_css($assets_path){
 }
 
 function pixflow_load_page_style($assets_path){
-	$last_modified = get_post_modified_time('Y-m-d-h-i-s');
+    global $in_mbuilder;
+    if($in_mbuilder){
+        return;
+    }
+    $last_modified = get_post_modified_time('Y-m-d-h-i-s') . PIXFLOW_THEME_VERSION;
 	if(file_exists($assets_path['css'])){
 		wp_enqueue_style('page-style',PIXFLOW_THEME_CACHE_URI.'/'. $assets_path['page_id'] .'.css' ,false,$last_modified);
 	}
 }
 
 function pixflow_load_page_scripts($assets_path){
-	$last_modified = get_post_modified_time('Y-m-d-h-i-s');
+	global $in_mbuilder;
+	if($in_mbuilder){
+	    return;
+    }
+    $last_modified = get_post_modified_time('Y-m-d-h-i-s') . PIXFLOW_THEME_VERSION;
 	if(file_exists($assets_path['js'])){
 		wp_enqueue_script('page-script',PIXFLOW_THEME_CACHE_URI.'/'. $assets_path['page_id'] .'.js' , array('main-custom-js') , $last_modified,true);
 	}

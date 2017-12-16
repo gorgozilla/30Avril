@@ -22,12 +22,18 @@ function pixflow_process_panel()
     );
 
     $param = array(
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Steps", 'massive-dynamic'),
+            "param_name" => "steps_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first",
             "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Number of Process Panel:", 'massive-dynamic'),
+            "heading" => esc_attr__("Steps Number", 'massive-dynamic'),
             "param_name" => $bar_num_param,
             "admin_label" => false,
             "value" => $dropDown,
@@ -38,6 +44,14 @@ function pixflow_process_panel()
         "type" => 'md_vc_separator',
         "group" => esc_attr__("General", 'massive-dynamic'),
         "param_name" => "process_panel_bar_separator" . ++$separatorCounter,
+    );
+
+    $param[] = array(
+        "type" => "md_group_title",
+        "heading" => esc_attr__("Color", 'massive-dynamic'),
+        "group" => esc_attr__("General", 'massive-dynamic'),
+        "param_name" => "color_group",
+        "edit_field_class" => $filedClass . "glue first last",
     );
 
     $param[] = array(
@@ -57,6 +71,18 @@ function pixflow_process_panel()
         for ($k = $i; $k <= $bar_num; $k++) {
             $value[] = (string)$k;
         }
+
+        $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "param_name" => "content_group". $i,
+            "group" => esc_attr__("Step", 'massive-dynamic') . $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            'dependency' => array(
+                'element' => $bar_num_param,
+                'value' => $value
+            ),
+        );
 
         $param[] = array(
             "type" => "textfield",
@@ -131,12 +157,22 @@ function pixflow_process_panel()
                 'value' => $value
             ),
         );
-
+        $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Colors", 'massive-dynamic'),
+            "param_name" => "colors_group". $i,
+            "group" => esc_attr__("Step", 'massive-dynamic') . $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            'dependency' => array(
+                'element' => $bar_num_param,
+                'value' => $value
+            ),
+        );
         $param[] = array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue",
             "group" => esc_attr__("Step", 'massive-dynamic') . $i,
-            "heading" => esc_attr__("Icon Color", 'massive-dynamic'),
+            "heading" => esc_attr__("Icon", 'massive-dynamic'),
             "param_name" => "process_panel_icon_color_" . $i,
             "admin_label" => false,
             "value" => '#fff',
@@ -160,7 +196,7 @@ function pixflow_process_panel()
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue last",
             "group" => esc_attr__("Step", 'massive-dynamic') . $i,
-            "heading" => esc_attr__("Background Color", 'massive-dynamic'),
+            "heading" => esc_attr__("Background", 'massive-dynamic'),
             "param_name" => "process_panel_bg_color_" . $i,
             "admin_label" => false,
             "value" => $stepColor[$i - 1],

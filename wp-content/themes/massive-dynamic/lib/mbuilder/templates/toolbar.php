@@ -3,13 +3,13 @@
         <div class="builder-menu">
             <ul>
                 <li class="builder-brand">
-                    <a href="http://massivedynamic.co/" target="_blank" >
+                    <a href="http://pixflow.net/products/massive-dynamic/" target="_blank" >
                         <img src="<?php echo esc_url(PIXFLOW_THEME_LIB_URI.'/assets/img/builder-logo.png'); ?>">
                     </a>
                 </li>
                 <li class="builder-customizer">
                     <a class="site-setting" href="<?php echo admin_url('customize.php?url='.urlencode(get_permalink(get_the_ID()))) . '/#open-demo'; ?>">
-                        Import Demo
+                        Import Template
                     </a>
                 </li>
                 <li class="builder-sitesetting">
@@ -20,15 +20,19 @@
                 <li class="builder-dashboard">
                     <a class="preview" href="<?php echo admin_url(); ?>">Dashboard</a>
                 </li>
-                <li class="builder-preview">
-                    <a class="preview" href="#">Preview</a>
+                <li class="builder-help">
+                    <a href="https://help.pixflow.net" target="_blank" >Help</a>
                 </li>
+
             </ul>
         </div>
     </div>
     <div class="pixflow-builder-right" >
         <div class="builder-controls">
             <ul>
+                <li class="builder-preview">
+                    <a class="preview" href="#">Preview</a>
+                </li>
                 <li class="builder-save">
                     <a class="save" href="#">Publish</a>
                     <div class="save-loading"></div>

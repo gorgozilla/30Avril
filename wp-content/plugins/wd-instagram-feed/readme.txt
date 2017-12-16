@@ -3,8 +3,9 @@ Contributors: webdorado, progmastery
 Donate link: https://web-dorado.com/products/wordpress-instagram-feed-wd.html
 Tags: custom instagram feed, feed, instagram, hashtag, Instagram feed, instagram gallery, instagram posts, Instagram images, Instagram photos, lightbox, photos,instagram account
 Requires at least: 3.9
-Tested up to: 4.8
-Stable tag: 1.2.5
+Requires PHP: 5.2
+Tested up to: 4.9
+Stable tag: 1.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,10 +13,10 @@ Instagram Feed WD is a user-friendly plugin to display user or hashtag-based Ins
 
 == Description ==
 
+[Special Offer for all Premium Plugins](https://web-dorado.com/wordpress-plugins-bundle.html)   
 [WordPress WD Instagram Feed ](https://web-dorado.com/products/wordpress-instagram-feed-wd.html)   
 [Demo](http://wpdemo.web-dorado.com/instagram-wd/)  
 [User Guide](https://web-dorado.com/wordpress-instagram-feed-wd/installation-and-configuration/installation.html)    
-[Support Forum](https://web-dorado.com/forum/wordpress-instagram-feed-wd.html)    
     
 https://www.youtube.com/watch?v=KU4LJFxw0BY
 
@@ -76,7 +77,7 @@ Upgrade to [Instagram Feed Pro](https://web-dorado.com/products/wordpress-instag
 *   Infinite scroll for the feed (Similar to Instagram standard)     
 *   Instagram Comments display in Lightbox      
 *   Instagram Hashtag/ Instagram User account filtering options 
-* Conditional Filters      
+*   Conditional Filters      
 
 == Installation ==
 
@@ -84,7 +85,7 @@ Upgrade to [Instagram Feed Pro](https://web-dorado.com/products/wordpress-instag
 
 ### Minimum requirements.  
 *   Wordpress 3.9+  
-*   PHP 5.x  
+*   PHP 5.2+  
 *   MySQL 5.x  
 
 ### Perform a new installation  
@@ -110,6 +111,21 @@ After downloading the ZIP file of the Instagram Feed WD plugin,
 
 == Changelog ==
 
+= 1.2.10 =
+Fixed: CSS XSS vulnerability in lightbox   
+
+= 1.2.9 =
+Changed: Web-Dorado links
+
+= 1.2.8 =
+Changed: Allow more users and hashtags in feed settings  
+
+= 1.2.7 =
+Changed: Show notification to install Backup WD plugin only on plugin pages  
+
+= 1.2.6 =
+Change: Introduction of Backup WD plugin   
+ 
 = 1.2.5 =
 Change: "create_function" is not used anymore   
 

@@ -16,19 +16,23 @@ unset_filters_for('vc_shortcode_output');
  * @param string value
  * @return string with new br tags
  */
-function pixflow_detectNewLines($value)
+function pixflow_detect_new_lines($value)
 {
-    $new = array();
-    $newKey = 0;
-    $NewString = explode('<br />', nl2br($value));
-    for ($i = 0; $i < count($NewString); $i++) {
-        if (strlen($NewString[$i]) !== 1) {
-            $new[$newKey] = trim($NewString[$i]);
-            $newKey++;
-        }
-    }
-    $NewString = implode('<br />', $new);
-    return $NewString;
+	if( get_post_type( get_the_ID() ) == 'post'){
+		$newLineArray = array("\r\n","\n\r","\n","\r");
+		$new_string = str_replace($newLineArray,"<br />", $value);
+	}else{
+		$new_string = array();
+		$new_string_with_br = explode('<br />', nl2br($value));
+		for ($i = 0; $i < count($new_string_with_br); $i++) {
+			if (strlen($new_string_with_br[$i]) !== 1) {
+				$new_string[] = trim($new_string_with_br[$i]);
+			}
+		}
+		$new_string = implode('<br />', $new_string);
+	}
+
+	return $new_string;
 }
 
 /**
@@ -193,6 +197,14 @@ function pixflow_get_style_script($atts, $content = null, $shortcodename = '')
     }
     if(function_exists($funcName)){
         $output = call_user_func_array($funcName, array($atts, $content));
+        // Output shortcode attributes if row dropped as section
+        if ( isset( $_POST['attrs'] ) && strpos( $_POST['attrs'], 'section_id' ) ) {
+            $attributes = '';
+            foreach( $atts as $k => $v ) {
+                $attributes .= "$k=\"$v\" ";
+            }
+            $output .= '<span class="section-shortcode-attrs">'.$attributes.'</span>';
+        }
         // Minify Scripts and Styles
         $output = pixflow_minify_shortcodes_scripts($output);
 

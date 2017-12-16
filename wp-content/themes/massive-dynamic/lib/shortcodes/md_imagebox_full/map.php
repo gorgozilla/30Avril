@@ -6,7 +6,8 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Imagebox Full-Width
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
+$separatorCounter = 1;
 pixflow_map(
     array(
         "name" => "Image Box Full-Width",
@@ -278,7 +279,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porta, mi ut faci
             ),//btn general color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "button_hover_color_separator" . ++$separatorCounter,
+                "param_name" => "button_hover_color_separator". ++$separatorCounter,
                 "edit_field_class" => $filedClass . "stick-to-top",
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
@@ -304,7 +305,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porta, mi ut faci
             ),//text color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "button_hover_color_separator" . ++$separatorCounter,
+                "param_name" => "button_hover_color_separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "imagebox_button_style",
@@ -328,7 +329,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porta, mi ut faci
             ),//bg hover color
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "button_hover_color_separator" . ++$separatorCounter,
+                "param_name" => "button_hover_color_separator". ++$separatorCounter,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 "dependency" => array(
                     'element' => "imagebox_button_style",
@@ -370,7 +371,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec porta, mi ut faci
             ),//size
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "product_compare_button_size_separator" . ++$separatorCounter,
+                "param_name" => "product_compare_button_size_separator". ++$separatorCounter,
                 "admin_label" => false,
                 "group" => esc_attr__("Button", 'massive-dynamic'),
                 'dependency' => array(

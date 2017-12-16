@@ -6,7 +6,8 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Image Box
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
+$separatorCounter = 1;
 pixflow_map(
 
     array(
@@ -18,19 +19,36 @@ pixflow_map(
 
         "params" => array(
 
-            /* Background image tab */
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Images", 'massive-dynamic'),
+                "param_name" => "images_group",
+                "group" => esc_attr__("General", 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
 
+            /* Background image tab */
             array(
                 'type' => 'attach_images',
                 'edit_field_class' => $filedClass . "first glue last",
                 'heading' => esc_attr__('Choose Image(s)', 'massive-dynamic'),
+                "group" => esc_attr__("General", 'massive-dynamic'),
                 'param_name' => 'image_box_slider_image',
+            ),
+
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Sizing", 'massive-dynamic'),
+                "param_name" => "sizing_group",
+                "group" => esc_attr__("General", 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last"
             ),
 
             array(
                 'type' => 'md_vc_slider',
                 "edit_field_class" => $filedClass . "glue first",
                 'heading' => esc_attr__('Image Height', 'massive-dynamic'),
+                "group" => esc_attr__("General", 'massive-dynamic'),
                 'param_name' => 'image_box_slider_height',
                 'value' => '300',
                 'defaultSetting' => array(
@@ -44,6 +62,7 @@ pixflow_map(
 
             array(
                 "type" => 'md_vc_separator',
+                "group" => esc_attr__("General", 'massive-dynamic'),
                 "param_name" => "image_box_slider_separator" . ++$separatorCounter,
             ),
 
@@ -51,6 +70,7 @@ pixflow_map(
                 'type' => 'dropdown',
                 "edit_field_class" => $filedClass . "glue last",
                 'heading' => esc_attr__('Image Size', 'massive-dynamic'),
+                "group" => esc_attr__("General", 'massive-dynamic'),
                 'param_name' => 'image_box_slider_size',
                 'checked' => true,
                 "value" => array(
@@ -61,24 +81,25 @@ pixflow_map(
             ),
 
             array(
-                'type' => 'md_vc_checkbox',
-                "edit_field_class" => $filedClass . "glue first last",
-                'heading' => esc_attr__('Hover Effect', 'massive-dynamic'),
-                'param_name' => 'image_box_slider_hover',
-                'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'no'),
-                'checked' => false,
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Link", 'massive-dynamic'),
+                "param_name" => "link_group",
+                "group" => esc_attr__("General", 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last"
             ),
 
             array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "glue first ",
                 "heading" => esc_attr__("Link URL", 'massive-dynamic'),
+                "group" => esc_attr__("General", 'massive-dynamic'),
                 "param_name" => "image_box_slider_hover_link",
                 'value' => '',
                 "admin_label" => false,
             ),
             array(
                 "type" => 'md_vc_separator',
+                "group" => esc_attr__("General", 'massive-dynamic'),
                 "param_name" => "image_box_slider_separator" . ++$separatorCounter,
             ),
             array(
@@ -86,6 +107,7 @@ pixflow_map(
                 "edit_field_class" => $filedClass . "glue last",
                 "heading" => esc_attr__("Link's target", 'massive-dynamic'),
                 "param_name" => "image_box_slider_hover_link_target",
+                "group" => esc_attr__("General", 'massive-dynamic'),
                 "admin_label" => false,
                 "value" => array(
                     esc_attr__("Open in same window", 'massive-dynamic') => "_self",
@@ -132,11 +154,20 @@ pixflow_map(
 
 
             // Hover Tab
+            array(
+                'type' => 'md_vc_checkbox',
+                "edit_field_class" => $filedClass . "glue first last",
+                'heading' => esc_attr__('Activate', 'massive-dynamic'),
+                'param_name' => 'image_box_slider_hover',
+                "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
+                'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'no'),
+                'checked' => false,
+            ),
 
             array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Hover Type", 'massive-dynamic'),
+                "heading" => esc_attr__("Type", 'massive-dynamic'),
                 "param_name" => "image_box_slider_hover_effect",
                 "admin_label" => false,
                 "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
@@ -149,50 +180,9 @@ pixflow_map(
                     'value' => array('yes')
                 )
             ),
-
             array(
                 "type" => 'md_vc_separator',
-                "param_name" => "image_box_slider_separator" . ++$separatorCounter,
-                "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
-                "dependency" => Array(
-                    'element' => "image_box_slider_hover",
-                    'value' => array('yes')
-                )
-            ),
-
-            array(
-                'type' => 'attach_image',
-                'edit_field_class' => $filedClass . "glue last",
-                'heading' => esc_attr__('Choose Image(s)', 'massive-dynamic'),
-                'param_name' => 'image_box_slider_hover_image_sec',
-                "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
-                "dependency" => Array(
-                    'element' => "image_box_slider_hover_effect",
-                    'value' => 'image'
-                )
-            ),
-
-
-            array(
-                "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue",
-                "heading" => esc_attr__("Text Hover Style", 'massive-dynamic'),
-                "param_name" => "image_box_slider_hover_text_effect",
-                "admin_label" => false,
-                "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
-                "value" => array(
-                    esc_attr__("Light", 'massive-dynamic') => "light",
-                    esc_attr__("Dark", 'massive-dynamic') => "dark",
-                ),
-                "dependency" => Array(
-                    'element' => "image_box_slider_hover_effect",
-                    'value' => 'text'
-                )
-            ),
-
-            array(
-                "type" => 'md_vc_separator',
-                "param_name" => "image_box_slider_separator" . ++$separatorCounter,
+                "param_name" => "image_box_slider_separator". ++$separatorCounter,
                 "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
                 "dependency" => Array(
                     'element' => "image_box_slider_hover_effect",
@@ -213,6 +203,48 @@ pixflow_map(
                     'value' => 'text'
                 )
             ),
+            array(
+                "type" => 'md_vc_separator',
+                "param_name" => "image_box_slider_separator". ++$separatorCounter ,
+                "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
+                "dependency" => Array(
+                    'element' => "image_box_slider_hover_effect",
+                    'value' => 'image'
+                )
+            ),
+
+            array(
+                'type' => 'attach_image',
+                'edit_field_class' => $filedClass . "glue last",
+                'heading' => esc_attr__('Choose Image(s)', 'massive-dynamic'),
+                'param_name' => 'image_box_slider_hover_image_sec',
+                "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
+                "dependency" => Array(
+                    'element' => "image_box_slider_hover_effect",
+                    'value' => 'image'
+                )
+            ),
+
+
+            array(
+                "type" => "dropdown",
+                "edit_field_class" => $filedClass . "glue first last",
+                "heading" => esc_attr__("Text Skin", 'massive-dynamic'),
+                "param_name" => "image_box_slider_hover_text_effect",
+                "admin_label" => false,
+                "group" => esc_attr__("Hover Effect", 'massive-dynamic'),
+                "value" => array(
+                    esc_attr__("Light", 'massive-dynamic') => "light",
+                    esc_attr__("Dark", 'massive-dynamic') => "dark",
+                ),
+                "dependency" => Array(
+                    'element' => "image_box_slider_hover_effect",
+                    'value' => 'text'
+                )
+            ),
+
+
+
 
 
         ),

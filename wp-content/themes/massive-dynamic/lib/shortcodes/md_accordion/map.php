@@ -20,9 +20,15 @@ pixflow_map(
         "as_parent" => array('only' => 'md_accordion_tab'),
         'params' => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "category_group",
+                "edit_field_class" => $filedClass . "glue first ",
+            ),
+            array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "heading" => esc_attr__("Skin", 'massive-dynamic'),
                 "param_name" => "theme_style",
                 "description" => esc_attr__("Choose one theme style", 'massive-dynamic'),
                 "admin_label" => false,
@@ -59,6 +65,12 @@ pixflow_map(
                 "description" => esc_attr__("Choose a color for hover", 'massive-dynamic'),
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Extra Options", 'massive-dynamic'),
+                "param_name" => "exto_group",
+                "edit_field_class" => $filedClass . "glue first ",
+            ),
+            array(
                 "type" => 'md_vc_separator',
                 "param_name" => "hover_color_separator" . ++$separatorCounter,
             ),
@@ -79,7 +91,7 @@ pixflow_map(
                 'heading' => esc_attr__('Active section', 'massive-dynamic'),
                 'param_name' => 'active_tab',
                 'value' => '1',
-                'description' => esc_attr__('Enter section number to be active on load or enter "false" to collapse all sections.', 'massive-dynamic')
+                'description' => __('Enter section number to be active on load or enter "false" to collapse all sections.', 'massive-dynamic')
             ),
             array(
                 "type" => "md_vc_description",

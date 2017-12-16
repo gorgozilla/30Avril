@@ -22,25 +22,15 @@ pixflow_map(
         "category" => esc_attr__('Media','massive-dynamic'),
         'params' => array(
             array(
-                "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue first",
-                "heading" => esc_attr__("Column Number", 'massive-dynamic'),
-                "param_name" => "blog_column",
-                "group" => esc_attr__("General", 'massive-dynamic'),
-                "value" => array(
-                    esc_attr__("Three", 'massive-dynamic') => "three",
-                    esc_attr__("Four", 'massive-dynamic') => "four",
-                ),
-            ),
-            array(
-                "type" => 'md_vc_separator',
-                "param_name" => "blog_column_separator" . ++$separatorCounter,
-                "admin_label" => false,
-                'group' => esc_attr__('General', 'massive-dynamic')
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Categories", 'massive-dynamic'),
+                "param_name" => "category_group",
+                'group' => esc_attr__('General', 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first ",
             ),
             array(
                 'type' => 'md_vc_multiselect',
-                "edit_field_class" => $filedClass . "glue",
+                "edit_field_class" => $filedClass . "first glue",
                 'heading' => esc_attr__('Category', 'massive-dynamic'),
                 'param_name' => 'blog_category',
                 'items' => $posts_cats,
@@ -69,21 +59,39 @@ pixflow_map(
 
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("appearance", 'massive-dynamic'),
+                'group' => esc_attr__('General', 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first ",
+            ),
+            array(
+                "type" => "dropdown",
+                "edit_field_class" => $filedClass . "glue first ",
+                "heading" => esc_attr__("Column Number", 'massive-dynamic'),
+                "param_name" => "blog_column",
+                "group" => esc_attr__("General", 'massive-dynamic'),
+                "value" => array(
+                    esc_attr__("Three", 'massive-dynamic') => "three",
+                    esc_attr__("Four", 'massive-dynamic') => "four",
+                ),
+            ),
+            array(
                 "type" => "md_vc_colorpicker",
 
-                "edit_field_class" => $filedClass . "first glue",
+                "edit_field_class" => $filedClass . "glue",
                 "heading" => esc_attr__("Background Color", 'massive-dynamic'),
                 "param_name" => "blog_background_color",
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "value" => 'rgb(87,63,203)',
                 "admin_label" => false,
                 "opacity" => false,
-                'group' => esc_attr__('Design', 'massive-dynamic')
             ),
             array(
                 "type" => 'md_vc_separator',
                 "param_name" => "blog_background_color_separator" . ++$separatorCounter,
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "admin_label" => false,
-                'group' => esc_attr__('Design', 'massive-dynamic')
             ),
             array(
                 "type" => "md_vc_colorpicker",
@@ -91,16 +99,16 @@ pixflow_map(
                 "edit_field_class" => $filedClass . "glue",
                 "heading" => esc_attr__("Text Color", 'massive-dynamic'),
                 "param_name" => "blog_foreground_color",
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "value" => 'rgb(255,255,255)',
                 "admin_label" => false,
                 "opacity" => false,
-                'group' => esc_attr__('Design', 'massive-dynamic')
             ),
             array(
                 "type" => 'md_vc_separator',
                 "param_name" => "blog_foreground_color_separator" . ++$separatorCounter,
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "admin_label" => false,
-                'group' => esc_attr__('Design', 'massive-dynamic')
             ),
             array(
                 "type" => "md_vc_colorpicker",
@@ -108,37 +116,36 @@ pixflow_map(
                 "edit_field_class" => $filedClass . "glue ",
                 "heading" => esc_attr__("Accent Color", 'massive-dynamic'),
                 "param_name" => "blog_accent_color",
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "value" => 'rgb(220,38,139)',
                 "admin_label" => false,
                 "opacity" => false,
-                'group' => esc_attr__('Design', 'massive-dynamic')
             ), array(
                 "type" => 'md_vc_separator',
                 "param_name" => "blog_accent_color_separator" . ++$separatorCounter,
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "admin_label" => false,
-                'group' => esc_attr__('Design', 'massive-dynamic')
             ),
             array(
                 "type" => "md_vc_colorpicker",
-
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "edit_field_class" => $filedClass . "glue",
                 "heading" => esc_attr__("Text Accent Color", 'massive-dynamic'),
                 "param_name" => "blog_text_accent_color",
                 "value" => 'rgb(0,0,0)',
                 "admin_label" => false,
                 "opacity" => false,
-                'group' => esc_attr__('Design', 'massive-dynamic')
             ),
             array(
                 "type" => 'md_vc_separator',
                 "param_name" => "blog_accent_color_separator" . ++$separatorCounter,
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "admin_label" => false,
-                'group' => esc_attr__('Design', 'massive-dynamic')
             ), array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "glue last",
                 "heading" => esc_attr__("Shadow Color", 'massive-dynamic'),
-                'group' => esc_attr__('Design', 'massive-dynamic'),
+                'group' => esc_attr__('General', 'massive-dynamic'),
                 "param_name" => "blog_post_shadow",
                 "value" => 'rgba(0,0,0,.12)',
                 "admin_label" => false,

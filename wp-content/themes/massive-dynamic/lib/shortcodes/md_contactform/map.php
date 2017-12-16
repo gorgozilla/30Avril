@@ -26,8 +26,14 @@ pixflow_map(array(
     'description' => esc_attr__('Place Contact Form', 'massive-dynamic'),
     'params' => array(
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Content", 'massive-dynamic'),
+            "param_name" => "content_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             'type' => 'dropdown',
-            'heading' => esc_attr__('Select contact form', 'massive-dynamic'),
+            'heading' => esc_attr__('Select Form', 'massive-dynamic'),
             "edit_field_class" => $filedClass . "first glue last",
             'param_name' => 'contactform_id',
             'value' => $contact_forms,
@@ -53,7 +59,12 @@ pixflow_map(array(
             "admin_label" => false,
             "value" => "We are a fairly small, flexible design studio that designs for print and web.",
         ),
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
         array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue first",
@@ -80,9 +91,15 @@ pixflow_map(array(
             "admin_label" => false,
         ),
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Button", 'massive-dynamic'),
+            "param_name" => "btn_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue",
-            "heading" => esc_attr__("Button Color", 'massive-dynamic'),
+            "heading" => esc_attr__("Color", 'massive-dynamic'),
             "param_name" => "contactform_button_color",
             "value" => 'rgb(0,0,0)',
             "opacity" => true,
@@ -95,7 +112,7 @@ pixflow_map(array(
         array(
             "type" => "md_vc_colorpicker",
             "edit_field_class" => $filedClass . "glue last",
-            "heading" => esc_attr__("Button Hover Color", 'massive-dynamic'),
+            "heading" => esc_attr__("Hover Color", 'massive-dynamic'),
             "param_name" => "contactform_button_hover",
             "value" => 'rgba(150,150,150,0.9)',
             "opacity" => true,
@@ -103,7 +120,7 @@ pixflow_map(array(
         array(
             'type' => 'md_vc_slider',
             "edit_field_class" => $filedClass . "first glue last",
-            'heading' => esc_attr__('Button Padding', 'massive-dynamic'),
+            'heading' => esc_attr__('Padding', 'massive-dynamic'),
             'param_name' => 'left_right_padding',
             'value' => '12',
             'defaultSetting' => array(

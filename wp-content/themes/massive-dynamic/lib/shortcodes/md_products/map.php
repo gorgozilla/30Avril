@@ -22,6 +22,12 @@ pixflow_map(
         "category" => esc_attr__("Commerce", 'massive-dynamic'),
         'params' => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Categories", 'massive-dynamic'),
+                "param_name" => "category_title",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
+            array(
                 'type' => 'dropdown',
                 'heading' => esc_attr__('Category', 'massive-dynamic'),
                 "edit_field_class" => $filedClass . "first glue last",
@@ -38,6 +44,12 @@ pixflow_map(
                 "admin_label" => false,
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Layout", 'massive-dynamic'),
+                "param_name" => "category_title",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
+            array(
                 'type' => 'md_vc_slider',
                 "edit_field_class" => $filedClass . "first glue last",
                 'heading' => esc_attr__('Columns', 'massive-dynamic'),
@@ -50,14 +62,7 @@ pixflow_map(
                     "step" => 1,
                 )
             ),
-            array(
-                "type" => "textfield",
-                "edit_field_class" => $filedClass . "first last glue",
-                "heading" => esc_attr__("Thumbnails Height", 'massive-dynamic'),
-                "param_name" => "products_height",
-                "value" => '500',
-                "admin_label" => false,
-            ),
+
             array(
                 "type" => "dropdown",
 
@@ -71,6 +76,12 @@ pixflow_map(
                 ),
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "category_title",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
+            array(
                 "type" => "dropdown",
 
                 "edit_field_class" => $filedClass . "glue first last",
@@ -82,7 +93,14 @@ pixflow_map(
                     esc_attr__("Modern", 'massive-dynamic') => "modern",
                 ),
             ),
-
+            array(
+                "type" => "textfield",
+                "edit_field_class" => $filedClass . "first last glue",
+                "heading" => esc_attr__("Thumbnails Height", 'massive-dynamic'),
+                "param_name" => "products_height",
+                "value" => '500',
+                "admin_label" => false,
+            ),
             array(
                 "type" => "md_vc_colorpicker",
 
@@ -121,7 +139,7 @@ pixflow_map(
             array(
                 'type' => 'md_vc_checkbox',
                 "edit_field_class" => $filedClass . "first glue last",
-                'heading' => esc_attr__('Use Button', 'massive-dynamic'),
+                'heading' => esc_attr__('Activate', 'massive-dynamic'),
                 'param_name' => 'products_use_button',
                 'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
                 'checked' => false,

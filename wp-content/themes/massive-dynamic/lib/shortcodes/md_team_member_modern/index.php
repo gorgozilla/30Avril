@@ -114,6 +114,7 @@ function pixflow_sc_team_member_modern($atts, $content = null)
     </div>
 
     <script>
+
         $(function(){
             var $ = (jQuery),
                 $teamMemberId = $('<?php echo "#" . esc_attr($id) ?>');
@@ -133,9 +134,6 @@ function pixflow_sc_team_member_modern($atts, $content = null)
             <?php pixflow_callAnimation(false,$animation['animation-type'],'.'.$id); ?>
         })
     </script>
-
-
-
 
     <?php
     return ob_get_clean();

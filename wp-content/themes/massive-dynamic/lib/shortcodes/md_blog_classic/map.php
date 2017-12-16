@@ -23,6 +23,12 @@ pixflow_map(
         'params' => array(
 
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Category", 'massive-dynamic'),
+                "param_name" => "category_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
+            array(
                 'type' => 'md_vc_multiselect',
                 "edit_field_class" => $filedClass . "first glue",
                 'heading' => esc_attr__('Category', 'massive-dynamic'),
@@ -43,10 +49,16 @@ pixflow_map(
                 "value" => '5',
             ),
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Colors", 'massive-dynamic'),
+                "param_name" => "color_group",
+                "edit_field_class" => $filedClass . "glue first last",
+            ),
+            array(
                 "type" => "md_vc_colorpicker",
 
                 "edit_field_class" => $filedClass . "first glue",
-                "heading" => esc_attr__("Title Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Title", 'massive-dynamic'),
                 "param_name" => "blog_title_color",
                 "value" => 'rgb(68,37,153)',
                 "admin_label" => false,
@@ -61,7 +73,7 @@ pixflow_map(
                 "type" => "md_vc_colorpicker",
 
                 "edit_field_class" => $filedClass . "glue",
-                "heading" => esc_attr__("Text Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Text", 'massive-dynamic'),
                 "param_name" => "blog_text_color",
                 "value" => 'rgb(163,163,163)',
                 "admin_label" => false,
@@ -76,7 +88,7 @@ pixflow_map(
                 "type" => "md_vc_colorpicker",
 
                 "edit_field_class" => $filedClass . "glue ",
-                "heading" => esc_attr__("Category Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Category ", 'massive-dynamic'),
                 "param_name" => "blog_category_color",
                 "value" => 'rgb(52,202,161)',
                 "admin_label" => false,
@@ -90,11 +102,17 @@ pixflow_map(
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Shadow Color", 'massive-dynamic'),
+                "heading" => esc_attr__("Shadow ", 'massive-dynamic'),
                 "param_name" => "blog_shadow_color",
                 "value" => 'rgba(0,0,0,.12)',
                 "admin_label" => false,
                 "opacity" => true,
+            ),
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last",
             ),
             array(
                 "type" => "dropdown",

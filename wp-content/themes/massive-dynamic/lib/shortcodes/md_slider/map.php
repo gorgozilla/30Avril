@@ -24,15 +24,28 @@ function pixflow_slider_param()
     );
 
     $param = array(
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Slides Number", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "num_group",
+            "edit_field_class" => $filedClass . "glue first last",
+        ),
         array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first last",
             "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Number Of Slides:", 'massive-dynamic'),
+            "heading" => esc_attr__("Number ", 'massive-dynamic'),
             "param_name" => $slider_param,
             "admin_label" => false,
             "value" => $dropDown
+        ),
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "edit_field_class" => $filedClass . "glue first last",
         ),
         array(
             "type" => "dropdown",
@@ -50,45 +63,7 @@ function pixflow_slider_param()
                 'callback' => 'pixflow_pixflowSliderDependency_contentType'
             )
         ),
-        array(
-            'type' => 'md_vc_checkbox',
-            "edit_field_class" => $filedClass . "first glue last",
-            'heading' => esc_attr__('Auto Play', 'massive-dynamic'),
-            'param_name' => 'slider_autoplay',
-            'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
-            'checked' => false,
-            "group" => esc_attr__("General", 'massive-dynamic'),
-        ),
-        array(
-            "type" => 'md_vc_separator',
-            "edit_field_class" => $filedClass . "stick-to-top",
-            "param_name" => "slider" . ++$separatorCounter,
-            "group" => esc_attr__("General", 'massive-dynamic'),
-            "admin_label" => false,
-            "dependency" => array(
-                'element' => "slider_autoplay",
-                'value' => array('yes')
-            )
-        ),
-        array(
-            'type' => 'md_vc_slider',
-            "edit_field_class" => $filedClass . "glue last",
-            'heading' => esc_attr__('Auto Play Duration', 'massive-dynamic'),
-            'param_name' => 'slider_autoplay_duration',
-            "group" => esc_attr__('General', 'massive-dynamic'),
-            "value" => "3",
-            'defaultSetting' => array(
-                "min" => "1",
-                "max" => "30",
-                "prefix" => " s",
-                "step" => "0.1",
-                "decimal" => "1",
-            ),
-            "dependency" => array(
-                'element' => "slider_autoplay",
-                'value' => array('yes'),
-            ),
-        ),
+
         array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first last",
@@ -129,13 +104,64 @@ function pixflow_slider_param()
                 'value' => array('custom'),
             )
         ),
-
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Autoplay", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "autoplay_group",
+            "edit_field_class" => $filedClass . "glue first last",
+        ),
+        array(
+            'type' => 'md_vc_checkbox',
+            "edit_field_class" => $filedClass . "first glue last",
+            'heading' => esc_attr__('Activate', 'massive-dynamic'),
+            'param_name' => 'slider_autoplay',
+            'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
+            'checked' => false,
+            "group" => esc_attr__("General", 'massive-dynamic'),
+        ),
+        array(
+            "type" => 'md_vc_separator',
+            "edit_field_class" => $filedClass . "stick-to-top",
+            "param_name" => "slider" . ++$separatorCounter,
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "admin_label" => false,
+            "dependency" => array(
+                'element' => "slider_autoplay",
+                'value' => array('yes')
+            )
+        ),
+        array(
+            'type' => 'md_vc_slider',
+            "edit_field_class" => $filedClass . "glue last",
+            'heading' => esc_attr__('Duration', 'massive-dynamic'),
+            'param_name' => 'slider_autoplay_duration',
+            "group" => esc_attr__('General', 'massive-dynamic'),
+            "value" => "3",
+            'defaultSetting' => array(
+                "min" => "1",
+                "max" => "30",
+                "prefix" => " s",
+                "step" => "0.1",
+                "decimal" => "1",
+            ),
+            "dependency" => array(
+                'element' => "slider_autoplay",
+                'value' => array('yes'),
+            ),
+        ),
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Navigator", 'massive-dynamic'),
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "edit_field_class" => $filedClass . "glue first last",
+        ),
         array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue last first",
             "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Indicators :", 'massive-dynamic'),
+            "heading" => esc_attr__("Navigator ", 'massive-dynamic'),
             "param_name" => "slider_indicator",
             "admin_label" => false,
             "value" => array(
@@ -149,7 +175,7 @@ function pixflow_slider_param()
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first last",
             "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Indicator Theme :", 'massive-dynamic'),
+            "heading" => esc_attr__("Skin ", 'massive-dynamic'),
             "param_name" => "slider_indicator_theme",
             "admin_label" => false,
             "value" => array(
@@ -190,6 +216,7 @@ function pixflow_slider_param()
             "edit_field_class" => $filedClass . "glue",
             "group" => esc_attr__("Typography", 'massive-dynamic'),
             'param_name' => 'slider_title_font',
+            'value'=> 'font_family:Roboto%3A100%2C200%2C300%2Cregular%2C500%2C600%2C700%2C800%2C900|font_style:200%20light%20regular%3A200%3Anormal',
             'settings' => array(
                 'fields' => array(
                     'font_family_description' => esc_attr__('Font family', 'massive-dynamic'),
@@ -286,6 +313,7 @@ function pixflow_slider_param()
             "edit_field_class" => $filedClass . "glue last",
             "group" => esc_attr__("Typography", 'massive-dynamic'),
             'param_name' => 'slider_subtitle_font',
+            'value' =>'font_family:Roboto%3A100%2C200%2C300%2Cregular%2C500%2C600%2C700%2C800%2C900|font_style:200%20light%20regular%3A200%3Anormal',
             'settings' => array(
                 'fields' => array(
                     'font_family_description' => esc_attr__('Font family', 'massive-dynamic'),
@@ -382,6 +410,7 @@ function pixflow_slider_param()
             "edit_field_class" => $filedClass . "glue last classic-hiddenn",
             "group" => esc_attr__("Typography", 'massive-dynamic'),
             'param_name' => 'slider_desc_font',
+            'value' => 'font_family:Roboto%3A100%2C200%2C300%2Cregular%2C500%2C600%2C700%2C800%2C900|font_style:200%20light%20regular%3A200%3Anormal',
             'settings' => array(
                 'fields' => array(
                     'font_family_description' => esc_attr__('Font family', 'massive-dynamic'),
@@ -409,13 +438,25 @@ function pixflow_slider_param()
         ),
 
     );
-    $s = 1;
+    $i = 1;
     for ($i = 1; $i <= (int)$slider_num; $i++) {
         $value = array();
 
         for ($k = $i; $k <= $slider_num; $k++) {
             $value[] = (string)$k;
         }
+
+        $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Title", 'massive-dynamic'),
+            "param_name" => "title_group". $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
+            'dependency' => array(
+                'element' => $slider_param,
+                'value' => $value
+            ),
+        );
 
         $param[] = array(
             "type" => "dropdown",
@@ -445,8 +486,9 @@ function pixflow_slider_param()
             'value' => 'Massive Dynamic <br> Unique Slider',
             "admin_label" => false,
             "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
+            "color_picker" => "slide_title_color_" . $i,
             'dependency' => array(
-                'element' => "slide_content_type_" . $i,
+                'element' => $slider_param,
                 'value' => 'text'
             ),
         );
@@ -459,9 +501,10 @@ function pixflow_slider_param()
             "admin_label" => false,
             "value" => "#ffffff",
             'dependency' => array(
-                'element' => "slide_content_type_" . $i,
+                'element' => $slider_param,
                 'value' => 'text'
             ),
+            "inline_color_picker" => true,
         );
 
         /* Image */
@@ -472,12 +515,24 @@ function pixflow_slider_param()
             'param_name' => 'slide_content_image_' . $i,
             "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
             'dependency' => array(
-                'element' => "slide_content_type_" . $i,
+                'element' => $slider_param,
                 'value' => 'image'
             ),
         );
 
         /*Subtitle*/
+        $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Subtitle", 'massive-dynamic'),
+            "param_name" => "subtitle_group". $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
+            'dependency' => array(
+                'element' => $slider_param,
+                'value' => $value
+            ),
+
+        );
         $param[] = array(
             "type" => "textfield",
             "edit_field_class" => $filedClass . "first glue last textNsize-text",
@@ -490,6 +545,7 @@ function pixflow_slider_param()
                 'element' => $slider_param,
                 'value' => $value
             ),
+            "color_picker" => "slide_subtitle_color_" . $i,
         );
         $param[] = array(
             "type" => "md_vc_colorpicker",
@@ -503,10 +559,24 @@ function pixflow_slider_param()
                 'element' => $slider_param,
                 'value' => $value
             ),
+            "inline_color_picker" => true,
 
         );
 
         /*Description*/
+        $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Description", 'massive-dynamic'),
+            "param_name" => "desc_group". $i,
+            "edit_field_class" => $filedClass . "glue first last classic-hidden",
+            "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
+            'dependency' => array(
+                'element' => $slider_param,
+                'value' => $value,
+
+            ),
+
+        );
         $param[] = array(
             "type" => "textarea",
             "edit_field_class" => $filedClass . "glue first last textNsize-text classic-hidden",
@@ -520,6 +590,7 @@ function pixflow_slider_param()
                 'value' => $value,
 
             ),
+            "color_picker" => "slide_desc_color_" . $i,
         );
 
         $param[] = array(
@@ -534,12 +605,26 @@ function pixflow_slider_param()
                 'element' => $slider_param,
                 'value' => $value
             ),
+            "inline_color_picker" => true,
         );
 
         /* Image  */
         $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Image", 'massive-dynamic'),
+            "param_name" => "image_group". $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
+            'dependency' => array(
+                'element' => $slider_param,
+                'value' => $value,
+
+            ),
+
+        );
+        $param[] = array(
             'type' => 'attach_image',
-            'edit_field_class' => $filedClass . "glue first last glue-color-image",
+            'edit_field_class' => $filedClass . "glue first last",
             'heading' => esc_attr__('Slide Image', 'massive-dynamic'),
             'param_name' => 'slide_image_' . $i,
             "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
@@ -551,7 +636,7 @@ function pixflow_slider_param()
 
         $param[] = array(
             "type" => "md_vc_colorpicker",
-            "edit_field_class" => $filedClass . "textNsize-size glue-color-image",
+            "edit_field_class" => $filedClass . "textNsize-size ",
             "heading" => esc_attr__("Overlay Color", 'massive-dynamic'),
             "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
             "param_name" => "slide_image_color_" . $i,
@@ -566,9 +651,21 @@ function pixflow_slider_param()
 
         /* Button 1 */
         $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Button 1", 'massive-dynamic'),
+            "param_name" => "btn1_group". $i,
+            "edit_field_class" => $filedClass . "glue first last",
+            "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
+            'dependency' => array(
+                'element' => $slider_param,
+                'value' => $value,
+
+            ),
+        );
+        $param[] = array(
             'type' => 'md_vc_checkbox',
             "edit_field_class" => $filedClass . "first glue last ",
-            'heading' => esc_attr__('Button1', 'massive-dynamic'),
+            'heading' => esc_attr__('Activate', 'massive-dynamic'),
             'param_name' => 'slide_btn1_' . $i,
             'value' => array(esc_attr__('Yes', 'massive-dynamic') => 'yes'),
             'checked' => true,
@@ -658,7 +755,7 @@ function pixflow_slider_param()
             "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
             "heading" => esc_attr__("Link", 'massive-dynamic'),
             "param_name" => "slide_btn1_link_" . $i,
-            "value" => 'http://massivedynamic.co/',
+            "value" => 'http://pixflow.net/products/massive-dynamic/',
             "admin_label" => false,
             'dependency' => array(
                 'element' => $slider_param,
@@ -798,6 +895,18 @@ function pixflow_slider_param()
         );
         //button2
         $param[] = array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Button 2", 'massive-dynamic'),
+            "param_name" => "btn2_group",
+            "edit_field_class" => $filedClass . "glue first last",
+            "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
+            'dependency' => array(
+                'element' => $slider_param,
+                'value' => $value,
+
+            ),
+        );
+        $param[] = array(
             'type' => 'md_vc_checkbox',
             "edit_field_class" => $filedClass . "first glue last ",
             'heading' => esc_attr__('Button2', 'massive-dynamic'),
@@ -890,7 +999,7 @@ function pixflow_slider_param()
             "group" => esc_attr__("Slide ", 'massive-dynamic') . $i,
             "heading" => esc_attr__("Link", 'massive-dynamic'),
             "param_name" => "slide_btn2_link_" . $i,
-            "value" => 'http://demo.massivedynamic.co/general/',
+            "value" => '#',
             "admin_label" => false,
             'dependency' => array(
                 'element' => $slider_param,

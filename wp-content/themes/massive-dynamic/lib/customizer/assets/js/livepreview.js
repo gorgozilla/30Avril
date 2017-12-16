@@ -350,7 +350,7 @@ if(window.top != window.self) {
                 }
             }
             res = JSON.stringify(final);
-            pixflow_customizerObj().$("input[data-customize-setting-link='header_items_order']").attr("value", res).keyup();
+            pixflow_customizerObj().$("input[data-customize-setting-link='header_items_order']").attr("value", res).keyup().trigger('change');
         };
 
         function pixflow_updateMaxWidth(event) {

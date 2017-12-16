@@ -51,7 +51,7 @@ function pixflow_genFooterSocialIcons(){
             $title = $social['title'];
             $icon = $social['icon'];
             $link = $social['link'];
-            $retString.='<span data-social="'.esc_attr($title).'"><a href="'.esc_url($link).'"><span class="'.esc_attr($icon).'"></span></a></span>';
+            $retString.='<span data-social="'.esc_attr($title).'"><a href="'.esc_url($link).'" target="_blank"><span class="'.esc_attr($icon).'"></span></a></span>';
         }
     }
     $retString.='</div>';

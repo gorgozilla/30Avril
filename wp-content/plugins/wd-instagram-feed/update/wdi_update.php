@@ -88,6 +88,10 @@ function wdi_update_diff($new_v, $old_v = 0.0){
   if(version_compare($old_v, "2.2", '<')){ 
 		$wpdb->query("ALTER TABLE " . $wpdb->prefix . WDI_FEED_TABLE . " ADD `redirect_url` varchar(255) NOT NULL DEFAULT ''");
 	}
+	if(version_compare($old_v, "2.8", '<')){
+		$wpdb->query("ALTER TABLE " . $wpdb->prefix . WDI_FEED_TABLE . " MODIFY `feed_users` VARCHAR(2000) NOT NULL");
+	}
+
 
 
 

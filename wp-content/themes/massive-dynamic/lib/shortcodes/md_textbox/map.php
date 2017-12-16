@@ -17,6 +17,12 @@ pixflow_map(
         'show_settings_on_create' => false,
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
                 "type" => "md_vc_iconpicker",
                 "edit_field_class" => $filedClass . "first glue last",
                 "heading" => esc_attr__("Choose an icon", 'massive-dynamic'),
@@ -38,9 +44,23 @@ pixflow_map(
                 "param_name" => ++$separatorCounter,
                 "admin_label" => false
             ),
+
+            array(
+                "type" => "textarea",
+                "edit_field_class" => $filedClass . "glue ",
+                "heading" => esc_attr__("Description", 'massive-dynamic'),
+                "param_name" => "textbox_description",
+                "value" => "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable",
+                "admin_label" => false
+            ),
+            array(
+                "type" => 'md_vc_separator',
+                "param_name" => ++$separatorCounter,
+                "admin_label" => false
+            ),
             array(
                 "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue",
+                "edit_field_class" => $filedClass . "glue last",
                 "heading" => esc_attr__("Title size", 'massive-dynamic'),
                 "param_name" => "textbox_heading",
                 "admin_label" => false,
@@ -53,18 +73,12 @@ pixflow_map(
                     "H6" => "h6"
                 ),
             ),
+
             array(
-                "type" => 'md_vc_separator',
-                "param_name" => ++$separatorCounter,
-                "admin_label" => false
-            ),
-            array(
-                "type" => "textarea",
-                "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Description", 'massive-dynamic'),
-                "param_name" => "textbox_description",
-                "value" => "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable",
-                "admin_label" => false
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
             array(
                 "type" => "md_vc_colorpicker",

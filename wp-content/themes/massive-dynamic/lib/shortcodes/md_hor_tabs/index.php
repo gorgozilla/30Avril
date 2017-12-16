@@ -154,6 +154,11 @@ function pixflow_sc_hor_tabs( $atts, $content = null ){
             $('.<?php echo esc_attr($id); ?>').closest('.vc_md_hor_tabs').find('.px_tabs_nav').append('<li class="unsortable"><a class="md-hor-tab-add-tab vc_control-btn"><strong>+</strong><div class="modernTabTitle">ADD TAB</div></a></li>');
             $('.<?php echo esc_attr($id); ?>').closest('.vc_md_hor_tabs').find('.md-hor-tab-add-tab').click(function(e){
                 e.preventDefault();
+				$(this).closest('.mBuilder-element').find('>.mBuilder_controls .vc_control-btn[data-control="add_section"] .vc_btn-content').on( 'click',function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+				});
+				
                 $(this).closest('.mBuilder-element').find('>.mBuilder_controls .vc_control-btn[data-control="add_section"] .vc_btn-content').click();
             });
             if (!$('.<?php echo esc_attr($id); ?>').data("ui-tabs")) {

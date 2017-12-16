@@ -1,6 +1,16 @@
-.md-live-text{
-     display: flex;
+.live-text-container{
+     overflow-wrap: break-word;
 }
+
+.md-live-text{
+    display: flex;
+}
+
+.md-live-text-new.md-live-text{
+     color: #3D3D3D;
+     font-size:18px;
+}
+
 .md-live-text.md-align-left{
      justify-content: flex-start;
 }
@@ -16,6 +26,7 @@
 .md-live-text .gizmo-container{
      display: inline-flex;
 }
+
 .md-live-text .meditor.inline-md-editor a,
 .md-live-text .meditor.inline-md-editor blockquote{
      color: inherit;
@@ -25,8 +36,8 @@
      font-size: inherit;
      line-height: inherit;
      letter-spacing: inherit;
-
  }
+
 .md-live-text .inline-md-editor blockquote{
      background: none;
      text-align: inherit;
@@ -39,4 +50,8 @@
      padding: 0;
      margin: 0 0 0 40px;
      border:none;
+}
+
+.md-live-text-new .live-text-container{
+    width: 100%;
 }

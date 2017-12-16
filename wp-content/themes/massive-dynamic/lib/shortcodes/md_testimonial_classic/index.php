@@ -70,10 +70,10 @@ function pixflow_sc_testimonial_classic( $atts, $content = null ) {
 
     <style >
 
-        [data-flex-id = <?php echo esc_attr($id) ?>].testimonial-classic .title,
-        [data-flex-id = <?php echo esc_attr($id) ?>].testimonial-classic .title .quote,
-        [data-flex-id = <?php echo esc_attr($id) ?>].testimonial-classic .flexslider .detail .paragraph,
-        [data-flex-id = <?php echo esc_attr($id) ?>].testimonial-classic .flexslider .name-job{
+        .<?php echo esc_attr($id) ?> .title,
+        .<?php echo esc_attr($id) ?> .title .quote,
+        .<?php echo esc_attr($id) ?>  .flexslider .detail .paragraph,
+        .<?php echo esc_attr($id) ?>  .flexslider .name-job{
             color: <?php echo esc_attr( $md_testimonial_solid_color ); ?>
         }
 

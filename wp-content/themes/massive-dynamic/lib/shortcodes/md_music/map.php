@@ -6,7 +6,7 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Music
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
 function pixflow_music_param()
 {
 
@@ -32,6 +32,14 @@ function pixflow_music_param()
     $param = array(
 
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Tracks", 'massive-dynamic'),
+            "param_name" => "tr_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first ",
+        ),
+
+        array(
             "type" => "dropdown",
             "edit_field_class" => $filedClass . "glue first",
             "group" => esc_attr__("General", 'massive-dynamic'),
@@ -40,18 +48,23 @@ function pixflow_music_param()
             "admin_label" => false,
             "value" => $dropDown
         ),
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Album", 'massive-dynamic'),
+            "param_name" => "category_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first ",
+        ),
         array(
             "type" => 'md_vc_separator',
             "group" => esc_attr__("General", 'massive-dynamic'),
             "param_name" => "music_sep" . ++$separatorCounter,
         ),
-
         array(
             "type" => "textfield",
             "edit_field_class" => $filedClass . "glue",
             "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Album", 'massive-dynamic'),
+            "heading" => esc_attr__("Name", 'massive-dynamic'),
             "param_name" => "music_album",
             "value" => "Audio Jungle",
             "admin_label" => false,
@@ -83,11 +96,17 @@ function pixflow_music_param()
             "type" => "attach_image",
             "edit_field_class" => $filedClass . "glue",
             "group" => esc_attr__("General", 'massive-dynamic'),
-            "heading" => esc_attr__("Album Image", 'massive-dynamic'),
+            "heading" => esc_attr__("Image", 'massive-dynamic'),
             "param_name" => "music_image",
             "admin_label" => false,
         ),
-
+        array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Appreance", 'massive-dynamic'),
+            "param_name" => "app_group",
+            "group" => esc_attr__("General", 'massive-dynamic'),
+            "edit_field_class" => $filedClass . "glue first ",
+        ),
         array(
             "type" => 'md_vc_separator',
             "group" => esc_attr__("General", 'massive-dynamic'),
@@ -147,7 +166,7 @@ function pixflow_music_param()
 
     );
 
-
+    $i = 1;
     for ($i = 1; $i <= (int)$track_num; $i++) {
         $value = array();
 
@@ -171,7 +190,7 @@ function pixflow_music_param()
 
         $param[] = array(
             "type" => 'md_vc_separator',
-            "group" => "Track " . $i,
+            "group" => esc_attr__("Track ", 'massive-dynamic') . $i,
             "param_name" => "music_sep" . $i . "_separator" . ++$separatorCounter,
             'dependency' => array(
                 'element' => $track_num_param,

@@ -152,7 +152,7 @@ function pixflow_genHeaderSideFooter(){
                     $link = $social['link'];
                     ?>
                     <li data-social="<?php echo esc_attr($title) ?>" class="icon">
-                        <a href="<?php echo esc_url($link) ?>" title="<?php echo esc_attr($title) ?>">
+                        <a href="<?php echo esc_url($link) ?>" title="<?php echo esc_attr($title) ?>" target="_blank">
                             <span class="<?php echo esc_attr($icon) ?> default"></span>
                             <span class="<?php echo esc_attr($icon) ?> hover"></span>
                         </a>
@@ -179,7 +179,7 @@ function pixflow_genHeaderSideFooter(){
                                 $link = $social['link'];
                                 ?>
                                 <li data-social="<?php echo esc_attr($title) ?>" class="icon">
-                                    <a href="<?php echo esc_url($link) ?>" title="<?php echo esc_attr($title) ?>">
+                                    <a href="<?php echo esc_url($link) ?>" title="<?php echo esc_attr($title) ?>" target="_blank">
                                         <span class="<?php echo esc_attr($icon) ?> default"></span>
                                         <span class="<?php echo esc_attr($icon) ?> hover"></span>
                                     </a>
@@ -215,7 +215,7 @@ function pixflow_genHeaderSideFooter(){
                     $link = $social['link'];
                 ?>
                 <li data-social="<?php echo esc_attr($title) ?>" class="icon">
-                    <a href="<?php echo esc_url($link) ?>" title="<?php echo esc_attr($title) ?>">
+                    <a href="<?php echo esc_url($link) ?>" title="<?php echo esc_attr($title) ?>" target="_blank">
                         <span class="<?php echo esc_attr($icon) ?> default"></span>
                         <span class="<?php echo esc_attr($icon) ?> hover"></span>
                     </a>
@@ -282,7 +282,7 @@ $headerClass .= ($headerSideTheme == 'standard')?' standard-mode':'';
                 <a class="mobile-sidebar hidden-desktop visible-tablet"><i class="icon-plus5"></i></a>
             <?php
             global $woocommerce;
-            $cart_url = $woocommerce->cart->get_cart_url(); ?>
+            $cart_url = wc_get_cart_url(); ?>
             <a class="mobile-shopcart hidden-desktop visible-tablet" href="<?php echo esc_url($cart_url); ?>"><span class="icon-shopcart"></span></a>
         <?php }} ?>
     </div>

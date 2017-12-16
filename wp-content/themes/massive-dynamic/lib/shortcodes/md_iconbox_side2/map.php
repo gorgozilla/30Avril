@@ -6,7 +6,8 @@
 /*-----------------------------------------------------------------------------------*/
 /*  Icon Box Side 2
 /*-----------------------------------------------------------------------------------*/
-
+global $separatorCounter;
+$separatorCounter = 1;
 pixflow_map(
     array(
         "name" => "Icon Box Side 2",
@@ -17,6 +18,27 @@ pixflow_map(
         'show_settings_on_create' => false,
         "params" => array(
             array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "group" => esc_attr__('General', 'massive-dynamic'),
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
+            array(
+                "type" => "md_vc_iconpicker",
+                "edit_field_class" => $filedClass . "first glue last",
+                "heading" => esc_attr__("Choose an icon", 'massive-dynamic'),
+                "param_name" => "iconbox_side2_icon",
+                "value" => "icon-ribbon",
+                "group" => esc_attr__('General', 'massive-dynamic'),
+                "admin_label" => false,
+                "description" => esc_attr__("Select an icon", 'massive-dynamic'),
+                'dependency' => array(
+                    'element' => "iconbox_side2_type",
+                    'value' => array('icon')
+                )
+            ),
+            array(
                 "type" => "textfield",
                 "edit_field_class" => $filedClass . "glue first last",
                 "heading" => esc_attr__("Sub Title", 'massive-dynamic'),
@@ -24,6 +46,7 @@ pixflow_map(
                 "value" => "Advertisement",
                 "group" => esc_attr__('General', 'massive-dynamic'),
                 "admin_label" => false,
+                "color_picker" => 'iconbox_side2_small_title_color'
             ),//small title
             array(
                 "type" => "textfield",
@@ -39,9 +62,27 @@ pixflow_map(
                 "group" => esc_attr__('General', 'massive-dynamic'),
                 "param_name" => "iconbox_title_separator" . ++$separatorCounter,
             ),//separator
+
+            array(
+                "type" => "textarea",
+                "edit_field_class" => $filedClass . "glue last",
+                "heading" => esc_attr__("Description", 'massive-dynamic'),
+                "param_name" => "iconbox_side2_description",
+                "value" => "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable",
+                "group" => esc_attr__('General', 'massive-dynamic'),
+                "description" => esc_attr__("Iconbox description text", 'massive-dynamic'),
+                "admin_label" => false,
+            ),//description
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "group" => esc_attr__('General', 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue last",
+                "edit_field_class" => $filedClass . "first glue last",
                 "heading" => esc_attr__("Title size", 'massive-dynamic'),
                 "param_name" => "iconbox_side2_title_big_heading",
                 "group" => esc_attr__('General', 'massive-dynamic'),
@@ -55,18 +96,7 @@ pixflow_map(
                     "H2" => "h2",
                     "H1" => "h1"
                 ),
-            ),//heading
-            array(
-                "type" => "textarea",
-                "edit_field_class" => $filedClass . "glue first last",
-                "heading" => esc_attr__("Description", 'massive-dynamic'),
-                "param_name" => "iconbox_side2_description",
-                "value" => "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable",
-                "group" => esc_attr__('General', 'massive-dynamic'),
-                "description" => esc_attr__("Iconbox description text", 'massive-dynamic'),
-                "admin_label" => false,
-            ),//description
-
+            ),
             array(
                 "type" => "dropdown",
                 "edit_field_class" => $filedClass . "glue first",
@@ -84,20 +114,7 @@ pixflow_map(
                 "group" => esc_attr__('General', 'massive-dynamic'),
                 "param_name" => "iconbox_title_separator" . ++$separatorCounter,
             ),//separator
-            array(
-                "type" => "md_vc_iconpicker",
-                "edit_field_class" => $filedClass . "glue last",
-                "heading" => esc_attr__("Choose an icon", 'massive-dynamic'),
-                "param_name" => "iconbox_side2_icon",
-                "value" => "icon-ribbon",
-                "group" => esc_attr__('General', 'massive-dynamic'),
-                "admin_label" => false,
-                "description" => esc_attr__("Select an icon", 'massive-dynamic'),
-                'dependency' => array(
-                    'element' => "iconbox_side2_type",
-                    'value' => array('icon')
-                )
-            ),//icon
+//icon
             array(
                 'type' => 'attach_image',
                 'edit_field_class' => $filedClass . "glue last",
@@ -122,7 +139,7 @@ pixflow_map(
             ),
             array(
                 "type" => "dropdown",
-                "edit_field_class" => $filedClass . "glue first last",
+                "edit_field_class" => $filedClass . "glue last",
                 "heading" => esc_attr__("Alignment", 'massive-dynamic'),
                 "param_name" => "iconbox_side2_alignment",
                 "description" => esc_attr__("Choose icnobox alignment", 'massive-dynamic'),
@@ -142,6 +159,7 @@ pixflow_map(
                 "group" => esc_attr__('General', 'massive-dynamic'),
                 "admin_label" => false,
                 "description" => esc_attr__("Choose icon hover color", 'massive-dynamic'),
+                "inline_color_picker" => true,
             ),//small title color
             array(
                 "type" => 'md_vc_separator',

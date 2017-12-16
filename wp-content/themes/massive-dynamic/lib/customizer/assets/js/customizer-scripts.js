@@ -203,16 +203,16 @@ function pixflow_create_builder_bar() {
     customizer_options_menu.setAttribute('class', 'customizer-options-menu');
     customizer_options_menu.innerHTML = '<div class="customizer-left-menu">' +
         '<ul>' +
-        '<li class="massive-brand"><a class="logo" href="http://massivedynamic.co" target="_blank"><img src="' + customizerSentences.logo_path + '" alt="massive logo"></a></li>' +
+        '<li class="massive-brand"><a class="logo" href="http://pixflow.net/products/massive-dynamic/" target="_blank"><img src="' + customizerSentences.logo_path + '" alt="massive logo"></a></li>' +
         '<li><a class="customizer-btn import"><span class="symbol">' + customizerSentences.demos + '</span></a></li>' +
         '<li><a class="customizer-btn setting" id="page-option-btn"><span class="text">Page setting</span><div class="save-loading"></div></a></li>' +
         '<li><a class="customizer-btn dashboard" href="' + customizerSentences.adminURL + '" ><span class="symbol"></span><span class="text">' + customizerSentences.dashboard + '</span></a></li>' +
         '<li><a class="customizer-btn builder"><span class="symbol">' + customizerSentences.edit_content + '</span></a></li>' +
-        '<li><a class="collaps customizer-btn"><span class="status"></span><span class="symbol" >Preview</span></a></li>' +
         '</ul></div>' +
         '<div class="customizer-right-menu">' +
         '<ul>' +
-        '<li><a class="customizer-btn" id="save-btn"><span class="text"> ' + customizerSentences.saveAndView + '</span><div class="save-loading"></div></a></li>' +
+        '<li class="customizer-preview-btn"><a class="collaps customizer-btn"></span><span class="symbol" >Preview</span></a></li>' +
+        '<li class="customizer-publish-btn"><a class="customizer-btn" id="save-btn"><span class="text"> ' + customizerSentences.saveAndView + '</span><div class="save-loading"></div></a></li>' +
         '<li class="close"><a class="customizer-btn" href="#">' + close_svg + '</a></li>' +
         '</ul></div>';
 

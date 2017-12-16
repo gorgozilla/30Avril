@@ -549,12 +549,12 @@ function pixflow_initSliderControllers(){
 
         MDslider.noUiSlider.on('slide', function(values){
             if($slider.attr('data-transform') != 'refresh'){
-                $input.val(pixflow_updateDesimal(values[0],step)).keyup();
+                $input.val(pixflow_updateDesimal(values[0],step)).keyup().trigger('change');
             }
             $sliderValue.html(pixflow_updateDesimal(values[0],step) + prefix);
         });
         MDslider.noUiSlider.on('set', function(values){
-            $input.val(pixflow_updateDesimal(values[0],step)).keyup();
+            $input.val(pixflow_updateDesimal(values[0],step)).keyup().trigger('change');
             $sliderValue.html(pixflow_updateDesimal(values[0],step) + prefix);
             if($slider.attr('data-transform') == 'refresh'){
                 pixflow_customizerLoading('slider');
@@ -623,7 +623,7 @@ function pixflow_colorController(){
         }
         //Cancel button click
         $('.'+id+'_alpha .sp-cancel').click(function(){
-            currentPicker.val(defaultVal).keyup();
+	        currentPicker.val(defaultVal).keyup().trigger('change');
         })
     });
 }
@@ -2355,7 +2355,6 @@ function pixflow_documentReady() {
     /* Content Width */
     wp.customize('site_width', function (value) {
         value.bind(function (newval) {
-
 
             if ($('#input_header_theme').val() != 'modern') {
                 pixflow_livePreviewObj().$('.layout').css('width', newval + '%');
@@ -4647,7 +4646,7 @@ function pixflow_collapse() {
                 $(this).removeClass('hold-collapse');
                 $iframe.find('.vc_welcome').css('display','block');
                 $iframe.find('.wpb_content_element .px_tabs_nav.md-custom-tab > li:last-child').css('display','inline-block');
-                $iframe.find('.sortable-handle').css('border','1px dashed rgba(92,92,92,.9)');
+                $iframe.find('.sortable-handle').css('border','1px dashed #338ffc');
                 $iframe.find('.footer-setting').removeClass('md-hidden');
                 $iframe.find('div.widget-area-column').addClass('ui-sortable-handle');
                 cntWin.pixflow_itemOrderSetter('enable');
@@ -4754,68 +4753,72 @@ function pixflow_isJson(str) {
 function pixflow_demoImporter(){
     "use strict";
     var demos = [
-        { "name":"general", "category":"business store" , "importFile":"0" , "demo":"http://demo.massivedynamic.co/general" },
-        { "name":"business-agency", "category":"business" , "importFile":"1" , "demo":"http://demo.massivedynamic.co/business-agency" },
-        { "name":"restaurant",  "category":"career" , "importFile":"2" , "demo":"http://demo.massivedynamic.co/restaurant/"},
-        { "name":"seo", "revslider":true, "category":"business store" , "importFile":"3" , "demo":"http://demo.massivedynamic.co/seo/" },
-        { "name":"minimal-agency", "category":"career" , "importFile":"4" , "demo":"http://demo.massivedynamic.co/minimal-agency"},
-        { "name":"branding", "category":"career" , "importFile":"5" , "demo":"http://demo.massivedynamic.co/branding"},
-        { "name":"business-firm", "category":"business" , "importFile":"6" , "demo":"http://demo.massivedynamic.co/business-firm" },
-        { "name":"app1", "category":"business store" , "importFile":"7" , "demo":"http://demo.massivedynamic.co/app1" },
-        { "name":"shop-jewelry",  "revslider":true, "category":"store" , "importFile":"8" , "demo":"http://demo.massivedynamic.co/shop-jewelry/" },
-        { "name":"interior-design", "revslider":true, "category":"career" , "importFile":"9" , "demo":"http://demo.massivedynamic.co/interior-design/"},
-        { "name":"architecture", "category":"business" , "importFile":"10" , "demo":"http://demo.massivedynamic.co/architecture/" },
-        { "name":"store-classic-fashion", "revslider":true, "category":"store" , "importFile":"11" , "demo":"http://demo.massivedynamic.co/store-classic-fashion/" },
-        { "name":"business-classic", "revslider":true, "category":"business" , "importFile":"12" , "demo":"http://demo.massivedynamic.co/business-classic/" },
-        { "name":"portfolio-design-agency", "category":"portfolio" , "importFile":"13" , "demo":"http://demo.massivedynamic.co/portfolio-design-agency/" },
-        { "name":"musician", "revslider":true, "category":"career" , "importFile":"14" , "demo":"http://demo.massivedynamic.co/musician/"},
-        { "name":"startup", "category":"career" , "importFile":"15" , "demo":"http://demo.massivedynamic.co/startup/"},
-        { "name":"store-modern-fashion", "category":"store" , "importFile":"16" , "demo":"http://demo.massivedynamic.co/store-modern-fashion/" },
-        { "name":"agency", "category":"business" , "importFile":"17" , "demo":"http://demo.massivedynamic.co/agency/"},
-        { "name":"portfolio-agency", "category":"portfolio" , "importFile":"18" , "demo":"http://demo.massivedynamic.co/portfolio-agency/" },
-        { "name":"resume-boxed", "revslider":true, "category":"personal" , "importFile":"19" , "demo":"http://demo.massivedynamic.co/resume-boxed/"},
-        { "name":"Gym","revslider":true, "category":"career" , "importFile":"20" , "demo":"http://demo.massivedynamic.co/gym/"},
-        { "name":"resume-modern", "category":"personal" , "importFile":"21" , "demo":"http://demo.massivedynamic.co/resume-modern/" },
-        { "name":"wedding","category":"personal" , "importFile":"22" , "demo":"http://demo.massivedynamic.co/wedding/" },
-        { "name":"blog-masonry", "category":"blog" , "importFile":"23" , "demo":"http://demo.massivedynamic.co/blog-masonry/" },
-        { "name":"blog - vertical", "revslider":true, "category":"blog" , "importFile":"24" , "demo":"http://demo.massivedynamic.co/blog-vertical/" },
-        { "name":"blog - boxed", "revslider":true, "category":"blog" , "importFile":"25" , "demo":"http://demo.massivedynamic.co/blog-boxed/" },
-        { "name":"construction", "category":"career" , "importFile":"26" , "demo":"http://demo.massivedynamic.co/construction/" },
-        { "name":"business-modern", "category":"business" , "importFile":"27" , "demo":"http://demo.massivedynamic.co/business-modern/" },
-        { "name":"store-handicraft", "revslider":true, "category":"store" , "importFile":"28" , "demo":"http://demo2.massivedynamic.co/store-handicraft/" },
-        { "name":"Artistic" , "category":"career" , "importFile":"29" , "demo":"http://demo.massivedynamic.co/artistic/" },
-        { "name":"Corporate" , "category":"business store" , "importFile":"30" , "demo":"http://demo.massivedynamic.co/corporate-1/" },
-        { "name":"fashion-photography" , "category":"career" , "importFile":"31" , "demo":"http://demo.massivedynamic.co/fashion-photography/" },
-        { "name":"portfolio-web-design" , "category":"personal" , "importFile":"32" , "demo":"http://demo.massivedynamic.co/portfolio-web-design/" },
-        { "name":"resume-graphic-designer" , "category":"career" , "importFile":"33" , "demo":"http://demo.massivedynamic.co/resume-graphic-designer" },
-        { "name":"resume-tab" , "category":"personal" , "importFile":"34" , "demo":"http://demo.massivedynamic.co/resume-tab" },
-        { "name":"motion" , "category":"career" , "importFile":"35" , "demo":"http://demo.massivedynamic.co/motion" },
-        { "name":"it-service" , "category":"business" , "importFile":"36" , "demo":"http://demo.massivedynamic.co/it-service"},
-        { "name":"travel" , "category":"business" , "importFile":"37" , "demo":"http://demo.massivedynamic.co/travel" },
-        { "name":"hotel" , "category":"business" , "importFile":"38" , "demo":"http://demo.massivedynamic.co/hotel" },
-        { "name":"barber" , "category":"business" , "importFile":"39" , "demo":"http://demo.massivedynamic.co/barber" },
-        { "name":"health-care" , "category":"business" , "importFile":"40" , "demo":"http://demo.massivedynamic.co/health-care" },
-        { "name":"marketing" , "category":"business" , "importFile":"41" , "demo":"http://demo.massivedynamic.co/marketing" },
-        { "name":"rtl" , "category":"business" , "importFile":"42" , "demo":"http://demo.massivedynamic.co/rtl" },
-        { "name":"empire-business" , "revslider":true, "category":"business store" , "importFile":"43" , "demo":"http://demo.massivedynamic.co/empire-business" },
-        { "name":"business-consulting" , "category":"business" , "importFile":"44" , "demo":"http://demo.massivedynamic.co/business-consulting" },
-        { "name":"communication" , "category":"business" , "importFile":"45" , "demo":"http://demo.massivedynamic.co/communication/" },
-        { "name":"business-clean" , "category":"business" , "importFile":"46" , "demo":"http://demo.massivedynamic.co/business-clean/" },
-        { "name":"strategy" , "category":"business" , "importFile":"47" , "demo":"http://demo.massivedynamic.co/strategy/" },
-        { "name":"association" , "category":"business" , "revslider":true, "importFile":"48" , "demo":"http://demo.massivedynamic.co/association/" },
-        { "name":"app2" , "category":"business" , "revslider":true, "importFile":"49" , "demo":"http://demo.massivedynamic.co/app2/" },
-        { "name":"creative-studio" , "category":"business" , "revslider":true, "importFile":"50" , "demo":"http://demo.massivedynamic.co/creative-studio/" },
-        { "name":"seo2" , "category":"business" , "revslider":true, "importFile":"51" , "demo":"http://demo.massivedynamic.co/seo-2/" },
-        { "name":"portfolio-minimal" , "category":"portfolio store" , "revslider":true, "importFile":"52" , "demo":"http://demo.massivedynamic.co/portfolio-minimal/" },
-        { "name":"technology" , "category":"business" , "importFile":"53" , "demo":"http://demo.massivedynamic.co/technology/" },
-        { "name":"christmas" ,  "category":"business store" , "importFile":"54" , "demo":"http://demo2.massivedynamic.co/christmas/" },
-        { "name":"landing" , "category":"business" , "importFile":"55" , "demo":"http://demo.massivedynamic.co/landing/" },
-        { "name":"media-agency" , "category":"business" , "importFile":"56" , "demo":"http://demo.massivedynamic.co/media-agency/" },
-        { "name":"innovation-agency" , "category":"business" , "importFile":"57" , "demo":"http://demo.massivedynamic.co/innovation-agency/" },
-        { "name":"interactive-agency" , "category":"business" , "importFile":"58" , "demo":"http://demo.massivedynamic.co/interactive-agency/" },
-        { "name":"startup2" , "category":"career" , "importFile":"59" , "demo":"http://demo.massivedynamic.co/startup2/" },
+        { "name":"general", "category":"business store" , "importFile":"0" , "demo":"http://theme.pixflow.net/massive-dynamic/general" },
+        { "name":"business-agency", "category":"business" , "importFile":"1" , "demo":"http://theme.pixflow.net/massive-dynamic/business-agency" },
+        { "name":"restaurant",  "category":"career" , "importFile":"2" , "demo":"http://theme.pixflow.net/massive-dynamic/restaurant/"},
+        { "name":"seo", "revslider":true, "category":"business store" , "importFile":"3" , "demo":"http://theme.pixflow.net/massive-dynamic/seo/" },
+        { "name":"minimal-agency", "category":"career" , "importFile":"4" , "demo":"http://theme.pixflow.net/massive-dynamic/minimal-agency"},
+        { "name":"branding", "category":"career" , "importFile":"5" , "demo":"http://theme.pixflow.net/massive-dynamic/branding"},
+        { "name":"business-firm", "category":"business" , "importFile":"6" , "demo":"http://theme.pixflow.net/massive-dynamic/business-firm" },
+        { "name":"app1", "category":"business store" , "importFile":"7" , "demo":"http://theme.pixflow.net/massive-dynamic/app1" },
+        { "name":"shop-jewelry",  "revslider":true, "category":"store" , "importFile":"8" , "demo":"http://theme.pixflow.net/massive-dynamic/shop-jewelry/" },
+        { "name":"interior-design", "revslider":true, "category":"career" , "importFile":"9" , "demo":"http://theme.pixflow.net/massive-dynamic/interior-design/"},
+        { "name":"architecture", "category":"business" , "importFile":"10" , "demo":"http://theme.pixflow.net/massive-dynamic/architecture/" },
+        { "name":"store-classic-fashion", "revslider":true, "category":"store" , "importFile":"11" , "demo":"http://theme.pixflow.net/massive-dynamic/store-classic-fashion/" },
+        { "name":"business-classic", "revslider":true, "category":"business" , "importFile":"12" , "demo":"http://theme.pixflow.net/massive-dynamic/business-classic/" },
+        { "name":"portfolio-design-agency", "category":"portfolio" , "importFile":"13" , "demo":"http://theme.pixflow.net/massive-dynamic/portfolio-design-agency/" },
+        { "name":"musician", "revslider":true, "category":"career" , "importFile":"14" , "demo":"http://theme.pixflow.net/massive-dynamic/musician/"},
+        { "name":"startup", "category":"career" , "importFile":"15" , "demo":"http://theme.pixflow.net/massive-dynamic/startup/"},
+        { "name":"store-modern-fashion", "category":"store" , "importFile":"16" , "demo":"http://theme.pixflow.net/massive-dynamic/store-modern-fashion/" },
+        { "name":"agency", "category":"business" , "importFile":"17" , "demo":"http://theme.pixflow.net/massive-dynamic/agency/"},
+        { "name":"portfolio-agency", "category":"portfolio" , "importFile":"18" , "demo":"http://theme.pixflow.net/massive-dynamic/portfolio-agency/" },
+        { "name":"resume-boxed", "revslider":true, "category":"personal" , "importFile":"19" , "demo":"http://theme.pixflow.net/massive-dynamic/resume-boxed/"},
+        { "name":"Gym","revslider":true, "category":"career" , "importFile":"20" , "demo":"http://theme.pixflow.net/massive-dynamic/gym/"},
+        { "name":"resume-modern", "category":"personal" , "importFile":"21" , "demo":"http://theme.pixflow.net/massive-dynamic/resume-modern/" },
+        { "name":"wedding","category":"personal" , "importFile":"22" , "demo":"http://theme.pixflow.net/massive-dynamic/wedding/" },
+        { "name":"blog-masonry", "category":"blog" , "importFile":"23" , "demo":"http://theme.pixflow.net/massive-dynamic/blog-masonry/" },
+        { "name":"blog - vertical", "revslider":true, "category":"blog" , "importFile":"24" , "demo":"http://theme.pixflow.net/massive-dynamic/blog-vertical/" },
+        { "name":"blog - boxed", "revslider":true, "category":"blog" , "importFile":"25" , "demo":"http://theme.pixflow.net/massive-dynamic/blog-boxed/" },
+        { "name":"construction", "category":"career" , "importFile":"26" , "demo":"http://theme.pixflow.net/massive-dynamic/construction/" },
+        { "name":"business-modern", "category":"business" , "importFile":"27" , "demo":"http://theme.pixflow.net/massive-dynamic/business-modern/" },
+        { "name":"store-handicraft", "revslider":true, "category":"store" , "importFile":"28" , "demo":"http://theme.pixflow.net/massive-dynamic/store-handicraft/" },
+        { "name":"Artistic" , "category":"career" , "importFile":"29" , "demo":"http://theme.pixflow.net/massive-dynamic/artistic/" },
+        { "name":"Corporate" , "category":"business store" , "importFile":"30" , "demo":"http://theme.pixflow.net/massive-dynamic/corporate-1/" },
+        { "name":"fashion-photography" , "category":"career" , "importFile":"31" , "demo":"http://theme.pixflow.net/massive-dynamic/fashion-photography/" },
+        { "name":"portfolio-web-design" , "category":"personal" , "importFile":"32" , "demo":"http://theme.pixflow.net/massive-dynamic/portfolio-web-design/" },
+        { "name":"resume-graphic-designer" , "category":"career" , "importFile":"33" , "demo":"http://theme.pixflow.net/massive-dynamic/resume-graphic-designer" },
+        { "name":"resume-tab" , "category":"personal" , "importFile":"34" , "demo":"http://theme.pixflow.net/massive-dynamic/resume-tab" },
+        { "name":"motion" , "category":"career" , "importFile":"35" , "demo":"http://theme.pixflow.net/massive-dynamic/motion" },
+        { "name":"it-service" , "category":"business" , "importFile":"36" , "demo":"http://theme.pixflow.net/massive-dynamic/it-service"},
+        { "name":"travel" , "category":"business" , "importFile":"37" , "demo":"http://theme.pixflow.net/massive-dynamic/travel" },
+        { "name":"hotel" , "category":"business" , "importFile":"38" , "demo":"http://theme.pixflow.net/massive-dynamic/hotel" },
+        { "name":"barber" , "category":"business" , "importFile":"39" , "demo":"http://theme.pixflow.net/massive-dynamic/barber" },
+        { "name":"health-care" , "category":"business" , "importFile":"40" , "demo":"http://theme.pixflow.net/massive-dynamic/health-care" },
+        { "name":"marketing" , "category":"business" , "importFile":"41" , "demo":"http://theme.pixflow.net/massive-dynamic/marketing" },
+        { "name":"rtl" , "category":"business" , "importFile":"42" , "demo":"http://theme.pixflow.net/massive-dynamic/rtl" },
+        { "name":"empire-business" , "revslider":true, "category":"business store" , "importFile":"43" , "demo":"http://theme.pixflow.net/massive-dynamic/empire-business" },
+        { "name":"business-consulting" , "category":"business" , "importFile":"44" , "demo":"http://theme.pixflow.net/massive-dynamic/business-consulting" },
+        { "name":"communication" , "category":"business" , "importFile":"45" , "demo":"http://theme.pixflow.net/massive-dynamic/communication/" },
+        { "name":"business-clean" , "category":"business" , "importFile":"46" , "demo":"http://theme.pixflow.net/massive-dynamic/business-clean/" },
+        { "name":"strategy" , "category":"business" , "importFile":"47" , "demo":"http://theme.pixflow.net/massive-dynamic/strategy/" },
+        { "name":"association" , "category":"business" , "revslider":true, "importFile":"48" , "demo":"http://theme.pixflow.net/massive-dynamic/association/" },
+        { "name":"app2" , "category":"business" , "revslider":true, "importFile":"49" , "demo":"http://theme.pixflow.net/massive-dynamic/app2/" },
+        { "name":"creative-studio" , "category":"business" , "revslider":true, "importFile":"50" , "demo":"http://theme.pixflow.net/massive-dynamic/creative-studio/" },
+        { "name":"seo2" , "category":"business" , "revslider":true, "importFile":"51" , "demo":"http://theme.pixflow.net/massive-dynamic/seo-2/" },
+        { "name":"portfolio-minimal" , "category":"portfolio store" , "revslider":true, "importFile":"52" , "demo":"http://theme.pixflow.net/massive-dynamic/portfolio-minimal/" },
+        { "name":"technology" , "category":"business" , "importFile":"53" , "demo":"http://theme.pixflow.net/massive-dynamic/technology/" },
+        { "name":"christmas" ,  "category":"business store" , "importFile":"54" , "demo":"http://theme.pixflow.net/massive-dynamic/christmas/" },
+        { "name":"landing" , "category":"business" , "importFile":"55" , "demo":"http://theme.pixflow.net/massive-dynamic/landing/" },
+        { "name":"media-agency" , "category":"business" , "importFile":"56" , "demo":"http://theme.pixflow.net/massive-dynamic/media-agency/" },
+        { "name":"innovation-agency" , "category":"business" , "importFile":"57" , "demo":"http://theme.pixflow.net/massive-dynamic/innovation-agency/" },
+        { "name":"interactive-agency" , "category":"business" , "importFile":"58" , "demo":"http://theme.pixflow.net/massive-dynamic/interactive-agency/" },
+        { "name":"startup2" , "category":"career" , "importFile":"59" , "demo":"http://theme.pixflow.net/massive-dynamic/startup2/" },
         { "name":"rtl-agency" , "category":"career" , "importFile":"60" , "demo":"http://theme.pixflow.net/massive-dynamic/rtl-agency/" } ,
-        { "name":"design-Studio" ,"revslider":true,  "category":"portfolio business" , "importFile":"61" , "demo":"http://theme.pixflow.net/massive-dynamic/design-studio/" }
+        { "name":"design-Studio" ,"revslider":true,  "category":"portfolio business" , "importFile":"61" , "demo":"http://theme.pixflow.net/massive-dynamic/design-studio/" },
+        { "name":"small-business" ,"category":"business" , "importFile":"62" , "demo":"http://theme.pixflow.net/massive-dynamic/small-business/" },
+        { "name":"digital-agency" , "category":"career" , "importFile":"63" , "demo":"http://theme.pixflow.net/massive-dynamic/digital-agency/" },
+        { "name":"corporation" , "category":"business" , "importFile":"64" , "demo":"http://theme.pixflow.net/massive-dynamic/corporation/" },
+        { "name":"case-study" , "revslider":true,  "category":"portfolio" , "importFile":"65" , "demo":"http://theme.pixflow.net/massive-dynamic/case-study/" }
     ];
 
     $('.customizer-btn.import').click(function(){
@@ -4845,12 +4848,11 @@ function pixflow_demoImporter(){
             if(typeof demos[i].revslider != "undefined"){
                 itemRevSlider = true;
             }
-           demosHtml += '<div data-revslider="'+itemRevSlider+'" data-index="'+i+'" class ="'+ itemClass+'"><span style="background-image:url(http://massivedynamic.co/dummydata/demo'+itemID+'/preview.png)"></span><div class="hover-overlay"><a href="#">DEMO DETAIL</a></div>' +
+           demosHtml += '<div data-revslider="'+itemRevSlider+'" data-index="'+i+'" class ="'+ itemClass+'"><span style="background-image:url(http://theme.pixflow.net/massive-dynamic/dummydata/demo'+itemID+'/preview.png)"></span><div class="hover-overlay"><a href="#">DEMO DETAIL</a></div>' +
                '<section class="demo-importer-title">' + demos[i].name + '</section>'  +
                '</div>';
         }
-
-
+        
         var height = $(window).height()*.75,
             width = $(window).width()*.8;
 
@@ -4894,7 +4896,7 @@ function pixflow_demoImporter(){
                 '<div class="screen">' +
                 '<a class="live-demo" target="_blank" href="'+demoUrl+'">'+customizerValues.viewDemo+'</a>' +
                 '</div>' +
-                '<span class="demo-image"  style="background-image:url(http://massivedynamic.co/dummydata/demo'+imgId+'/preview.png)"></span>'+
+                '<span class="demo-image"  style="background-image:url(http://theme.pixflow.net/massive-dynamic/dummydata/demo'+imgId+'/preview.png)"></span>'+
                 '</div>' +
                 '<div class="right">' +
                 '<h3>'+customizerValues.demoImporter1+'</h3>' +
@@ -5247,7 +5249,7 @@ function pixflow_masterSetting() {
             }else if(detailStatus == 'product'){
                 text = customizerValues.mastersettingMsgProduct;
             }
-            pixflow_messageBox(customizerValues.mastersettingMsgTitle1,'caution',text,customizerValues.mastersettingMsgYes1,function(){
+            pixflow_messageBox(customizerValues.mastersettingMsgTitle,'caution',text,customizerValues.mastersettingMsgYes,function(){
                 pixflow_livePreviewObj().$('meta[name="post-id"]').attr('setting-status', 'unique');
                 try {
                     pixflow_livePreviewObj().pixflow_save_status('unique', pixflow_livePreviewObj().$('meta[name="post-id"]').attr('content'), detailStatus, 'change',function(){
@@ -5567,7 +5569,7 @@ function pixflow_dropDownController(id){
         }
         $(this).siblings('.select-item').removeClass('selected');
         $(this).addClass('selected');
-        $input.val($(this).attr('value')).keyup();
+        $input.val($(this).attr('value')).keyup().trigger('change');
     });
 
     //enable search

@@ -7,7 +7,7 @@
 	Author URI: http://www.pixflow.net
 	License: GNU General Public License version 3.0
 	License URI: http://www.gnu.org/licenses/gpl-3.0.html
-	Version: 4.5.1
+	Version: 5.4
 	Tags:  left-sidebar, right-sidebar, custom-colors, flexible-header, full-width-template, post-formats, theme-options, threaded-comments, translation-ready
 	Text Domain: massive-dynamic
 
@@ -59,7 +59,6 @@
  - Process Panel
  - Info Box
  - Count Down
-
 
 /* WP Classes */
 .wp-caption,
@@ -287,6 +286,16 @@ main .submit:hover{
 }
 body:not(.compose-mode) .vc_empty-element>.vc_column-inner{
     min-height:0px;
+}
+
+.no-js #pageLoadingOverlay {
+    display: none;
+}
+.no-js {
+    overflow: auto;
+}
+.no-js .has-animation {
+    opacity: 1;
 }
 /* End */
 /*---------------------------------------------------------
@@ -7406,7 +7415,7 @@ body.one_page_scroll footer{
 .relative-row{
     position: relative !important;
 }
-body.one_page_scroll footer , body.one_page_scroll footer .row.widget-area{
+body:not(.compose-mode).one_page_scroll footer , body:not(.compose-mode).one_page_scroll footer .row.widget-area{
     z-index: 10;
     opacity: 1 !important;
 }
@@ -9007,6 +9016,7 @@ body.search header .icons-pack a{
 }
 
 /* VC grid styles */
+
 .vc_grid > div{
     width:100%;
 }
@@ -9015,6 +9025,7 @@ body.search header .icons-pack a{
 /*
     GENERAL STYLES
 */
+
 .wpb_column .wpb_content_element {
     margin-bottom: 0;
 }

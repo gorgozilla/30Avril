@@ -16,20 +16,25 @@ pixflow_map(
         "allowed_container_element" => 'vc_row',
         "params" => array(
             array(
-                "type" => "textfield",
-                "edit_field_class" => $filedClass . "first glue last",
-                "param_name" => "counter_to",
-                "heading" => esc_attr__("Count To", 'massive-dynamic'),
-                "value" => '560',
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Content", 'massive-dynamic'),
+                "param_name" => "content_group",
+                "edit_field_class" => $filedClass . "glue first last"
             ),
-
             array(
                 "type" => "textfield",
-                "edit_field_class" => $filedClass . "first glue",
+                "edit_field_class" => $filedClass . "first glue last",
                 "heading" => esc_attr__("Title", 'massive-dynamic'),
                 "param_name" => "counter_title",
                 "admin_label" => false,
                 "value" => "Complete Projects",
+            ),
+            array(
+                "type" => "textfield",
+                "edit_field_class" => $filedClass . "first glue ",
+                "param_name" => "counter_to",
+                "heading" => esc_attr__("Count To", 'massive-dynamic'),
+                "value" => '560',
             ),
             array(
                 "type" => 'md_vc_separator',
@@ -44,7 +49,12 @@ pixflow_map(
                 "description" => esc_attr__("Select an icon that shown before text", 'massive-dynamic'),
                 'value' => 'icon-share3'
             ),
-
+            array(
+                "type" => "md_group_title",
+                "heading" => esc_attr__("Appearance", 'massive-dynamic'),
+                "param_name" => "app_group",
+                "edit_field_class" => $filedClass . "glue first last"
+            ),
             array(
                 "type" => "md_vc_colorpicker",
                 "edit_field_class" => $filedClass . "first glue",

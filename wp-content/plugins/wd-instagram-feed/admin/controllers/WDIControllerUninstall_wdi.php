@@ -98,7 +98,6 @@ class WDIControllerUninstall_wdi{
           else{
             $this->already_uninstalled();
           };
-
           delete_option(WDI_OPT);
 
           $sample_post_id = get_option('wdi_sample_feed_post_id');

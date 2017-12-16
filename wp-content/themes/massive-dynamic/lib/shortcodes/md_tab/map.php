@@ -12,6 +12,12 @@ pixflow_map(array(
     'content_element' => false,
     'params' => array(
         array(
+            "type" => "md_group_title",
+            "heading" => esc_attr__("Title", 'massive-dynamic'),
+            "param_name" => "title_group",
+            "edit_field_class" => $filedClass . "glue first last"
+        ),
+        array(
             'type' => 'textfield',
             "edit_field_class" => $filedClass . "glue first",
             'heading' => esc_attr__('Title', 'massive-dynamic'),

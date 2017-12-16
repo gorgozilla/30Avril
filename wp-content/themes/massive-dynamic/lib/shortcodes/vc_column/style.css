@@ -2,3 +2,6 @@
     position: relative;
     z-index: 1;
 }
+.row-equal-column-height .vc_column-inner > .wpb_wrapper{
+    width:100%;
+}

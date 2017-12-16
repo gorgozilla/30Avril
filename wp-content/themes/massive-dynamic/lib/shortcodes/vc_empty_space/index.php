@@ -15,7 +15,7 @@ function mBuilder_vcEmptySpace($atts,$content){
     ob_start();
     ?>
 
-    <div class='vc_empty_space gizmo-container small-gizmo clearfix <?php echo esc_attr($id);?>' style='height:<?php echo esc_attr($height); ?>px'></div>
+    <div class='vc_empty_space gizmo-container small-gizmo no-setting-gizmo no-animation-gizmo clearfix <?php echo esc_attr($id);?>' style='height:<?php echo esc_attr($height); ?>px'></div>
     <?php
     return ob_get_clean();
 }
