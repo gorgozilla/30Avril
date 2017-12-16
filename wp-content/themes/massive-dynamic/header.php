@@ -20,6 +20,7 @@ pixflow_decodeSetting();
         wp_head();
     ?>
 	<!-- Custom CSS -->
+	<link href="//fonts.googleapis.com/css?family=Baloo&subset=latin" rel="stylesheet" type="text/css">
 </head>
 
 <body <?php body_class();?> >
